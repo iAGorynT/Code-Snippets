@@ -1,0 +1,7 @@
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/core"
+brew "btop"
+cask "balenaetcher"
+cask "github"
+cask "macvim"
