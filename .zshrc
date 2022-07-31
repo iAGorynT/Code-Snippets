@@ -1,3 +1,7 @@
+# Java Commands
+alias jh="/usr/libexec/java_home -V"
+alias jv="java --version"
+
 # Launch macVim Editor From Terminal Command Prompt
 alias mvedit="open -a MacVim.app $1"
 
