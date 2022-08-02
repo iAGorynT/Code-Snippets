@@ -15,6 +15,15 @@ echo "***Cask Upgrade..."
 echo " "
 brew upgrade --cask --greedy
 
+# Create New Brewfile
+echo "*** Creating New Brewfile..."
+echo " "
+cd
+brew bundle dump --force
+chmod 644 Brewfile
+echo "Brewfile created in pwd: $(pwd)"
+ls -al Brewfile
+
 # HomeBrew Cleanup
 echo "***HomeBrew Cleanup..."
 echo " "
