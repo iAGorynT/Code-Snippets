@@ -18,7 +18,7 @@ alias la="ls -a"
 alias ll="ls -al"
 
 # hdituil Commands
-alias sbcompact="hdiutil compact $1"
+alias sbcompact="hdiutil compact -batteryallowed $1"
 
 # HomeBrew Commands
 alias brewit="./Brewit.sh"
