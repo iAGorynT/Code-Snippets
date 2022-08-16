@@ -1,4 +1,4 @@
 #! /bin/zsh
 
-open -a MacVim.app ~
+./Mvexplore.sh
 exit
