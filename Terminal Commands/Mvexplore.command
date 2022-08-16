@@ -1,4 +1,4 @@
 #! /bin/zsh
 
-./Mvexplore.sh
+./mvexplore.sh
 exit
