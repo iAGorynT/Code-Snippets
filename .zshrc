@@ -12,6 +12,8 @@ alias jv="java --version"
 
 # Launch macVim Editor From Terminal Command Prompt
 alias mvedit="open -a MacVim.app $1"
+# Open Netrw File Explorer in Home Directory 
+alias mvexplore="mvedit ~"
 
 # Terminal List Commands
 alias la="ls -a"
