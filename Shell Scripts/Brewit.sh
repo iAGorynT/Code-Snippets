@@ -5,7 +5,7 @@ echo "Brew Update, Upgrade, and Cleanup..."
 echo " "
 
 # HomeBrew Update
-echo "***HobeBrew Update..."
+echo "***HomeBrew Update..."
 echo " "
 brew update
 brew upgrade
@@ -21,7 +21,7 @@ echo " "
 cd
 brew bundle dump --force
 chmod 644 Brewfile
-echo "Brewfile created in pwd: $(pwd)"
+echo "Brewfile created in: $(pwd)"
 ls -al Brewfile
 
 # HomeBrew Cleanup
