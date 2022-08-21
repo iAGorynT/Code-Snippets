@@ -8,7 +8,7 @@ echo " "
 SERVER_IP=$(pbpaste)
 
 # Display Internal Network IP Address
-echo Testing Speed from Server_IP Address: $SERVER_IP to Client
+echo Testing Speed from SERVER_IP Address: $SERVER_IP to Client
 echo " "
 
 # Test Network Speed from Server

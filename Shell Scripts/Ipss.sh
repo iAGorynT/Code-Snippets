@@ -9,7 +9,7 @@ echo " "
 echo $(ipconfig getifaddr en0) | pbcopy
 
 # Display Internal Network IP Address
-echo Server_IP Address: $(ipconfig getifaddr en0)
+echo SERVER_IP Address: $(ipconfig getifaddr en0)
 echo " "
 
 # Startup iPerf Server
