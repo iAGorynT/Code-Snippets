@@ -2,13 +2,15 @@
 
 clear
 echo "iPerf Server to Client Speedtest..."
-echo "   Pass Server IP Address to Shell Script..."
+echo "   Passing SERVER_IP Address to Shell Script using Pasteboard..."
 echo " "
 
+SERVER_IP=$(pbpaste)
+
 # Display Internal Network IP Address
-echo Testing Speed from Server IP Address: $1
+echo Testing Speed from Server_IP Address: $SERVER_IP to Client
 echo " "
 
 # Test Network Speed from Server
-iPerf3 -c $1 -R
+iPerf3 -c $SERVER_IP -R
 
