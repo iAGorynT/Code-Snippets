@@ -24,7 +24,7 @@ alias ll="ls -al"
 alias ipss="./Ipss.sh"
 alias ipc2s="./Ipc2s.sh"
 alias ips2c="./Ips2c.sh"
-# Internet Speedtest"
+# Internet Speedtest
 alias webspeed="open -a Speedtest.app"
 
 # hdituil Commands
