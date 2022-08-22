@@ -1,4 +1,4 @@
 #! /bin/zsh
 
-./brewit.sh
+brewit.sh
 exit
