@@ -24,6 +24,7 @@ alias ll="ls -al"
 
 # Network Speedtest Commands
 # iPerf - Internal Network
+alias ipm="Ipm.sh"
 alias ipss="Ipss.sh"
 alias ipc2s="Ipc2s.sh"
 alias ips2c="Ips2c.sh"
