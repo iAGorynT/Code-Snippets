@@ -73,5 +73,5 @@ do
 done
 clear
 
-# Reste Trap Ctl-C
+# Reset Trap Ctl-C
 trap INT
