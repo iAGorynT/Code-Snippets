@@ -12,6 +12,7 @@ echo $(ipconfig getifaddr en0) | pbcopy
 echo SERVER_IP Address: $(ipconfig getifaddr en0)
 echo " "
 
-# Startup iPerf Server
-iPerf3 -s
+# Startup iPerf Server - Server will Process 1 Request, then Exit.
+# Remove -1 to Enable Multi-Request, Unlimited Listening
+iPerf3 -s -1
 
