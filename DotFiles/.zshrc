@@ -21,6 +21,7 @@ alias mvexplore="Mvexplore.sh"
 # Terminal List Commands
 alias la="ls -a"
 alias ll="ls -al"
+alias ss="cd ShellScripts; la"
 
 # Network Speedtest Commands
 # iPerf - Internal Network
@@ -35,6 +36,7 @@ alias webspeed="open -a Speedtest.app"
 alias sbcompact="hdiutil compact -batteryallowed $1"
 
 # HomeBrew Commands
+alias brewm="Brewm.sh"
 alias brewit="Brewit.sh"
 alias brewdep="brew deps --formula --installed"
 
