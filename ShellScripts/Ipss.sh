@@ -14,5 +14,6 @@ echo " "
 
 # Startup iPerf Server - Server will Process 1 Request, then Exit.
 # Remove -1 to Enable Multi-Request, Unlimited Listening
-iPerf3 -s -1
+# iPerf3 -s -1
+iPerf3 -s
 
