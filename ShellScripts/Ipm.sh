@@ -54,3 +54,6 @@ do
 	read -n 1 line
 done
 clear
+
+# Reset Trap Ctl-C
+trap INT

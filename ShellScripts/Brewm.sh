@@ -72,3 +72,6 @@ do
 	read -n 1 line
 done
 clear
+
+# Reste Trap Ctl-C
+trap INT
