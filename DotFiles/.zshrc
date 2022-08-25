@@ -38,6 +38,9 @@ alias sbcompact="hdiutil compact -batteryallowed $1"
 # Preference Pane Commands
 alias pp="la /system/library/Preferencepanes | more"
 
+# Time Machine Commands
+alias tmb="Tmb.sh"
+
 # HomeBrew Commands
 alias brewm="Brewm.sh"
 alias brewit="Brewit.sh"
