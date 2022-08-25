@@ -1,8 +1,9 @@
 # Set PATH
 export PATH=$PATH:~/bin
 
-# alias Commands
+# General Commands
 alias calias="clear; cat ~/.zshrc | more"
+alias clr="clear"
 
 # History Commands
 # Search Last 200 History Commands (To Execute a Displayed Command Enter "!<Line #> ie !1031")
