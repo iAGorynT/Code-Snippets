@@ -19,6 +19,12 @@ function iperfserver2client {
 	ips2c.sh 
 }
 
+function ooklainternettest {
+	clear
+	echo "Starting Ookla Internet Speedtest App..."
+	open -a Speedtest.app
+}
+
 function menu {
 	clear
 	echo
@@ -26,6 +32,7 @@ function menu {
 	echo -e "\t1. Start iPerf Server"
 	echo -e "\t2. Client to Server Speedtest"
 	echo -e "\t3. Server to Client Speedtest"
+	echo -e "\t4. Ookla Internet Speedtest"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -n 1 option
@@ -45,6 +52,9 @@ do
 
 	3)
 	iperfserver2client ;;
+
+	4)
+	ooklainternettest ;;
 
 	*)
 	clear
