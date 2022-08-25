@@ -5,13 +5,13 @@ echo "Brew Update, Upgrade, and Cleanup..."
 echo " "
 
 # HomeBrew Update
-echo "***HomeBrew Update..."
+echo "*** HomeBrew Update..."
 echo " "
 brew update
 brew upgrade
 
 # Cask Upgrade
-echo "***Cask Upgrade..."
+echo "*** Cask Upgrade..."
 echo " "
 brew upgrade --cask --greedy
 
@@ -25,7 +25,7 @@ echo "Brewfile created in: $(pwd)"
 ls -al Brewfile
 
 # HomeBrew Cleanup
-echo "***HomeBrew Cleanup..."
+echo "*** HomeBrew Cleanup..."
 echo " "
 brew autoremove
 brew cleanup
