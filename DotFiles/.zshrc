@@ -35,6 +35,9 @@ alias webspeed="open -a Speedtest.app"
 # hdituil Commands
 alias sbcompact="hdiutil compact -batteryallowed $1"
 
+# Preference Pane Commands
+alias pp="la /system/library/Preferencepanes | more"
+
 # HomeBrew Commands
 alias brewm="Brewm.sh"
 alias brewit="Brewit.sh"
