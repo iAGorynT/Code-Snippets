@@ -14,6 +14,8 @@ alias hg='history | tail -200 | grep -i'
 alias jh="/usr/libexec/java_home -V"
 alias jv="java --version"
 alias jvm="ls -a1 /Library/Java/JavaVirtualMachines/"
+alias jvmcd="cd /Library/Java/JavaVirtualMachines; ls -a1"
+alias jvmrm="sudo rm -rf %1"
 
 # Launch macVim Editor From Terminal Command Prompt
 alias mvedit="open -a MacVim.app $1"
