@@ -11,16 +11,22 @@ function brewit {
 
 function brewlist {
 	clear
+	echo "Brew List..."
+	echo " "
 	brew list
 }
 
 function brewdep {
 	clear
+	echo "Brew Dependencies..."
+	echo " "
 	brew deps --formula --installed
 }
 
 function viewbrewfile {
 	clear
+	echo "Brew File..."
+	echo " "
 	cat ~/Brewfile
 }
 
