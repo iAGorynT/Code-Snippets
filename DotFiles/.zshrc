@@ -45,6 +45,11 @@ alias pp="la /system/library/Preferencepanes | more"
 # Time Machine Commands
 alias tmb="Tmb.sh"
 
+# SSH Commands
+alias sshstat="sudo systemsetup -getremotelogin"
+alias sshon="sudo systemsetup -setremotelogin on"
+alias sshoff="sudo systemsetup -setremotelogin off"
+
 # HomeBrew Commands
 alias brewm="Brewm.sh"
 alias brewit="Brewit.sh"
