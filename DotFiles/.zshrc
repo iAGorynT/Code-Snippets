@@ -10,6 +10,11 @@ alias clr="clear"
 # Ctl-R will perform reverse search in MacOS Terminal app
 alias hg='history | tail -200 | grep -i'
 
+# Mac Shutdown / Retart Commands
+# Pass Time Parameter - "now" for immediate, "+<minutes>" to delay for specified number of minutes.
+alias macsd="sudo shutdown -h $1"
+alias macrs="sudo shutdown -r $1"
+
 # Java Commands
 alias jh="/usr/libexec/java_home -V"
 alias jv="java --version"
