@@ -52,8 +52,8 @@ alias tmb="Tmb.sh"
 
 # SSH Commands
 alias sshstat="sudo systemsetup -getremotelogin"
-alias sshon="sudo systemsetup -setremotelogin on"
-alias sshoff="sudo systemsetup -setremotelogin off"
+alias sshon="sudo systemsetup -setremotelogin on; sudo systemsetup -getremotelogin"
+alias sshoff="sudo systemsetup -setremotelogin off; sudo systemsetup -getremotelogin"
 
 # HomeBrew Commands
 alias brewm="Brewm.sh"
