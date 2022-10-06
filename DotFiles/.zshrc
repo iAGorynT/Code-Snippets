@@ -4,6 +4,7 @@ export PATH=$PATH:~/bin
 # General Commands
 alias calias="clear; cat ~/.zshrc | more"
 alias clr="clear"
+alias dsleep="pmset displaysleepnow"
 
 # History Commands
 # Search Last 200 History Commands (To Execute a Displayed Command Enter "!<Line #> ie !1031")
