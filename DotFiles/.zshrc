@@ -39,8 +39,12 @@ alias ipm="Ipm.sh"
 alias ipss="Ipss.sh"
 alias ipc2s="Ipc2s.sh"
 alias ips2c="Ips2c.sh"
-# Internet Speedtest"
+# Internet Speedtest
 alias webspeed="open -a Speedtest.app"
+# Apple Network Quality Test (Note: RPM = Round Trips Per Minute, RTT = Round Trip Time)
+alias netq="networkQuality -v"		# Default Network Interface
+alias netqif="networkQuality -v -I $1"	# Network Interface
+alias netqs="networkQuality -vs"	# Sequential Test
 
 # hdituil Commands
 alias sbcompact="hdiutil compact -batteryallowed $1"
