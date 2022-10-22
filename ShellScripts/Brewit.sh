@@ -23,6 +23,7 @@ brew bundle dump --force
 chmod 644 Brewfile
 echo "Brewfile created in: $(pwd)"
 ls -al Brewfile
+echo " "
 
 # HomeBrew Cleanup
 echo "*** HomeBrew Cleanup..."
