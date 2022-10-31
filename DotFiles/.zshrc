@@ -5,6 +5,7 @@ export PATH=$PATH:~/bin
 alias calias="clear; cat ~/.zshrc | more"
 alias clr="clear"
 alias dsleep="pmset displaysleepnow"
+alias hname="Hname.sh"	# Display Hostname / IP Addresses
 
 # History Commands
 # Search Last 200 History Commands (To Execute a Displayed Command Enter "!<Line #> ie !1031")
