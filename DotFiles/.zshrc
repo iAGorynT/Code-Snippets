@@ -65,4 +65,5 @@ alias sshoff="sudo systemsetup -setremotelogin off; sudo systemsetup -getremotel
 alias brewm="Brewm.sh"
 alias brewit="Brewit.sh"
 alias brewdep="brew deps --formula --installed"
+alias brewdoc="Brewdoc.sh"
 
