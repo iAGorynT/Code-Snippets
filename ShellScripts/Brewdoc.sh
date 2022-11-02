@@ -20,6 +20,8 @@ echo " "
 echo "*** Brew Doctor..."
 echo " "
 brew doctor
+echo " "
+echo "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting"
 
 echo " "
 echo "Brew Doctor Complete!"
