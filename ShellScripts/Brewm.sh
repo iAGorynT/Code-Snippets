@@ -5,7 +5,6 @@
 trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
 function brewit {
-	clear
 	brewit.sh
 }
 
