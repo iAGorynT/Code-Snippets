@@ -30,6 +30,11 @@ function viewbrewfile {
 	cat ~/Brewfile
 }
 
+function brewdocm {
+	clear
+	brewdocm.sh
+}
+
 function mvexplore {
 	clear
 	mvexplore.sh 
@@ -43,7 +48,8 @@ function menu {
 	echo -e "\t2. Brew List"
 	echo -e "\t3. Brew Dependencies"
 	echo -e "\t4. View Brewfile"
-	echo -e "\t5. MacVim Explore"
+	echo -e "\t5. Brew Doctor"
+	echo -e "\t6. MacVim Explore"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -n 1 option
@@ -55,6 +61,7 @@ do
 	case $option in
 	0)
 	break ;;
+
 	1)
 	brewit;;
 
@@ -68,6 +75,9 @@ do
 	viewbrewfile;;
 
 	5)
+	brewdocm;;
+
+	6)
 	mvexplore;;
 
 	*)
