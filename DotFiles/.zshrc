@@ -45,7 +45,7 @@ alias webspeed="open -a Speedtest.app"
 # Apple Network Quality Test (Note: RPM = Round Trips Per Minute, RTT = Round Trip Time)
 alias netq="clear; networkQuality -v"		# Default Network Interface
 alias netqif="clear; networkQuality -v -I $1"	# Network Interface
-alias netqs="clear; networkQuality -vs"	# Sequential Test
+alias netqs="clear; networkQuality -vs"		# Sequential Test
 
 # hdituil Commands
 alias sbcompact="hdiutil compact -batteryallowed $1"
