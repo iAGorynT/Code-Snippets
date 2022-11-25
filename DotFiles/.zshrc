@@ -24,6 +24,11 @@ alias jvm="ls -a1 /Library/Java/JavaVirtualMachines/"
 alias jvmcd="cd /Library/Java/JavaVirtualMachines; ls -a1"
 alias jvmrm="sudo rm -rf %1"
 
+# Particulars CLI Commands
+alias pall="clear; particulars -a"	# Display All System Information
+alias pnet="clear; particulars -N"	# Display Network Information
+alias phelp="clear; particulars --help"	# Display Help
+
 # Launch macVim Editor From Terminal Command Prompt
 alias mvedit="open -a MacVim.app $1"
 # Open Netrw File Explorer in Home Directory 
