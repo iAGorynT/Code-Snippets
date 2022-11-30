@@ -66,9 +66,12 @@ alias sshstat="sudo systemsetup -getremotelogin"
 alias sshon="sudo systemsetup -setremotelogin on; sudo systemsetup -getremotelogin"
 alias sshoff="sudo systemsetup -setremotelogin off; sudo systemsetup -getremotelogin"
 
+# Mosh Commands
 # NetCat Network Port Troubleshooting For Mosh Server
 alias ncsvr="nc -4 -u -l -v 60013"					# Open Port On Mosh Server
 alias nccli='echo "hello world" | nc -4 -v -u 172.16.0.115 60013'	# Send Message To Server
+# Mosh DevLoc
+alias devloc="mosh --server='/usr/local/bin/mosh-server' $USER@172.16.0.115"
 
 # HomeBrew Commands
 alias brewm="Brewm.sh"
