@@ -76,8 +76,8 @@ alias nccli='echo "hello world" | nc -4 -v -u 172.16.0.115 60013'	# Send Message
 # Note: ~/.zshenv contains DECO_DDNS, DEV_IP
 alias moshloc="mosh --server='/usr/local/bin/mosh-server' $USER@$DEV_IP"
 alias moshrem="mosh --server='/usr/local/bin/mosh-server' $USER@$DECO_DDNS"
-alias sshloc="ssh $USER@$DEV_IP"
-alias sshrem="ssh $USER@$DECO_DDNS"
+alias sshloc="clear; ssh $USER@$DEV_IP"
+alias sshrem="clear; ssh $USER@$DECO_DDNS"
 
 # HomeBrew Commands
 alias brewm="Brewm.sh"
