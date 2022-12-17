@@ -4,16 +4,16 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
-function brewappu {
+function brewappsu {
 	clear
-	echo "*** Brew App List Unformatted..."
+	echo "*** Brew Apps Unformatted..."
 	echo " "
 	brew desc --eval-all $(brew list)
 }
 
-function brewappf {
+function brewappsf {
 	clear
-	echo "*** Brew App List Formatted..."
+	echo "*** Brew Apps Formatted..."
 	echo " "
 	brew desc --eval-all $(brew list) | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t
 }
@@ -21,7 +21,7 @@ function brewappf {
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tBrew Apps Listing Menu\n"
+	echo -e "\t\t\tBrew Apps Menu\n"
 	echo -e "\t1. Brew Apps Unformatted"
 	echo -e "\t2. Brew Apps Formatted"
 	echo -e "\t0. Exit Menu\n\n"
@@ -37,10 +37,10 @@ do
 	break ;;
 
 	1)
-	brewappu ;;
+	brewappsu ;;
 
 	2)
-	brewappf ;;
+	brewappsf ;;
 
 	*)
 	clear
