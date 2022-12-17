@@ -35,13 +35,7 @@ function viewbrewfile {
 	clear
 	echo "App Decriptions..."
 	echo " "
-	echo "* btop - Activity Monitor"
-	echo "* iperf3 - Internal Network Speed Test"
-	echo "* mosh - Mobile Shell; Use Instead of SSH for High Latency Connections"
-	echo "* speedtest-cli - Internet Speed Test"
-	echo "* balenaetcher - ISO Burner"
-	echo "* github - Version Control Manager"
-	echo "* macvim - Code Editor"
+	cat ~/Brewapps
 }
 
 function brewdocm {
