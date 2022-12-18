@@ -84,5 +84,4 @@ alias brewm="Brewm.sh"
 alias brewit="Brewit.sh"
 alias brewdep="brew deps --formula --installed"
 alias brewdocm="Brewdocm.sh"
-alias brewapps="Brewapps.sh"
 
