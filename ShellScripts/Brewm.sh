@@ -38,6 +38,16 @@ function viewbrewfile {
 	cat ~/Brewapps
 }
 
+function brewapps {
+	clear
+	echo "Brew App Listing..."
+	echo " "
+# Formatted Listing
+	brew desc --eval-all $(brew list) | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t
+# For Unformatted Listing
+# brew desc --eval-all $(brew list)
+}
+
 function brewdocm {
 	clear
 	brewdocm.sh
@@ -56,8 +66,9 @@ function menu {
 	echo -e "\t2. Brew List"
 	echo -e "\t3. Brew Dependencies"
 	echo -e "\t4. View Brewfile"
-	echo -e "\t5. Brew Doctor"
-	echo -e "\t6. MacVim Explore"
+	echo -e "\t5. Brew App Listing"
+	echo -e "\t6. Brew Doctor"
+	echo -e "\t7. MacVim Explore"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -n 1 option
@@ -83,9 +94,12 @@ do
 	viewbrewfile;;
 
 	5)
-	brewdocm;;
+	brewapps;;
 
 	6)
+	brewdocm;;
+
+	7)
 	mvexplore;;
 
 	*)
