@@ -20,7 +20,7 @@ function brewdep {
 	clear
 	echo "Brew Dependencies..."
 	echo " "
-	brew deps --formula --installed
+	brew deps --formula --installed | more
 }
 
 function viewbrewfile {
