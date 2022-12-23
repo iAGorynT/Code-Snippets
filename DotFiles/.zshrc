@@ -2,7 +2,7 @@
 export PATH=$PATH:~/bin
 
 # General Commands
-alias calias="clear; cat ~/.zshrc | more"
+alias ca="clear; cat ~/.zshrc | more"
 alias clr="clear"
 alias dsleep="pmset displaysleepnow"
 alias hname="Hname.sh"	# Display Hostname / IP Addresses
