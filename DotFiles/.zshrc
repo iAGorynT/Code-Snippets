@@ -78,6 +78,8 @@ alias moshloc="mosh --server='/usr/local/bin/mosh-server' $USER@$DEV_IP"
 alias moshrem="mosh --server='/usr/local/bin/mosh-server' $USER@$DECO_DDNS"
 alias sshloc="clear; ssh $USER@$DEV_IP"
 alias sshrem="clear; ssh $USER@$DECO_DDNS"
+# List Mosh/SSH Alias'
+alias rc="clear; grep -e 'mosh ' -e 'ssh ' .zshrc | grep -v ‘rc=‘"
 
 # HomeBrew Commands
 alias brewm="Brewm.sh"
