@@ -81,6 +81,9 @@ alias sshrem="clear; ssh $USER@$DECO_DDNS"
 # List Mosh/SSH Alias'
 alias ra="clear; grep -e '# Mosh/SSH' -e 'mosh ' -e 'ssh ' .zshrc | grep -v ‘rc=‘"
 
+# Github Commands
+alias gh="open -a 'Github Desktop'"
+
 # HomeBrew Commands
 alias brewm="Brewm.sh"
 alias brewit="Brewit.sh"
