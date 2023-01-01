@@ -43,7 +43,7 @@ function brewapps {
 	echo "Brew App Listing..."
 	echo " "
 # Formatted Listing
-	brew desc --eval-all $(brew list) | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t
+	brew desc --eval-all $(brew list) | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | more
 # For Unformatted Listing
 # brew desc --eval-all $(brew list)
 }
