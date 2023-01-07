@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 # Using bash instead of zsh becasue of menu command incompatibility.
 
 # Trap Ctl-C and Require a Menu Selection to Exit Script
@@ -35,7 +35,7 @@ function menu {
 	echo -e "\t4. Ookla Internet Speedtest"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
-	read -n 1 option
+	read -k 1 option
 }
 
 while [ 1 ]
@@ -61,7 +61,7 @@ do
 	echo "Sorry, wrong selection";;
 	esac
 	echo -en "\n\n\t\t\tHit any key to continue"
-	read -n 1 line
+	read -k 1 line
 done
 clear
 
