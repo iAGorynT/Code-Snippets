@@ -30,8 +30,9 @@ alias pall="clear; particulars -a"	# Display All System Information
 alias pnet="clear; particulars -N"	# Display Network Information
 alias phelp="clear; particulars --help"	# Display Help
 
-# Encrypt / Decrypt Commands
+# Encrypt / Decrypt / Security Commands
 alias cryptxt="Cryptxt.sh"		# OpenSSL Encrypt / Decrypt Text
+alias pwgen="Pwgen.sh"			# Generate Random Password
 
 # Launch macVim Editor From Terminal Command Prompt
 alias mvedit="open -a MacVim.app $1"
