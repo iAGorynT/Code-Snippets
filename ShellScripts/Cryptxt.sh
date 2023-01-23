@@ -1,22 +1,25 @@
 #!/bin/zsh
 
-# Usage
-# cryptxt.sh -m 'enc' -s 'string' -p 'pass'
-# cryptxt.sh -m 'dec' -s 'U2FsdGVkX18lO/DQQ6Aze5ChxQi4USDFO8jz1ywsWR0=' -p 'pass'
+clear
+echo "OpenSSL Text Encrypt / Decrypt"
+echo " "
 
-# Get the parameteres of the script and assign them
-while getopts m:s:p: flag
-do
-    case "${flag}" in
-        m) mechanism=${OPTARG};;
-        s) string=${OPTARG};;
-        p) password=${OPTARG};;
-    esac
-done
+# Request User Input
+read mechanism\?"enc / dec: "
+read string\?"string: "
+read -s password\?"password: "
+
+# Another way to request input using vared command
+#vared -p "enc / dec: " -c mechanism
+#vared -p "string: " -c string
+#vared -p "password: " -c password
+
+# Skip line
+echo -e "\n"
 
 # Check if all parameters are set, if not show an error message and exit the script
 if [ -z "$mechanism" ] || [ -z "$string" ] || [ -z "$password" ]
-    then echo "You need to set all variables to run the script: -m enc for encryption or dec for decryption, -s The string to encrypt/decrypt, -p The password for the encryption/decryption"
+    then echo "You need to set all variables to run the script: enc for encryption or dec for decryption, The string to encrypt/decrypt, The password for the encryption/decryption"
     exit 0
 fi
 
@@ -32,3 +35,6 @@ elif [ $mechanism = 'dec' ]
 else
     echo "Mechanism (-m) must be enc for encryption or dec for decryption"
 fi
+
+# Skip Line
+echo -e "\n"
