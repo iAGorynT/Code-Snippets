@@ -33,7 +33,7 @@ elif [ $mechanism = 'dec' ]
     echo "DECODE $string"
     echo $string | openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$password -pbkdf2 -iter 100000
 else
-    echo "Mechanism (-m) must be enc for encryption or dec for decryption"
+    echo "Mechanism must be enc for encryption or dec for decryption"
 fi
 
 # Skip Line
