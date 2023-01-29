@@ -23,11 +23,9 @@ fi
 VAULT="VcaSutL6TsVSj7IrEmOve"
 
 # Encrypt Vault
-
 #tar -cf $VAULT.tar $VAULT && gzip $VAULT.tar && openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$SECRET -pbkdf2 -iter 100000 -in $VAULT.tar.gz -out $VAULT.enc && rm -f $VAULT.tar.gz
 
 # Decrypt Vault
-
 openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$SECRET -pbkdf2 -iter 100000 -in $VAULT.enc -out $VAULT.tar.gz && tar -xzf $VAULT.tar.gz && rm -f $VAULT.tar.gz 
 
 echo "Vault Encrypted!"
