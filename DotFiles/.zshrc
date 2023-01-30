@@ -32,6 +32,7 @@ alias phelp="clear; particulars --help"	# Display Help
 
 # Encrypt / Decrypt / Security Commands
 alias cryptxt="Cryptxt.sh"		# OpenSSL Encrypt / Decrypt Text
+alias crypvault="Crypvault.sh"		# OpenSSL Encrypt / Decript Vault
 alias pwgen="Pwgen.sh"			# Generate Random Password
 
 # Launch macVim Editor From Terminal Command Prompt
