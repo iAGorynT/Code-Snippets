@@ -5,7 +5,14 @@ echo "OpenSSL Text Encrypt / Decrypt"
 echo " "
 
 # Request User Input
-read action\?"enc / dec: "
+while true; do
+    read action\?"enc / dec: "
+    case $action in
+        [enc]* ) break;;
+        [dec]* ) break;;
+        * ) echo "Please answer enc or dec";;
+    esac
+done
 read string\?"string: "
 read -s password\?"password: "
 
@@ -32,8 +39,6 @@ elif [ $action = 'dec' ]
     then
     echo "DECODE $string"
     echo $string | openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$password -pbkdf2 -iter 100000
-else
-    echo "Action must be enc for encryption or dec for decryption"
 fi
 
 # Skip Line
