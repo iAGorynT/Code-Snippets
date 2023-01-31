@@ -8,21 +8,33 @@ echo " "
 cd $HOME/Desktop
 
 # Request User Input
-read action\?"enc / dec: "
-read whichvault\?"vault / git: "
+while true; do
+    read action\?"enc / dec: "
+    case $action in
+        [enc]* ) break;;
+        [dec]* ) break;;
+        * ) echo "Please answer enc or dec";;
+    esac
+done
 
-# Another way to request input using vared command
-#vared -p "enc / dec: " -c action
-#vared -p "vault / git: " -c whichvault
+while true; do
+    read vaultname\?"vmgr / gmgr: "
+    case $vaultname in
+        [vmgr]* ) break;;
+        [gmgr]* ) break;;
+        * ) echo "Please answer vmgr or gmgr";;
+    esac
+done
 
-# Skip line
-echo -e "\n"
-
-# Check if all parameters are set, if not show an error message and exit the script
-if [ -z "$action" ] || [ -z "$whichvault" ]
-    then echo "You need to set all variables to run the script: enc for encryption or dec for decryption, The vault to encrypt/decrypt: vault for VaultMGR or git for GitMGR"
-    echo " "
-    exit 0
+# Set Vault Variables
+if [ $vaultname = "vmgr" ] 
+    then
+    vaultdir="VcaSutL6TsVSj7IrEmOve" 
+    vaultenc=$vaultdir".enc";
+elif [ $vaultname = "gmgr" ] 
+    then
+    vaultdir="GciSttH6UsbSj7IrEMoVe"
+    vaultenc=$vaultdir".enc"
 fi
 
 # Load Hash_CFG
@@ -37,35 +49,20 @@ if ! secret=$(security find-generic-password -w -s "$stype" -a "$acct"); then
   exit 1
 fi
 
-# Set Vault Directory
-if [ $whichvault = "vault" ]
-    then
-    vaultdir="VcaSutL6TsVSj7IrEmOve"
-    vaultenc=$vaultdir".enc"
-elif [ $whichvault = "git" ]
-    then
-    vaultdir="GciSttH6UsbSj7IrEMoVe"
-    vaultenc=$vaultdir".enc"
-else
-    echo "Invalid vault to encrypt/decrypt: enter vault for VaultMGR or git for GitMGR"
-    echo " "
-    exit 0
-fi
-
 # Check For Vault Direcory or Encrypted File On Desktop
 if [ $action = "enc" ] && [ ! -d $vaultdir ]
     then
     echo "Vault Directory missing on Desktop:" $vaultdir
     echo " "
-    exit 0
+    exit 1
 elif [ $action = "dec" ] && [ ! -f $vaultenc ]
     then
     echo "Encrypted Vault missing on Desktop:" $vaultenc
     echo " "
-    exit 0
+    exit 1
 fi
 
-# If the action is encryption => encrypt the string, if the mechanism is decryption => decrypt the string
+# If the action is encryption => encrypt the string, if the action is decryption => decrypt the string
 if [ $action = 'enc' ]
     then
     tar -cf $vaultdir.tar $vaultdir && gzip $vaultdir.tar && openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$secret -pbkdf2 -iter 100000 -in $vaultdir.tar.gz -out $vaultdir.enc && rm -f $vaultdir.tar.gz
@@ -76,8 +73,4 @@ elif [ $action = 'dec' ]
     openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$secret -pbkdf2 -iter 100000 -in $vaultdir.enc -out $vaultdir.tar.gz && tar -xzf $vaultdir.tar.gz && rm -f $vaultdir.tar.gz 
     echo "Vault Decrypted:" $vaultdir
     echo " "
-else
-    echo "Action must be enc for encryption or dec for decryption"
-    echo " "
-    exit 0
 fi

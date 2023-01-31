@@ -43,7 +43,7 @@ alias mvexplore="Mvexplore.sh"
 # Terminal List Commands
 alias la="ls -a"
 alias ll="ls -al"
-alias ss="cd ShellScripts; la"
+alias ss="clear; cd $HOME/ShellScripts; la"
 
 # Network Speedtest Commands
 # iPerf - Internal Network
