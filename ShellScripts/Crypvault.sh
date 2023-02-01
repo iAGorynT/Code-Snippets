@@ -11,8 +11,8 @@ cd $HOME/Desktop
 while true; do
     read action\?"enc / dec: "
     case $action in
-        [enc]* ) break;;
-        [dec]* ) break;;
+        [enc]* ) break;;	# Encode vault
+        [dec]* ) break;;	# Decode vault
         * ) echo "Please answer enc or dec";;
     esac
 done
@@ -20,8 +20,8 @@ done
 while true; do
     read vaultname\?"vmgr / gmgr: "
     case $vaultname in
-        [vmgr]* ) break;;
-        [gmgr]* ) break;;
+        [vmgr]* ) break;;	# VaultMGR
+        [gmgr]* ) break;;	# GitMGR
         * ) echo "Please answer vmgr or gmgr";;
     esac
 done
@@ -62,7 +62,7 @@ elif [ $action = "dec" ] && [ ! -f $vaultenc ]
     exit 1
 fi
 
-# If the action is encryption => encrypt the string, if the action is decryption => decrypt the string
+# If the action is encryption => encrypt the vault, if the action is decryption => decrypt the vault
 if [ $action = 'enc' ]
     then
     tar -cf $vaultdir.tar $vaultdir && gzip $vaultdir.tar && openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$secret -pbkdf2 -iter 100000 -in $vaultdir.tar.gz -out $vaultdir.enc && rm -f $vaultdir.tar.gz
