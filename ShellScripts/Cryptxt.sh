@@ -8,8 +8,8 @@ echo " "
 while true; do
     read action\?"enc / dec: "
     case $action in
-        [enc]* ) break;;
-        [dec]* ) break;;
+        [enc]* ) break;;	# Encode text
+        [dec]* ) break;;	# Decode text
         * ) echo "Please answer enc or dec";;
     esac
 done
