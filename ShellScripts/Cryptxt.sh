@@ -1,5 +1,4 @@
 #!/bin/zsh
-#TEst
 
 clear
 echo "OpenSSL Text Encrypt / Decrypt"
