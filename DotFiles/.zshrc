@@ -32,6 +32,7 @@ alias pnet="clear; particulars -N"	# Display Network Information
 alias phelp="clear; particulars --help"	# Display Help
 
 # Encrypt / Decrypt / Security Commands
+alias sslh="openssl enc -help"		# OpenSSL Help
 alias cryptxt="Cryptxt.sh"		# OpenSSL Encrypt / Decrypt Text
 alias crypvault="Crypvault.sh"		# OpenSSL Encrypt / Decript Vault
 alias pwgen="Pwgen.sh"			# Generate Random Password
