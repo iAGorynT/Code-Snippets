@@ -7,6 +7,7 @@ alias clr="clear"
 alias dsleep="pmset displaysleepnow"
 alias hname="Hname.sh"		# Display Hostname / IP Addresses
 alias penv="printenv | more"	# Display Environment Variables
+alias sver="Versions.sh"	# Display Software Versions
 alias ppi="Ppi.sh"		# Calculate Monitor PPI
 
 # History Commands
