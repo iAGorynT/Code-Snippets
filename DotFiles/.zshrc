@@ -43,9 +43,10 @@ alias mvedit="open -a MacVim.app $1"
 alias mvexplore="Mvexplore.sh"
 
 # Terminal List Commands
-alias la="ls -a"
-alias ll="ls -al"
-alias ss="clear; cd $HOME/ShellScripts; la"
+alias la="ls -a"				# List All
+alias ll="ls -al"				# Long List
+alias ss="clear; cd $HOME/ShellScripts; la"	# Show Scripts
+alias lc="echo -n 'Number of Files:'; ls | wc -l" # List File Count
 
 # Network Speedtest Commands
 # iPerf - Internal Network
@@ -87,7 +88,7 @@ alias moshrem="mosh --server='/usr/local/bin/mosh-server' $USER@$DECO_DDNS"
 alias sshloc="clear; ssh $USER@$DEV_IP"
 alias sshrem="clear; ssh $USER@$DECO_DDNS"
 # List Mosh/SSH Alias'
-alias ra="clear; grep -e '# Mosh/SSH' -e 'mosh ' -e 'ssh ' .zshrc | grep -v ‘rc=‘"
+alias ra="clear; grep -e '# Mosh/SSH' -e 'mosh ' -e 'ssh ' $HOME/.zshrc | grep -v ‘rc=‘"
 
 # Github Commands
 alias gh="open -a 'Github Desktop'"
