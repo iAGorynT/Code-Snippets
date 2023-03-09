@@ -73,6 +73,7 @@ alias pp="la /system/library/Preferencepanes | more"
 alias tmb="Tmb.sh"
 
 # SSH Commands
+alias sshpw="Sshpw.sh"
 alias sshstat="sudo systemsetup -getremotelogin"
 alias sshon="sudo systemsetup -setremotelogin on; sudo systemsetup -getremotelogin"
 alias sshoff="sudo systemsetup -setremotelogin off; sudo systemsetup -getremotelogin"
