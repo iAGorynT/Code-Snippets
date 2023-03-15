@@ -13,8 +13,8 @@ alias ppi="Ppi.sh"		# Calculate Monitor PPI
 # History Commands
 # Search Last 200 History Commands (To Execute a Displayed Command Enter "!<Line #> ie !1031")
 # Ctl-R will perform reverse search in MacOS Terminal app
-alias hg='history | tail -200 | grep -i'	# Add Search Phrase (i.e. hg vim)
-alias ht='history | tail -200'			# List Last Commands
+alias hg='history | tail -n 200 | grep -i'	# Add Search Phrase (i.e. hg vim)
+alias ht='history | tail -n 200'		# List Last Commands
 
 # Mac Shutdown / Retart Commands
 # Pass Time Parameter - "now" for immediate, "+<minutes>" to delay for specified number of minutes.
