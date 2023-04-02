@@ -1,3 +1,6 @@
+# Set PATH
+export PATH="$PATH:~/bin"
+
 # General Commands
 alias ca="clear; cat ~/.zshrc | more"
 alias clr="clear"
