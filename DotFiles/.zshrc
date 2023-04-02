@@ -1,4 +1,3 @@
-#Testing
 # General Commands
 alias ca="clear; cat ~/.zshrc | more"
 alias clr="clear"
