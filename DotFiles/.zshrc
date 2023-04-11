@@ -2,10 +2,11 @@
 alias ca="clear; cat ~/.zshrc | more"
 alias clr="clear"
 alias dsleep="pmset displaysleepnow"
-alias hname="Hname.sh"		# Display Hostname / IP Addresses
-alias penv="printenv | more"	# Display Environment Variables
-alias sver="Versions.sh"	# Display Software Versions
-alias ppi="Ppi.sh"		# Calculate Monitor PPI
+alias hname="Hname.sh"			# Display Hostname / IP Addresses
+alias penv="printenv | more"		# Display Environment Variables
+alias sver="Versions.sh"		# Display Software Versions
+alias pkgu="pkgutil --pkgs | more"	# List Installed Packages (i.e. Xcode Command Line Tools)
+alias ppi="Ppi.sh"			# Calculate Monitor PPI
 
 # History Commands
 # Search Last 200 History Commands (To Execute a Displayed Command Enter "!<Line #> ie !1031")
