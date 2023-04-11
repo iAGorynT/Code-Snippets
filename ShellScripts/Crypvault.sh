@@ -68,12 +68,12 @@ fi
 # If the action is encryption => encrypt the vault, if the action is decryption => decrypt the vault
 if [ $action = 'enc' ]
     then
-    tar -cf $vaultdir.tar $vaultdir && gzip $vaultdir.tar && openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 100000 -in $vaultdir.tar.gz -out $vaultdir.enc && rm -f $vaultdir.tar.gz
+    tar -cf $vaultdir.tar $vaultdir && gzip $vaultdir.tar && openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 600000 -in $vaultdir.tar.gz -out $vaultdir.enc && rm -f $vaultdir.tar.gz
     echo "Vault Encrypted:" $vaultdir
     echo " "
 elif [ $action = 'dec' ]
     then
-    openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 100000 -in $vaultdir.enc -out $vaultdir.tar.gz && tar -xzf $vaultdir.tar.gz && rm -f $vaultdir.tar.gz 
+    openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 600000 -in $vaultdir.enc -out $vaultdir.tar.gz && tar -xzf $vaultdir.tar.gz && rm -f $vaultdir.tar.gz 
     echo "Vault Decrypted:" $vaultdir
     echo " "
 fi
