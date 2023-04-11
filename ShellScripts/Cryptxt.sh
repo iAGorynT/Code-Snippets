@@ -34,7 +34,7 @@ fi
 if [ $action = 'enc' ]
     then
     echo "ENCODE: $string"
-    echo $string | openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$password -pbkdf2 -iter 100000 | tr -d '\n' | pbcopy
+    echo $string | openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$password -pbkdf2 -iter 600000 | tr -d '\n' | pbcopy
     echo
     pbpaste
     echo
@@ -42,7 +42,7 @@ elif [ $action = 'dec' ]
     then
     echo "DECODE: $string"
     echo
-    echo $string | openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$password -pbkdf2 -iter 100000
+    echo $string | openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$password -pbkdf2 -iter 600000
 fi
 
 # Skip Line
