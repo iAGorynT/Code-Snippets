@@ -20,6 +20,9 @@ ssh -V | echo -n "OpenSSH: "
 # OpenSSL
 echo "OpenSSL: $(openssl version)"
 
+# Homebrew
+echo "Homebrew: $(brew -v)"
+
 # XCode Command Line Tools
 echo
 echo "Xcode Command Line Tools:"
