@@ -29,3 +29,8 @@ echo "Xcode Command Line Tools:"
 pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
 echo
 
+# Java
+echo "Java:"
+java --version
+echo
+
