@@ -93,6 +93,9 @@ alias ra="clear; grep -e '# Mosh/SSH' -e 'mosh ' -e 'ssh ' $HOME/.zshrc | grep -
 # Github Commands
 alias gh="open -a 'Github Desktop'"
 
+# Ops Commands
+alias opsm="Opsm.sh"
+
 # HomeBrew Commands
 alias brewm="Brewm.sh"
 alias brewit="Brewit.sh"
