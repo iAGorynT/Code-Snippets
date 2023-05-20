@@ -102,3 +102,6 @@ alias brewit="Brewit.sh"
 alias brewdep="brew deps --formula --installed"
 alias brewdocm="Brewdocm.sh"
 
+# Main Menu Commands
+alias mm="Mm.sh"
+
