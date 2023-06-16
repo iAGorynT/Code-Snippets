@@ -44,6 +44,11 @@ function netq {
 	networkQuality -v
 }
 
+function runbtop {
+	clear
+	btop 
+}
+
 function menu {
 	clear
 	echo
@@ -55,6 +60,7 @@ function menu {
 	echo -e "\t5. System Information"
 	echo -e "\t6. Internet Speed Test"
 	echo -e "\t7. Apple Network Quality Test"
+	echo -e "\t8. Run Btop"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -87,6 +93,9 @@ do
 
 	7)
 	netq;;
+
+	8)
+	runbtop;;
 
 	*)
 	clear
