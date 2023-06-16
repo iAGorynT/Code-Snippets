@@ -36,7 +36,7 @@ function pall {
 
 function clispeed {
 	clear
-	echo 'Speedtest in progress...'; speedtest-cli --simple
+	echo 'Speedtest in progress...'; speedtest
 }
 
 function netq {
