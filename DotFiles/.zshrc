@@ -76,6 +76,7 @@ alias sshstat="sudo systemsetup -getremotelogin"
 alias sshon="sudo systemsetup -setremotelogin on; sudo systemsetup -getremotelogin"
 alias sshoff="sudo systemsetup -setremotelogin off; sudo systemsetup -getremotelogin"
 alias sshlist="ssh-add -l"
+alias sshdir="Sshdir.sh"
 
 # Mosh Commands
 # NetCat Network Port Troubleshooting For Mosh Server
