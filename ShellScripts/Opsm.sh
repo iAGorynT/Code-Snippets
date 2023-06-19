@@ -44,6 +44,11 @@ function netq {
 	networkQuality -v
 }
 
+function sshd {
+	clear
+	Sshdir.sh
+}
+
 function runbtop {
 	clear
 	btop 
@@ -60,7 +65,8 @@ function menu {
 	echo -e "\t5. System Information"
 	echo -e "\t6. Internet Speed Test"
 	echo -e "\t7. Apple Network Quality Test"
-	echo -e "\t8. Run Btop"
+	echo -e "\t8. SSH Directory Contents"
+	echo -e "\t9. Run Btop"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -95,6 +101,9 @@ do
 	netq;;
 
 	8)
+	sshd;;
+
+	9)
 	runbtop;;
 
 	*)
