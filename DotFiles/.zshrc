@@ -55,7 +55,7 @@ alias ipc2s="Ipc2s.sh"
 alias ips2c="Ips2c.sh"
 # Internet Speedtest
 alias webspeed="open -a Speedtest.app"
-alias clispeed="clear; echo 'Speedtest in progress...'; speedtest"
+alias clispeed="clear; echo 'Speedtest in progress...'; speedtest -p no"
 # Apple Network Quality Test (Note: RPM = Round Trips Per Minute, RTT = Round Trip Time)
 alias netq="clear; networkQuality -v"		# Default Network Interface
 alias netqif="clear; networkQuality -v -I $1"	# Network Interface
