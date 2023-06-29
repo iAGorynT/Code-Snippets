@@ -98,10 +98,11 @@ alias gh="open -a 'Github Desktop'"
 alias opsm="Opsm.sh"
 
 # HomeBrew Commands
-alias brewm="Brewm.sh"
-alias brewit="Brewit.sh"
-alias brewdep="brew deps --formula --installed"
-alias brewdocm="Brewdocm.sh"
+alias brewm="Brewm.sh"				# Brew Menu
+alias brewit="Brewit.sh"			# Update Homebrew
+alias brewdep="clear; brew deps --formula --installed"	# List Dependencies
+alias brewdocm="Brewdocm.sh"			# Brew Doctor
+alias brewtap="clear; brew tap"			# List All Taps
 
 # Main Menu Commands
 alias mm="Mm.sh"
