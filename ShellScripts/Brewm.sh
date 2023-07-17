@@ -47,6 +47,13 @@ function brewapps {
 # brew desc --eval-all $(brew list)
 }
 
+function brewtap {
+	clear
+	echo "Brew Taps..."
+	echo " "
+	brew tap
+}
+
 function brewdocm {
 	clear
 	brewdocm.sh
@@ -66,8 +73,9 @@ function menu {
 	echo -e "\t3. Brew Dependencies"
 	echo -e "\t4. View Brewfile"
 	echo -e "\t5. Brew App Listing"
-	echo -e "\t6. Brew Doctor"
-	echo -e "\t7. MacVim Explore"
+	echo -e "\t6. Brew Taps"
+	echo -e "\t7. Brew Doctor"
+	echo -e "\t8. MacVim Explore"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -96,9 +104,12 @@ do
 	brewapps;;
 
 	6)
-	brewdocm;;
+	brewtap;;
 
 	7)
+	brewdocm;;
+
+	8)
 	mvexplore;;
 
 	*)
