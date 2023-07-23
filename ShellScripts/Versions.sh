@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Display Software Versions
 clear
@@ -6,7 +6,8 @@ echo "Software Versions..."
 echo
 
 # Bash
-echo "Bash: $BASH_VERSION"
+echo "Bash: $(bash --version)" 
+echo
 
 # Zsh
 echo "Zsh: $(zsh --version)"
