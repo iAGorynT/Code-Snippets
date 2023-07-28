@@ -35,3 +35,8 @@ echo "Java:"
 java --version
 echo
 
+# Python
+echo "Python3: $(python3 --version)"
+echo
+
+
