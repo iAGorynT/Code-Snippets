@@ -7,6 +7,7 @@ alias penv="printenv | more"		# Display Environment Variables
 alias sver="Versions.sh"		# Display Software Versions
 alias pkgu="pkgutil --pkgs | more"	# List Installed Packages (i.e. Xcode Command Line Tools)
 alias ppi="Ppi.sh"			# Calculate Monitor PPI
+alias zp="echo 'zsh Prompt: $PROMPT'"	# Show zsh Prompt Format
 
 # History Commands
 # Search Last 200 History Commands (To Execute a Displayed Command Enter "!<Line #> ie !1031")
