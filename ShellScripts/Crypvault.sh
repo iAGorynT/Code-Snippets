@@ -66,31 +66,43 @@ fi
 # Set Vault Variables
 if [ $vaultname = "vmgr" ] 
     then
+# If Installed, Use "jq" JSON Processor for Filename Lookup
+    if jq -V >/dev/null 2>&1
+        then
+        filename=$(jq -r .vaultmgr_name $configfile)
+    else 
 # Search VaultMGR JSON Config. File for Filename
-    str=$(cat $HOME'/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files/vaultmgr_config.json')
-    substr="vaultmgr_name"
-    prefix=${str%%$substr*}
-    index=${#prefix}
-    nameidx=$((index + 16)) # VaultMGR
+        str=$(cat $configfile)
+        substr="vaultmgr_name"
+        prefix=${str%%$substr*}
+        index=${#prefix}
+        nameidx=$((index + 16)) # VaultMGR
 # Create a SubString That Begins With VaultMGR Filename
-    str2=$(echo $str | cut -c $nameidx-)
+        str2=$(echo $str | cut -c $nameidx-)
 # Strip Special Characters and Save Actual VaultMGR Filename
-    filename=$(echo $str2 | cut -d '"' -f2)
+        filename=$(echo $str2 | cut -d '"' -f2)
+    fi
 # Initialize VaultMGR Names
     vaultdir=$filename
     vaultenc=$vaultdir".enc"
 elif [ $vaultname = "gmgr" ] 
     then
+# If Installed, Use "jq" JSON Processor for Filename Lookup
+    if jq -V >/dev/null 2>&1
+        then
+        filename=$(jq -r .gitmgr_name $configfile)
+    else 
 # Search GitMGR JSON Config. File for Filename
-    str=$(cat $HOME'/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files/gitmgr_config.json')
-    substr="gitmgr_name"
-    prefix=${str%%$substr*}
-    index=${#prefix}
-    nameidx=$((index + 14)) # GitMGR
+        str=$(cat $configfile)
+        substr="gitmgr_name"
+        prefix=${str%%$substr*}
+        index=${#prefix}
+        nameidx=$((index + 14)) # GitMGR
 # Create a SubString That Begins With GitMGR Filename
-    str2=$(echo $str | cut -c $nameidx-)
+        str2=$(echo $str | cut -c $nameidx-)
 # Strip Special Characters and Save Actual GitMGR Filename
-    filename=$(echo $str2 | cut -d '"' -f2)
+        filename=$(echo $str2 | cut -d '"' -f2)
+    fi
 # Initialize GitMGR Names
     vaultdir=$filename
     vaultenc=$vaultdir".enc"
