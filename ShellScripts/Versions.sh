@@ -21,6 +21,9 @@ ssh -V | echo -n "OpenSSH: "
 # OpenSSL
 echo "OpenSSL: $(openssl version)"
 
+# jq
+echo "jq JSON processor: $(jq -V)"
+
 # Homebrew
 echo "Homebrew: $(brew -v)"
 
