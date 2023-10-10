@@ -69,7 +69,7 @@ if [ $vaultname = "vmgr" ]
 # If Installed, Use "jq" JSON Processor for Filename Lookup
     if jq -V >/dev/null 2>&1
         then
-        filename=$(jq -r .vaultmgr_name $configfile)
+        filename=$(jq -r '.vaultmgr_name' $configfile)
     else 
 # Search VaultMGR JSON Config. File for Filename
         str=$(cat $configfile)
@@ -90,7 +90,7 @@ elif [ $vaultname = "gmgr" ]
 # If Installed, Use "jq" JSON Processor for Filename Lookup
     if jq -V >/dev/null 2>&1
         then
-        filename=$(jq -r .gitmgr_name $configfile)
+        filename=$(jq -r '.gitmgr_name' $configfile)
     else 
 # Search GitMGR JSON Config. File for Filename
         str=$(cat $configfile)
