@@ -10,10 +10,12 @@ cd $HOME/Desktop
 # Select Action
 echo "Select Action..."
 echo " "
-select act in "Encrypt" "Decrypt" "Config" "Quit"; do
+select act in "Encrypt" "Decrypt" "View" "Sync" "Config" "Quit"; do
     case $act in
         Encrypt ) action="enc"; break;;
 	Decrypt ) action="dec"; break;;
+	View	) action="view"; break;;
+	Sync	) action="sync"; break;;
 	Config  ) action="conf"; break;;
 	Quit    ) action="quit"; break;;
     esac
@@ -36,15 +38,29 @@ elif [ $action = "quit" ]
 fi
     
 # Select Vault Type
-echo " "
-echo "Select Vault Type..."
-echo " "
-select vnam in "VaultMGR" "GitMGR"; do
-    case $vnam in
-        VaultMGR ) vaultname="vmgr"; break;;
-	GitMGR   ) vaultname="gmgr"; break;;
-    esac
-done
+# All Actions Except Sync
+if [ $action != "sync" ]
+    then
+    echo " "
+    echo "Select Vault Type..."
+    echo " "
+    select vnam in "VaultMGR" "GitMGR"; do
+        case $vnam in
+            VaultMGR ) vaultname="vmgr"; break;;
+	    GitMGR   ) vaultname="gmgr"; break;;
+        esac
+    done
+# Sync Can Only Be Done for GitMGR
+else
+    echo " "
+    echo "Select Vault Type..."
+    echo " "
+    select vnam in "GitMGR"; do
+        case $vnam in
+	    GitMGR   ) vaultname="gmgr"; break;;
+        esac
+    done
+fi
 echo " "
 
 # Confirm that Vault ConfigFILE Encryption Type is OpenSSL
@@ -129,22 +145,28 @@ icloudenc=$iclouddir/$vaultenc
 if [ $action = "dec" ] && [ -f $icloudenc ]
     then
     mv -i $icloudenc $HOME/Desktop
+elif [ $action = "view" ] && [ -f $icloudenc ]
+    then
+    cp -i $icloudenc $HOME/Desktop
 fi
 
 # Check For Vault Direcory or Encrypted File On Desktop
-if [ $action = "enc" ] && [ ! -d $vaultdir ]
+if ([ $action = 'enc' ] || [ $action = 'sync' ]) && [ ! -d $vaultdir ]
     then
     echo "Vault Directory missing on Desktop:" $vaultdir
     echo " "
     exit 1
-elif [ $action = "dec" ] && [ ! -f $vaultenc ]
+elif ([ $action = 'dec' ] || [ $action = 'view' ]) && [ ! -f $vaultenc ]
     then
     echo "Encrypted Vault missing on Desktop:" $vaultenc
     echo " "
     exit 1
 fi
 
-# If the action is encryption => encrypt the vault, if the action is decryption => decrypt the vault
+# If the action is encryption => encrypt the vault
+# if the action is decryption => decrypt the vault
+# if the action is sync => sync the vault with GitHUB
+# Encrypt
 if [ $action = 'enc' ]
     then
     tar -cf $vaultdir.tar $vaultdir && gzip $vaultdir.tar && openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 600000 -in $vaultdir.tar.gz -out $vaultenc && rm -f $vaultdir.tar.gz
@@ -155,7 +177,8 @@ if [ $action = 'enc' ]
     echo "Vault Encrypted:" $vaultdir
     echo "Note:  Encrypted Vault Moved To iCloud, Encrypted Directory Moved To Trash"
     echo " "
-elif [ $action = 'dec' ]
+# Decrypt
+elif [ $action = 'dec' ] || [ $action = 'view' ]
     then
     openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 600000 -in $vaultenc -out $vaultdir.tar.gz && tar -xzf $vaultdir.tar.gz && rm -f $vaultdir.tar.gz 
 # Move encrypted file to trash
@@ -164,4 +187,23 @@ elif [ $action = 'dec' ]
     echo "Vault Decrypted:" $vaultdir
     echo "Note:  Encrypted Vault Moved To Trash"
     echo " "
+    if [ $action = 'view' ]
+        then
+        echo "When Done Viewing, Move $vaultdir To Trash!"
+        echo " "
+# Open unecncrypted vault in finder
+        open $HOME/Desktop/$vaultdir
+    fi
+# Sync With GitHUB
+elif [ $action = 'sync' ]
+    then
+    clear
+    echo "Github Sync Starting"
+    currentDate=`date`
+    echo $currentDate
+# rsync keeping all file attributes
+    rsync -avh $HOME/Documents/GitHub/Code-Snippets/ $HOME/Desktop/GciSttH6UsbSj7I/GitHub/Code-Snippets --delete
+    echo "Github Sync Completed"
+    echo " "
 fi
+
