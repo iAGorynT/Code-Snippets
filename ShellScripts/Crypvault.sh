@@ -198,12 +198,12 @@ elif [ $action = 'dec' ] || [ $action = 'view' ]
 elif [ $action = 'sync' ]
     then
     clear
-    echo "Github Sync Starting"
+    echo "GitHUB Sync Starting"
     currentDate=`date`
     echo $currentDate
 # rsync keeping all file attributes
     rsync -avh $HOME/Documents/GitHub/Code-Snippets/ $HOME/Desktop/GciSttH6UsbSj7I/GitHub/Code-Snippets --delete
-    echo "Github Sync Completed"
+    echo "GitHUB Sync Completed"
     echo " "
 fi
 
