@@ -10,19 +10,22 @@ cd $HOME/Desktop
 # Select Action
 echo "Select Action..."
 echo " "
-select act in "Encrypt" "Decrypt" "View" "Sync" "Config" "Quit"; do
+select act in "Encrypt" "Decrypt" "View" "GitSync" "Config" "Quit"; do
     case $act in
         Encrypt ) action="enc"; break;;
 	Decrypt ) action="dec"; break;;
 	View	) action="view"; break;;
-	Sync	) action="sync"; break;;
+	GitSync ) action="sync"; break;;
 	Config  ) action="conf"; break;;
 	Quit    ) action="quit"; break;;
     esac
 done
 
 # Run ConfigFILES Shortcuts App
-if [ $action = "conf" ]
+if [ $action = "view" ]
+    then
+    osascript -e 'display dialog "WHEN VIEWING, DO NOT UPDATE SELECTED VAULT-Changes will not be saved!" buttons {"OK"}' >/dev/null 2>&1
+elif [ $action = "conf" ]
     then
     echo " "
     echo "Standby... ConfigFILES Running"
@@ -189,8 +192,7 @@ elif [ $action = 'dec' ] || [ $action = 'view' ]
     echo " "
     if [ $action = 'view' ]
         then
-        echo "When Done Viewing, Move $vaultdir To Trash!"
-        echo " "
+        osascript -e 'display dialog "When Done Viewing, Move Selected Vault To Trash!" buttons {"OK"}' >/dev/null 2>&1
 # Open unecncrypted vault in finder
         open $HOME/Desktop/$vaultdir
     fi
