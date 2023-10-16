@@ -24,7 +24,7 @@ done
 # Run ConfigFILES Shortcuts App
 if [ $action = "view" ]
     then
-    osascript -e 'display dialog "WHEN VIEWING, DO NOT UPDATE SELECTED VAULT-Changes will not be saved!" with icon note buttons {"OK"} default button "OK"' >/dev/null 2>&1
+    osascript -e 'display dialog "WHEN VIEWING, DO NOT UPDATE SELECTED VAULT-Changes will not be saved!" with title "Caution When Viewing" with icon caution buttons {"OK"} default button "OK"' >/dev/null 2>&1
 elif [ $action = "conf" ]
     then
     echo " "
