@@ -18,6 +18,11 @@ function ipm {
 	ipm.sh
 }
 
+function testm {
+	clear
+	~/bin/zTests/mmt.sh
+}
+
 function menu {
 	clear
 	echo
@@ -25,6 +30,7 @@ function menu {
 	echo -e "\t1. Homebrew Menu"
 	echo -e "\t2. Ops Menu"
 	echo -e "\t3. Iperf3 Menu"
+	echo -e "\t4. Main Test Menu"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -45,6 +51,9 @@ do
 
 	3)
 	ipm;;
+
+	4)
+	testm;;
 
 	*)
 	clear
