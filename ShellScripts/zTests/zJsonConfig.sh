@@ -1,6 +1,7 @@
 #!/bin/zsh
 
 # THIS IS TEST CODE THAT WILL BE MERGED INTO Crypvault.sh
+# Use Substring Extract to Extract gitMGR Name
 
 # Search Vault/Git JSON Config. File for Filename
 str=$(cat $HOME'/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files/gitmgr_config.json')
