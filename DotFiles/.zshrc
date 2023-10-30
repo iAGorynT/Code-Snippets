@@ -109,4 +109,5 @@ alias brewtap="clear; brew tap"			# List All Taps
 
 # Main Menu Commands
 alias mm="Mm.sh"
+alias mmt="~/bin/zTests/Mmt.sh"
 
