@@ -1,4 +1,4 @@
-# Testbed for Shell Scripts
+# Shell Script Testbed
 
 This folder contains Shell Scripts used to test various concepts.
 
