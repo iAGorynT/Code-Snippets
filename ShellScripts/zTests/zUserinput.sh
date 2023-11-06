@@ -28,3 +28,22 @@ while true; do
 done
 echo $yn
 echo
+
+echo "Read / Echo Statment..."
+echo
+while true; do
+    echo "Choose an option:"
+    echo "1. Option 1"
+    echo "2. Option 2"
+
+    read choice
+
+    echo
+    case $choice in
+        1) echo "Option 1 chosen"; break;;
+        2) echo "Option 2 chosen"; break;;
+        *) echo "Invalid choice";;
+    esac
+done
+echo
+
