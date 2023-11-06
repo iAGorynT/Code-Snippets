@@ -11,7 +11,7 @@ export PATH=$PATH:~/bin
 ```
 
 You may find it helpful to create a Symbolic Link in your $HOME dirctory to the /usr/local/bin directory to
-make thins easier and more seamless when working with your Shell Scripts.
+make things easier and more seamless when working with your Shell Scripts.
 
 Creating a Symbolic Link:
 ```shell
