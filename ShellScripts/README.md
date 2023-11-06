@@ -14,7 +14,9 @@ You may find it helpful to create a Symbolic Link in your $HOME dirctory to the 
 make thins easier and more seamless when working with your Shell Scripts.
 
 Creating a Symbolic Link:
+```shell
 ln -s /usr/local/bin $HOME/ShellScripts
 ln -s $HOME/bin $HOME/ShellScripts
+```
 
-Modified: 8/22/2022 18:13 
+Modified: 11/6/2023 07:57  
