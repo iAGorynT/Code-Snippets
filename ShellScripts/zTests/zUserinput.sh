@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# Sample User Input Code - 2 Examples Using Select and Read Statements
+# Sample User Input Code - Examples Using Select and Read Statements
 
 clear
 echo "Select Statement..."
