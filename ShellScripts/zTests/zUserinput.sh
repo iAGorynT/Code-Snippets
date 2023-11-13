@@ -47,3 +47,25 @@ while true; do
 done
 echo
 
+echo "Array / Select Statement..."
+echo
+# Define the menu options
+array=("Option 1" "Option 2")
+# Prompt the user to select an option contained in array values
+select choice in "${array[@]}"; do
+    case $choice in
+        "Option 1")
+            echo "You selected Option 1"
+            break
+            ;;
+        "Option 2")
+            echo "You selected Option 2"
+            break
+            ;;
+        *)
+            echo "Invalid option. Please try again."
+            ;;
+    esac
+done
+echo
+
