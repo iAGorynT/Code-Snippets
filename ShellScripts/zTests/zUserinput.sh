@@ -49,6 +49,7 @@ echo
 
 echo "Array / Select Statement..."
 echo
+echo "Which Option?"
 # Define the menu options
 array=("Option 1" "Option 2")
 # Prompt the user to select an option contained in array values
