@@ -1,6 +1,6 @@
 # Code Snippets
 
-I will be sharing various MacOS code snippits that can be used and shared by all.
+MacOS code snippits that can be used and shared by all.
 Included Scripts: Shortcuts Scripts, Terminal Scripts, etc.
 
-Modified: 4/17/2023 20:54 
+Modified: 11/14/2023 08:01 
