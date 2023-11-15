@@ -70,3 +70,21 @@ select choice in "${array[@]}"; do
 done
 echo
 
+echo "Array / Read / RegEX Validation Statement..."
+echo
+# Prompt for numeric month
+read month\?"Enter month (1-12): "
+# Validate month
+if [[ $month =~ ^[1-9]$ ]] || [[ $month =~ ^1[0-2]$ ]]
+    then 
+    echo 'Valid input'
+else 
+    echo 'Invalid input'
+fi
+echo "Month entered: $month"
+# Lookup table for month names
+months=("January" "February" "March" "April" "May" "June" "July" "August" "September" "October" "November" "December")
+# Display the corresponding month name
+echo "Month: ${months[$month]}"
+echo
+
