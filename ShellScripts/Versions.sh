@@ -27,6 +27,9 @@ echo "jq JSON processor: $(jq -V)"
 # Homebrew
 echo "Homebrew: $(brew -v)"
 
+# Python
+echo "Python3: $(python3 --version)"
+
 # XCode Command Line Tools
 echo
 echo "Xcode Command Line Tools:"
@@ -38,8 +41,8 @@ echo "Java:"
 java --version
 echo
 
-# Python
-echo "Python3: $(python3 --version)"
+# macVim
+mver=$(mvim --version | grep -e 'VIM - Vi IMproved' -e 'Included patches')
+echo "macVim Version: $mver"
 echo
-
 
