@@ -88,3 +88,20 @@ months=("January" "February" "March" "April" "May" "June" "July" "August" "Septe
 echo "Month: ${months[$month]}"
 echo
 
+echo "Function / RegEX Validation Statement..."
+echo
+# Validate Phone Number Function
+validate_phone_number() {
+  local phone_number="$1"
+  local regex="^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$"
+  if [[ $phone_number =~ $regex ]]; then
+    echo "Valid phone number: $phone_number"
+  else
+    echo "Invalid phone number: $phone_number"
+  fi
+}
+# Enter Phone Number
+read phone_number\?"Enter Phone Number (XXX) XXX-XXXX: "
+validate_phone_number $phone_number
+echo
+
