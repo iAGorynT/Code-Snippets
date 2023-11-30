@@ -1,7 +1,8 @@
 btop:		Activity Monitor
 iperf3:		Internal Network Speed Test
-jq:		Command-line JSON processor
-qlmarkdown:	macOS Quick Look extension to preview Markdown files
+jq:		Command-line JSON Processor
+qlmarkdown:	macOS Quick Look Extension to Preview Markdown Files
+macdown:	Open Source Markdown Editor
 mosh:		Mobile Shell; Use Instead of SSH for High Latency Connections
 speedtest:	Ookla Internet Speed Test
 balenaetcher:	ISO Burner

@@ -43,6 +43,9 @@ alias mvedit="open -a MacVim.app $1"
 # Open Netrw File Explorer in Home Directory 
 alias mvexplore="Mvexplore.sh"
 
+# Launch MacDown Markdown Editor From Terminal Command Prompt
+alias mdedit="open -a MacDown.app $1"
+
 # Terminal List Commands
 alias la="ls -a"					# List All
 alias ll="ls -al"					# Long List
