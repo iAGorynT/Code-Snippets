@@ -104,6 +104,9 @@ alias gh="open -a 'Github Desktop'"
 # Ops Commands
 alias opsm="Opsm.sh"
 
+# Dev Commands
+alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
+
 # HomeBrew Commands
 alias brewm="Brewm.sh"				# Brew Menu
 alias brewit="Brewit.sh"			# Update Homebrew
