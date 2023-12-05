@@ -33,7 +33,7 @@ function zuserinput {
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tMain Test Menu\n"
+	echo -e "\t\t\tTest Menu\n"
 	echo -e "\t1. zDialogBox"
 	echo -e "\t2. zJQJsonConfig"
 	echo -e "\t3. zJsonConfig"
