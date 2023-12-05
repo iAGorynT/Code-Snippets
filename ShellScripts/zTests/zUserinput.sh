@@ -91,9 +91,14 @@ echo
 echo "Function / RegEX Validation Statement..."
 echo
 # Validate Phone Number Function
+# The regular expression used in this script is designed to match US phone numbers of the 
+# format (XXX) XXX-XXXX, XXX-XXX-XXXX, or XXX XXX XXXX, where X represents a digit between 
+# 2 and 9. The script prompts the user to enter a phone number, checks if it matches the 
+# regular expression, and returns a message indicating whether it is valid or not.
 validate_phone_number() {
   local phone_number="$1"
-  local regex="^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$"
+  local regex="^\\(?([2-9][0-9]{2})\\)?[-. ]?([2-9][0-9]{2})[-. ]?([0-9]{4})$"
+  # local regex="^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$"
   if [[ $phone_number =~ $regex ]]; then
     echo "Valid phone number: $phone_number"
   else
@@ -101,7 +106,8 @@ validate_phone_number() {
   fi
 }
 # Enter Phone Number
-read phone_number\?"Enter Phone Number (XXX) XXX-XXXX: "
+echo "Format:  (XXX) XXX-XXXX, XXX-XXX-XXXX, or XXX XXX XXXX"
+read phone_number\?"Enter Phone Number: "
 validate_phone_number $phone_number
 echo
 
