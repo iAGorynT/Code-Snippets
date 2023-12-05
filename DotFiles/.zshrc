@@ -1,7 +1,7 @@
 # General Commands
-alias ca="clear; cat ~/.zshrc | more"
+alias ca="clear; cat ~/.zshrc | more"	# Display .zshrc Contents
 alias clr="clear"
-alias dsleep="pmset displaysleepnow"
+alias dsleep="pmset displaysleepnow"	# Put Mac Display To Sleep
 alias hname="Hname.sh"			# Display Hostname / IP Addresses
 alias penv="printenv | more"		# Display Environment Variables
 alias sver="Versions.sh"		# Display Software Versions
@@ -55,26 +55,25 @@ alias lc="echo -n 'Number of Files:'; ls | wc -l" 	# List File Count
 
 # Network Speedtest Commands
 # iPerf - Internal Network
-alias ipm="Ipm.sh"
-alias ipss="Ipss.sh"
-alias ipc2s="Ipc2s.sh"
-alias ips2c="Ips2c.sh"
+alias ipss="Ipss.sh"				# Start iPerf3 Server
+alias ipc2s="Ipc2s.sh"				# Start iPerf3 Client-to-Server Test
+alias ips2c="Ips2c.sh"				# Start iPerf3 Server-to-Client Test
 # Internet Speedtest
-alias webspeed="open -a Speedtest.app"
-alias clispeed="clear; echo 'Speedtest in progress...'; speedtest -p no"
+alias webspeed="open -a Speedtest.app"		# Gui Based Speedtest
+alias clispeed="clear; echo 'Speedtest in progress...'; speedtest -p no" # Character Based Speedtest
 # Apple Network Quality Test (Note: RPM = Round Trips Per Minute, RTT = Round Trip Time)
 alias netq="clear; networkQuality -v"		# Default Network Interface
 alias netqif="clear; networkQuality -v -I $1"	# Network Interface
 alias netqs="clear; networkQuality -vs"		# Sequential Test
 
 # hdituil Commands
-alias sbcompact="hdiutil compact -batteryallowed $1"
+alias sbcompact="hdiutil compact -batteryallowed $1"	# Compact Sparsebundle File
 
 # Preference Pane Commands
 alias pp="la /system/library/Preferencepanes | more"
 
 # Time Machine Commands
-alias tmb="Tmb.sh"
+alias tmb="Tmb.sh"				# Run Time-Machine Backup
 
 # SSH Commands
 alias sshm="Sshm.sh"
@@ -101,20 +100,19 @@ alias ra="clear; grep -e '# Mosh/SSH' -e 'mosh ' -e 'ssh ' $HOME/.zshrc | grep -
 # Github Commands
 alias gh="open -a 'Github Desktop'"
 
-# Ops Commands
-alias opsm="Opsm.sh"
-
 # Dev Commands
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
 
 # HomeBrew Commands
-alias brewm="Brewm.sh"				# Brew Menu
 alias brewit="Brewit.sh"			# Update Homebrew
 alias brewdep="clear; brew deps --formula --installed"	# List Dependencies
 alias brewdocm="Brewdocm.sh"			# Brew Doctor
 alias brewtap="clear; brew tap"			# List All Taps
 
 # Main Menu Commands
-alias mm="Mm.sh"
-alias mmt="~/bin/zTests/Mmt.sh"
+alias mm="Mm.sh"				# Main Menu - All Menus
+alias mmb="Brewm.sh"				# Brew Menu
+alias mmo="Opsm.sh"				# Ops Menu
+alias mmi="Ipm.sh"				# Ipm Menu
+alias mmt="~/bin/zTests/Mmt.sh"			# Test Menu
 
