@@ -115,4 +115,6 @@ alias mmb="Brewm.sh"				# Brew Menu
 alias mmo="Opsm.sh"				# Ops Menu
 alias mmi="Ipm.sh"				# Ipm Menu
 alias mmt="~/bin/zTests/Mmt.sh"			# Test Menu
+# List Menu Alias'
+alias mml="clear; grep -e '# Main Menu' -e 'alias mm' $HOME/.zshrc | grep -v ‘mml=‘"
 
