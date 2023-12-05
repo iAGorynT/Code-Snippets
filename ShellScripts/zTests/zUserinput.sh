@@ -101,13 +101,24 @@ validate_phone_number() {
   # local regex="^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$"
   if [[ $phone_number =~ $regex ]]; then
     echo "Valid phone number: $phone_number"
+    retval=0
   else
     echo "Invalid phone number: $phone_number"
+    retval=1
   fi
+  return "$retval"
 }
+while true; do
 # Enter Phone Number
-echo "Format:  (XXX) XXX-XXXX, XXX-XXX-XXXX, or XXX XXX XXXX"
-read phone_number\?"Enter Phone Number: "
-validate_phone_number $phone_number
+    echo "Format:  (XXX) XXX-XXXX, XXX-XXX-XXXX, or XXX XXX XXXX"
+    read phone_number\?"Enter Phone Number: "
+    validate_phone_number $phone_number
+# Valid Phone Number - Exit Do While...
+    if [ "$retval" = 0 ]; then
+        break 
+    else
+	echo
+    fi
+done
 echo
 
