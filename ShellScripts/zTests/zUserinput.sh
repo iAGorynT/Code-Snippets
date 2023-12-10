@@ -124,12 +124,14 @@ echo
 
 echo "Text Dialog Box / Display Input..."
 echo
+# Display Text Dialog Box
 textin=$(osascript -e 'tell app "System Events" to display dialog ¬
 "Insert Text" ¬
 with title "Text" ¬
 buttons {"OK", "Quit"} default button "OK" ¬
 default answer ""' \
 -e 'text returned of result')
+# Display Entered Text on Command Line
 echo "Your text is: $textin"
 # Set Focus Back To Termius App
 focustermius=$(osascript -e 'tell app "Termius" to activate')
