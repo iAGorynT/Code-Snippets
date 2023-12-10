@@ -122,3 +122,16 @@ while true; do
 done
 echo
 
+echo "Text Dialog Box / Display Input..."
+echo
+textin=$(osascript -e 'tell app "System Events" to display dialog ¬
+"Insert Text" ¬
+with title "Text" ¬
+buttons {"OK", "Quit"} default button "OK" ¬
+default answer ""' \
+-e 'text returned of result')
+echo "Your text is: $textin"
+# Set Focus Back To Termius App
+focustermius=$(osascript -e 'tell app "Termius" to activate')
+echo
+
