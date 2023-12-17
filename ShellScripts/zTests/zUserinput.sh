@@ -92,12 +92,13 @@ echo "Function / RegEX Validation Statement..."
 echo
 # Validate Phone Number Function
 # The regular expression used in this script is designed to match US phone numbers of the 
-# format (XXX) XXX-XXXX, XXX-XXX-XXXX, XXX XXX XXXX or +1 (XXX) XXX-XXXX where X represents a digit 
-# between 2 and 9. The script prompts the user to enter a phone number, checks if it matches the 
-# regular expression, and returns a message indicating whether it is valid or not.
+# format (XXX) XXX-XXXX, XXX-XXX-XXXX, XXX XXX XXXX, XXX.XXX.XXXX, +1 (XXX) XXX-XXXX where X 
+# represents a digit between 2 and 9. The script prompts the user to enter a phone number, 
+# checks if it's regular expression, and returns a message indicating whether it's valid or not.
 validate_phone_number() {
   local phone_number="$1"
-  local regex="^(\\+1)?[ -]?\\(?[2-9][0-9]{2}\\)?[- ]?[2-9][0-9]{2}[- ]?[0-9]{4}$"
+  local regex="^(\\+1)?[ .-]?\\(?[2-9][0-9]{2}\\)?[-. ]?[2-9][0-9]{2}[-. ]?[0-9]{4}$"
+  # local regex="^(\\+1)?[ -]?\\(?[2-9][0-9]{2}\\)?[- ]?[2-9][0-9]{2}[- ]?[0-9]{4}$"
   # local regex="^\\(?([2-9][0-9]{2})\\)?[-. ]?([2-9][0-9]{2})[-. ]?([0-9]{4})$"
   # local regex="^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$"
   if [[ $phone_number =~ $regex ]]; then
@@ -111,7 +112,7 @@ validate_phone_number() {
 }
 while true; do
 # Enter Phone Number
-    echo "Format:  (XXX) XXX-XXXX, XXX-XXX-XXXX, XXX XXX XXXX, +1 (XXX) XXX-XXXX"
+    echo "Format:  (XXX) XXX-XXXX, XXX-XXX-XXXX, XXX XXX XXXX, XXX.XXX.XXXX +1 (XXX) XXX-XXXX"
     read phone_number\?"Enter Phone Number: "
     validate_phone_number $phone_number
 # Valid Phone Number - Exit Do While...
