@@ -103,11 +103,12 @@ alias gh="open -a 'Github Desktop'"
 # Dev Commands
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
 
-# HomeBrew Commands
-alias brewit="Brewit.sh"			# Update Homebrew
-alias brewdep="clear; brew deps --formula --installed"	# List Dependencies
-alias brewdocm="Brewdocm.sh"			# Brew Doctor
-alias brewtap="clear; brew tap"			# List All Taps
+# Homebrew Commands
+alias brewit="Brewit.sh"					# Update Homebrew
+alias brewdep="clear; brew deps --formula --installed"		# List Dependencies
+alias brewdocm="Brewdocm.sh"					# Brew Doctor
+alias brewtap="clear; brew tap"					# List All Taps
+alias brewautohelp="clear; brew autoupdate --help | more"	# Homebrew Autoupdate Help
 
 # Main Menu Commands
 alias mm="Mm.sh"				# Main Menu - All Menus
