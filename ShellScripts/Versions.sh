@@ -24,11 +24,16 @@ echo "OpenSSL: $(openssl version)"
 # jq
 echo "jq JSON processor: $(jq -V)"
 
+# Python
+echo "Python3: $(python3 --version)"
+
 # Homebrew
 echo "Homebrew: $(brew -v)"
 
-# Python
-echo "Python3: $(python3 --version)"
+# Homebrew Autoupdate
+echo
+echo "Homebrew Autoupdate:"
+brew autoupdate version
 
 # XCode Command Line Tools
 echo
