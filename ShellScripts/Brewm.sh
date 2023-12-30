@@ -59,6 +59,11 @@ function brewdocm {
 	brewdocm.sh
 }
 
+function brewautom {
+	clear
+	brewautom.sh
+}
+
 function mvexplore {
 	clear
 	mvexplore.sh 
@@ -75,7 +80,8 @@ function menu {
 	echo -e "\t5. Brew App Listing"
 	echo -e "\t6. Brew Taps"
 	echo -e "\t7. Brew Doctor"
-	echo -e "\t8. MacVim Explore"
+	echo -e "\t8. Brew Autoupdate"
+	echo -e "\t9. MacVim Explore"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -110,6 +116,9 @@ do
 	brewdocm;;
 
 	8)
+	brewautom;;
+
+	9)
 	mvexplore;;
 
 	*)

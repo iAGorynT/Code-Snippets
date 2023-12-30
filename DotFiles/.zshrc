@@ -108,7 +108,6 @@ alias brewit="Brewit.sh"				# Update Homebrew
 alias brewdep="clear; brew deps --formula --installed"	# List Dependencies
 alias brewdocm="Brewdocm.sh"				# Brew Doctor
 alias brewtap="clear; brew tap"				# List All Taps
-alias brewauh="clear; brew autoupdate --help | more"	# Homebrew Autoupdate Help
 
 # Main Menu Commands
 alias mm="Mm.sh"				# Main Menu - All Menus
