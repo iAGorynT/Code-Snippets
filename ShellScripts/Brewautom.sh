@@ -3,18 +3,18 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
-function autoupdatestart {
-	clear
-	echo "Starting Brew Autoupdate..."
-	echo
-	brew autoupdate start --upgrade --greedy --cleanup --enable-notification --immediate
-}
-
 function autoupdatestatus {
 	clear
 	echo "Brew Autoupdate Status..."
 	echo
 	brew autoupdate status
+}
+
+function autoupdatestart {
+	clear
+	echo "Starting Brew Autoupdate..."
+	echo
+	brew autoupdate start --upgrade --greedy --cleanup --enable-notification --immediate
 }
 
 function autoupdatestop {
@@ -42,8 +42,8 @@ function menu {
 	clear
 	echo
 	echo -e "\t\t\tBrew Autoupdate Menu\n"
-	echo -e "\t1. Start Autoupdate"
-	echo -e "\t2. Autoupdate Status"
+	echo -e "\t1. Autoupdate Status"
+	echo -e "\t2. Start Autoupdate"
 	echo -e "\t3. Stop Autoupdate"
 	echo -e "\t4. Delete Autoupdate"
 	echo -e "\t5. Autoupdate Help" 
@@ -58,11 +58,12 @@ do
 	case $option in
 	0)
 	break ;;
+
 	1)
-	autoupdatestart ;;
+	autoupdatestatus ;;
 
 	2)
-	autoupdatestatus ;;
+	autoupdatestart ;;
 
 	3)
 	autoupdatestop ;;
