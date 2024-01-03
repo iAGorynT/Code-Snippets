@@ -8,6 +8,17 @@ function autoupdatestatus {
 	echo "Brew Autoupdate Status..."
 	echo
 	brew autoupdate status
+	echo "Brew Autoupdate Log Listing..."
+	echo
+# Brew Autoupdate Plist File
+	autoplist=$HOME'/Library/LaunchAgents/com.github.domt4.homebrew-autoupdate.plist'  
+# If Brew Autoupdate Logfile Exist, Show Contents
+	if test -f "$autoplist"
+	    then  
+# Extract Keyvalue From Plist File Using PlistBuddy
+	    autolog=$(/usr/libexec/PlistBuddy -c "Print :StandardOutPath" $autoplist)
+	    cat $autolog
+	fi
 }
 
 function autoupdatestart {
