@@ -17,7 +17,7 @@ function autoupdatestatus {
 	    then  
 # Extract Keyvalue From Plist File Using PlistBuddy
 	    autolog=$(/usr/libexec/PlistBuddy -c "Print :StandardOutPath" $autoplist)
-	    cat $autolog
+	    cat $autolog | more
 	fi
 }
 
