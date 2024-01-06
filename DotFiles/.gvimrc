@@ -109,6 +109,8 @@ endif " exists("macvim_hig_shift_movement")
 let &cpo = s:cpo_save
 unlet s:cpo_save
 
-macVim Custom Editor Settings
+" macVim Custom Editor Settings
 
-set guifont=Menlo:h14
+" set guifont=Menlo:h14
+set guifont=-monospace-:h14
+
