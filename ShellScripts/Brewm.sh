@@ -32,7 +32,7 @@ function viewbrewfile {
 	read -k 1 line
 # Display Installed Brew File App Descriptions
 	clear
-	echo "App Decriptions..."
+	echo "App Descriptions..."
 	echo " "
 	cat ~/Brewapps
 }
