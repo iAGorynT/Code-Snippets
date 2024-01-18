@@ -4,7 +4,7 @@ clear
 
 # Create Temporary Shell Script For Testing
 cd $HOME/ShellScripts/zTests
-touch zTmp.sh
+echo "#!/bin/zsh" > zTmp.sh
 chmod 755 zTmp.sh
 echo "Temporary File Created..."
 echo 
