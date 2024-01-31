@@ -25,7 +25,7 @@ function autoupdatestart {
 	clear
 	echo "Starting Brew Autoupdate..."
 	echo
-	brew autoupdate start --upgrade --greedy --cleanup --enable-notification --immediate
+	brew autoupdate start --upgrade --greedy --cleanup --enable-notification --immediate --quiet
 }
 
 function autoupdatestop {
