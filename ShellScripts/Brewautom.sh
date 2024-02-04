@@ -32,14 +32,28 @@ function autoupdatestop {
 	clear
 	echo "Brew Autoupdate Stop..."
 	echo
-	brew autoupdate stop
+	while true; do
+	    read yn\?"Yy / Nn: "
+	    case $yn in
+	        [Yy]* ) echo; brew autoupdate stop; break;;
+	        [Nn]* ) break;;
+	        * ) echo "Please answer yes or no.";;
+	    esac
+	done
 }
 
 function autoupdatedelete {
 	clear
 	echo "Brew Autoupdate Delete..."
 	echo
-	brew autoupdate delete
+	while true; do
+	    read yn\?"Yy / Nn: "
+	    case $yn in
+	        [Yy]* ) echo; brew autoupdate delete; break;;
+	        [Nn]* ) break;;
+	        * ) echo "Please answer yes or no.";;
+	    esac
+	done
 }
 
 function autoupdatehelp {
