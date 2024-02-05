@@ -43,6 +43,10 @@ function menu {
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
+# Test If Return / Enter Key Pressed; Replace Linefeed Character With Empty Character
+        if [[ "$option" == *$'\n'* ]]; then
+            option=""
+        fi
 }
 
 while [ 1 ]
@@ -60,6 +64,10 @@ do
 
 	3)
 	brewdocs3 ;;
+
+# Return / Enter Key Pressed
+        "")
+        break ;;
 
 	*)
 	clear
