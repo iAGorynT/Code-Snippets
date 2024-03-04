@@ -31,9 +31,7 @@ echo "Python3: $(python3 --version)"
 echo "Homebrew: $(brew -v)"
 
 # Homebrew Autoupdate
-echo "Homebrew Autoupdate:"
-# brew autoupdate version
-brew autoupdate version | grep -e 'Version' # Exclude Change Log
+echo "Homebrew Autoupdate: $(brew autoupdate version | grep -e 'Version')" # Exclude Change Log
 
 # XCode Command Line Tools
 echo
