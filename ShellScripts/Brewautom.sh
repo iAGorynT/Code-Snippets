@@ -63,6 +63,13 @@ function autoupdatehelp {
 	brew autoupdate --help | more
 }
 
+function autoupdatechglog {
+	clear
+	echo "Brew Autoupdate Changelog..."
+	echo
+	brew autoupdate --version | more
+}
+
 function menu {
 	clear
 	echo
@@ -72,6 +79,7 @@ function menu {
 	echo -e "\t3. Stop Autoupdate"
 	echo -e "\t4. Delete Autoupdate"
 	echo -e "\t5. Autoupdate Help" 
+	echo -e "\t6. Autoupdate Changelog" 
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -102,6 +110,9 @@ do
 
 	5)
 	autoupdatehelp ;;
+
+	6)
+	autoupdatechglog ;;
 
 # Return / Enter Key Pressed
         "")
