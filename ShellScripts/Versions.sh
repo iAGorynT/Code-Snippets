@@ -6,8 +6,7 @@ echo "Software Versions..."
 echo
 
 # Bash
-echo "Bash: $(bash --version)" 
-echo
+echo "Bash: $(bash --version)" | grep -e 'version '
 
 # Zsh
 echo "Zsh: $(zsh --version)"
@@ -27,6 +26,13 @@ echo "jq JSON processor: $(jq -V)"
 # Python
 echo "Python3: $(python3 --version)"
 
+# Mosh
+mosh --version | grep -e 'mosh '
+
+# macVim
+mver=$(mvim --version | grep -e 'VIM - Vi IMproved' -e 'Included patches')
+echo "macVim Version: $mver"
+
 # Homebrew
 echo "Homebrew: $(brew -v)"
 
@@ -42,10 +48,5 @@ echo
 # Java
 echo "Java:"
 java --version
-echo
-
-# macVim
-mver=$(mvim --version | grep -e 'VIM - Vi IMproved' -e 'Included patches')
-echo "macVim Version: $mver"
 echo
 
