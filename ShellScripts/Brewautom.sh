@@ -8,6 +8,37 @@ function autoupdatestatus {
 	echo "Brew Autoupdate Status..."
 	echo
 	brew autoupdate status
+#	echo
+# Autoupdate Log Listing
+# Brew Autoupdate Plist File
+	autoplist=$HOME'/Library/LaunchAgents/com.github.domt4.homebrew-autoupdate.plist'  
+# If Brew Autoupdate Logfile Exist, Show Contents
+	if test -f "$autoplist"; then
+# Extract Keyvalue From Plist File Using PlistBuddy
+	    autolog=$(/usr/libexec/PlistBuddy -c "Print :StandardOutPath" $autoplist)
+	fi
+# Check if the Autoupdate Log file exists
+	if [ -f "$autolog" ]; then
+	    echo -en "\n\n\t\t\tHit any key to view Autoupdate Log Listing"
+	    read -k 1 line
+	    clear
+	    echo "Brew Autoupdate Log Listing..."
+	    echo
+# Temporary file to store the modified content
+	    temp_file=$(mktemp)
+# Loop through each line of the file
+	    while IFS= read -r line; do
+# Check if the line starts with any of the specified days
+	        if [[ "$line" =~ ^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) ]]; then
+# Add a blank line before the line
+	            echo "" >> "$temp_file"
+	        fi
+# Append the original line to the temporary file
+	        echo "$line" >> "$temp_file"
+	    done < "$autolog"
+# Display Reformatted Autoupdate Logfile
+	    cat "$temp_file" | more
+	fi
 }
 
 function autoupdatestart {
@@ -45,38 +76,6 @@ function autoupdatedelete {
 	done
 }
 
-function autoupdateloglist {
-	clear
-	echo "Brew Autoupdate Log Listing..."
-	echo
-# Brew Autoupdate Plist File
-	autoplist=$HOME'/Library/LaunchAgents/com.github.domt4.homebrew-autoupdate.plist'  
-# If Brew Autoupdate Logfile Exist, Show Contents
-	if test -f "$autoplist"; then
-# Extract Keyvalue From Plist File Using PlistBuddy
-	    autolog=$(/usr/libexec/PlistBuddy -c "Print :StandardOutPath" $autoplist)
-	fi
-# Check if the file exists
-	if [ ! -f "$autolog" ]; then
-	    echo "File '$autolog' not found."
-	    exit 1
-	fi
-# Temporary file to store the modified content
-	temp_file=$(mktemp)
-# Loop through each line of the file
-	while IFS= read -r line; do
-# Check if the line starts with any of the specified days
-	    if [[ "$line" =~ ^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) ]]; then
-# Add a blank line before the line
-	        echo "" >> "$temp_file"
-	    fi
-# Append the original line to the temporary file
-	    echo "$line" >> "$temp_file"
-	done < "$autolog"
-# Display Reformatted Autoupdate Logfile
-	cat "$temp_file" | more
-}
-
 function autoupdatehelp {
 	clear
 	echo "Brew Autoupdate Help..."
@@ -99,9 +98,8 @@ function menu {
 	echo -e "\t2. Start Autoupdate"
 	echo -e "\t3. Stop Autoupdate"
 	echo -e "\t4. Delete Autoupdate"
-	echo -e "\t5. Autoupdate Log List"
-	echo -e "\t6. Autoupdate Help" 
-	echo -e "\t7. Autoupdate Changelog" 
+	echo -e "\t5. Autoupdate Help" 
+	echo -e "\t6. Autoupdate Changelog" 
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -131,12 +129,9 @@ do
 	autoupdatedelete ;;
 
 	5)
-	autoupdateloglist ;;
-
-	6)
 	autoupdatehelp ;;
 
-	7)
+	6)
 	autoupdatechglog ;;
 
 # Return / Enter Key Pressed
