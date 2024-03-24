@@ -30,9 +30,9 @@ function zuserinput {
 	~/bin/zTests/zUserinput.sh
 }
 
-function zwednesdays {
+function zdaysofmonth {
 	clear
-	~/bin/zTests/zWednesdays.sh
+	~/bin/zTests/zDaysOfMonth.sh
 }
 
 function menu {
@@ -44,7 +44,7 @@ function menu {
 	echo -e "\t3. zJsonConfig"
 	echo -e "\t4. zPassFromShortcuts"
 	echo -e "\t5. zUserinput"
-	echo -e "\t6. zWednesdays"
+	echo -e "\t6. zDaysOfMonth"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -77,7 +77,7 @@ do
 	zuserinput;;
 
 	6)
-	zwednesdays;;
+	zdaysofmonth;;
 
 # Return / Enter Key Pressed
 	"")
