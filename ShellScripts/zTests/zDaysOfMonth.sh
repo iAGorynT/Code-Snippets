@@ -9,10 +9,25 @@ clear
 echo "List Wednesdays For Month... "
 echo
 
-# Prompt user for month and year
+# Prompt user for month, year, and day
 read month\?"Enter the two-digit month (01-12): "
 read year\?"Enter the four-digit year: "
-echo
+
+# Array of days of the week
+days=("Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday" "Sunday")
+
+# Prompt the user to select a day
+echo "Select a day of the week:"
+select daychoice in "${days[@]}"; do
+    # Check if the input is valid
+    if [[ -n $daychoice ]]; then
+        echo "You selected: $daychoice"
+	echo
+        break
+    else
+        echo "Invalid selection. Please try again."
+    fi
+done
 
 # Validate the input
 if [[ $month =~ ^((0[1-9])|(1[0-2]))$ && $year =~ ^[0-9]{4}$ ]]; then
@@ -26,7 +41,7 @@ if [[ $month =~ ^((0[1-9])|(1[0-2]))$ && $year =~ ^[0-9]{4}$ ]]; then
         dow=$(date -j -f "%m/%d/%Y" "$month/$day/$year" "+%A")
 
 # If the day is Wednesday, print the date
-        if [ "$dow" = "Wednesday" ]; then
+        if [ "$dow" = $daychoice ]; then
             echo "$month/$day/$year"
         fi
     done
