@@ -1,12 +1,12 @@
 #!/bin/zsh
 
-# List Wednesdays For Month
+# List Selected Days For Month
 # This script uses the cal command to get the number of days in the supplied month and year,
-# and then loops through each day of the month to check if it is a Wednesday. If the day is
-# a Wednesday, it prints the date in the format MM/DD/YYYY.
+# and then loops through each day of the month to check if it is the selected day of the month.
+# If the day is the selected day, it prints the date in the format MM/DD/YYYY.
 
 clear
-echo "List Wednesdays For Month... "
+echo "List Selected Days For Month... "
 echo
 
 # Prompt user for month, year, and day
@@ -40,7 +40,7 @@ if [[ $month =~ ^((0[1-9])|(1[0-2]))$ && $year =~ ^[0-9]{4}$ ]]; then
         # Get the day of the week for the current day
         dow=$(date -j -f "%m/%d/%Y" "$month/$day/$year" "+%A")
 
-# If the day is Wednesday, print the date
+# If the day is the selected day of the week, print the date
         if [ "$dow" = $daychoice ]; then
             echo "$month/$day/$year"
         fi
