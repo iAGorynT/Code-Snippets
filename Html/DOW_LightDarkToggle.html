@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Date Generator - Light/Dark Mode Toggle</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+	background-color: #f4f4f4;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    .dark-mode {
+        background-color: #292b36; /* Dark background color */
+        color: #fff; /* Light text color */
+    }
+    .container {
+        text-align: center;
+    }
+    label {
+        font-weight: bold;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+    #output {
+        margin-top: 20px;
+    }
+    .mode-switch {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+    .mode-switch input {
+        display: none;
+    }
+    .mode-switch label {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+    .mode-switch label::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #ddd; /* Switch background color */
+        border-radius: 17px;
+        transition: background-color 0.3s;
+    }
+    .mode-switch input:checked + label::before {
+        background-color: #007bff; /* Dark mode background color */
+    }
+    .mode-switch label::after {
+        content: '';
+        position: absolute;
+        width: 28px;
+        height: 28px;
+        background-color: #fff; /* Switch button color */
+        border-radius: 50%;
+        top: 3px;
+        left: 3px;
+        transition: left 0.3s;
+    }
+    .mode-switch input:checked + label::after {
+        left: calc(100% - 3px);
+        transform: translateX(-100%);
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="mode-switch">
+        <input type="checkbox" id="modeToggle">
+        <label for="modeToggle"></label>
+    </div>
+    <h2>Date Generator - Light/Dark Mode Toggle</h2>
+    <form id="dateForm">
+        <label for="month">Month (01-12): </label>
+        <input type="number" id="month" min="1" max="12" required><br><br>
+        <label for="year">Year (YYYY): </label>
+        <input type="number" id="year" min="1000" max="9999" required><br><br>
+        <label for="dayOfWeek">Day of Week: </label>
+        <select id="dayOfWeek" required>
+            <option value="0">Sunday</option>
+            <option value="1">Monday</option>
+            <option value="2">Tuesday</option>
+            <option value="3">Wednesday</option>
+            <option value="4">Thursday</option>
+            <option value="5">Friday</option>
+            <option value="6">Saturday</option>
+        </select><br><br>
+        <button type="submit">Generate Dates</button>
+    </form>
+    <div id="output"></div>
+</div>
+
+<script>
+    // Function to toggle light/dark mode
+    function toggleMode() {
+        var body = document.body;
+        body.classList.toggle('dark-mode'); // Toggle the dark-mode class
+    }
+
+    // Event listener for mode switch toggle
+    document.getElementById('modeToggle').addEventListener('change', function() {
+        toggleMode();
+    });
+
+    document.getElementById('dateForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        generateDates();
+    });
+
+    function generateDates() {
+        var month = parseInt(document.getElementById('month').value);
+        var year = parseInt(document.getElementById('year').value);
+        var dayOfWeek = parseInt(document.getElementById('dayOfWeek').value);
+        var dates = [];
+
+        var date = new Date(year, month - 1, 1);
+        while (date.getMonth() === month - 1) {
+            if (date.getDay() === dayOfWeek) {
+                dates.push(new Date(date));
+            }
+            date.setDate(date.getDate() + 1);
+        }
+
+        var outputDiv = document.getElementById('output');
+        outputDiv.innerHTML = "<h3>Dates:</h3>";
+
+        if (dates.length === 0) {
+            outputDiv.innerHTML += "<p>No dates found for the specified day of the week.</p>";
+        } else {
+            outputDiv.innerHTML += "<ul>";
+            dates.forEach(function(date) {
+                outputDiv.innerHTML += "<li>" + formatDate(date) + "</li>";
+            });
+            outputDiv.innerHTML += "</ul>";
+        }
+    }
+
+    function formatDate(date) {
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        return month + "/" + day + "/" + year;
+    }
+</script>
+
+</body>
+</html>
