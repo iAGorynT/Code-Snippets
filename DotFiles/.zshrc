@@ -26,7 +26,7 @@ alias jh="/usr/libexec/java_home -V"
 alias jv="java --version"
 alias jvm="ls -a1 /Library/Java/JavaVirtualMachines/"
 alias jvmcd="cd /Library/Java/JavaVirtualMachines; ls -a1"
-alias jvmrm="sudo rm -rf %1"
+alias jvmrm="sudo rm -rf $1"
 
 # Particulars CLI Commands
 alias pall="clear; particulars -a"	# Display All System Information
