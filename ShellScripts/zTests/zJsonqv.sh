@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # JSON File Quick View Utility
-# NOTE:Pass the name of a valid JSON File when using - i.e. ./Jqv.sh json_filename.json
+# NOTE: Pass the name of a valid JSON File when using - i.e. ./zJsonqv.sh json_filename.json
 
 clear
 echo "JSON File Quick View: $1..."
