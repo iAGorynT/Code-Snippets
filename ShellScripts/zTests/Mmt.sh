@@ -20,6 +20,11 @@ function zjsonconfig {
 	~/bin/zTests/zJsonConfig.sh
 }
 
+function zjqjsonutil {
+	clear
+	~/bin/zTests/zJQJsonUtil.sh
+}
+
 function zpassfromshortcuts {
 	clear
 	~/bin/zTests/zPassFromShortcuts.sh
@@ -42,9 +47,10 @@ function menu {
 	echo -e "\t1. zDialogBox"
 	echo -e "\t2. zJQJsonConfig"
 	echo -e "\t3. zJsonConfig"
-	echo -e "\t4. zPassFromShortcuts"
-	echo -e "\t5. zUserinput"
-	echo -e "\t6. zDaysOfMonth"
+	echo -e "\t4. zJQJsonUtil"
+	echo -e "\t5. zPassFromShortcuts"
+	echo -e "\t6. zUserinput"
+	echo -e "\t7. zDaysOfMonth"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -71,12 +77,15 @@ do
 	zjsonconfig;;
 
 	4)
-	zpassfromshortcuts;;
+	zjqjsonutil;;
 
 	5)
-	zuserinput;;
+	zpassfromshortcuts;;
 
 	6)
+	zuserinput;;
+
+	7)
 	zdaysofmonth;;
 
 # Return / Enter Key Pressed
