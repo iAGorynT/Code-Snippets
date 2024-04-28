@@ -18,15 +18,15 @@ alias ht='history | tail -n 200'		# List Last Commands
 
 # Mac Shutdown / Retart Commands
 # Pass Time Parameter - "now" for immediate, "+<minutes>" to delay for specified number of minutes.
-alias macsd="sudo shutdown -h $1"
-alias macrs="sudo shutdown -r $1"
+alias macsd="sudo shutdown -h $1"	# Mac Shutdown
+alias macrs="sudo shutdown -r $1"	# Mac Restart
 
 # Java Commands
-alias jh="/usr/libexec/java_home -V"
-alias jv="java --version"
-alias jvm="ls -a1 /Library/Java/JavaVirtualMachines/"
-alias jvmcd="cd /Library/Java/JavaVirtualMachines; ls -a1"
-alias jvmrm="sudo rm -rf $1"
+alias jh="/usr/libexec/java_home -V"				# Java Home
+alias jv="java --version"					# Java Version
+alias jvm="ls -a1 /Library/Java/JavaVirtualMachines/"		# Java Virtual Machines
+alias jvmcd="cd /Library/Java/JavaVirtualMachines; ls -a1"	# cd to Java Virtual Machines Dir
+alias jvmrm="sudo rm -rf $1"					# Remove Java Virtual Machine
 
 # Particulars CLI Commands
 alias pall="clear; particulars -a"	# Display All System Information
@@ -38,13 +38,12 @@ alias cryptxt="Cryptxt.sh"		# OpenSSL Encrypt / Decrypt Text
 alias crypvault="Crypvault.sh"		# OpenSSL Encrypt / Decript Vault
 alias pwgen="Pwgen.sh"			# Generate Random Password
 
-# Launch macVim Editor From Terminal Command Prompt
-alias mvedit="open -a MacVim.app $1"
-# Open Netrw File Explorer in Home Directory 
-alias mvexplore="Mvexplore.sh"
+# MacVim Commands
+alias mvedit="open -a MacVim.app $1"	# Launch macVim Editor From Terminal Command Prompt
+alias mvexplore="Mvexplore.sh"		# Open Netrw File Explorer in Home Directory
 
-# Launch MacDown Markdown Editor From Terminal Command Prompt
-alias mdedit="open -a MacDown.app $1"
+# MacDown Markdown Editor Commands
+alias mdedit="open -a MacDown.app $1"	# Launch MacDown From Terminal Command Prompt
 
 # Terminal List Commands
 alias la="ls -a"					# List All
@@ -70,7 +69,7 @@ alias netqs="clear; networkQuality -vs"		# Sequential Test
 alias sbcompact="hdiutil compact -batteryallowed $1"	# Compact Sparsebundle File
 
 # Preference Pane Commands
-alias pp="la /system/library/Preferencepanes | more"
+alias pp="la /system/library/Preferencepanes | more"	# List Preference Panes
 
 # Time Machine Commands
 alias tmb="Tmb.sh"				# Run Time-Machine Backup
@@ -98,7 +97,7 @@ alias sshrem="clear; ssh $USER@$DECO_DDNS"
 alias ra="clear; grep -e '# Mosh/SSH' -e 'mosh ' -e 'ssh ' $HOME/.zshrc | grep -v ‘ra=‘"
 
 # Github Commands
-alias gh="open -a 'Github Desktop'"
+alias gh="open -a 'Github Desktop'"	# Launch Github Desktop App
 
 # Dev Commands
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
