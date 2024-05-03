@@ -33,6 +33,10 @@ while true; do
         echo
 
         read -r choice\?"Select Category: "
+# Test If Return / Enter Key Pressed; Replace Linefeed Character With Empty Character
+        if [[ "$choice" == *$'\n'* ]]; then
+            choice=""
+        fi
 
         echo
         case $choice in
@@ -55,7 +59,9 @@ while true; do
 	    17) category="Homebrew"; break;;
 	    18) category="Main Menu"; break;;
             19) clear; echo "Alias Documentation Complete..."; echo; exit 0;;
-             *) echo "Invalid choice";;
+# Return / Enter Key Pressed
+            "") clear; echo "Alias Documentation Complete..."; echo; exit 0;;
+             *) clear; echo "Invalid choice"; echo;;
         esac
     done
 

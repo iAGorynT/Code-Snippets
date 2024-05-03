@@ -1,6 +1,6 @@
 #=> General Commands
 alias ca="clear; cat ~/.zshrc | more"	# Display .zshrc Contents
-alias doca="Aliasdoc.sh"		# Display .zshrc Contents Using Doc Script
+alias da="Aliasdoc.sh"			# Display .zshrc Contents Using Doc Script
 alias clr="clear"			# Clear Screen
 alias dsleep="pmset displaysleepnow"	# Put Mac Display To Sleep
 alias hname="Hname.sh"			# Display Hostname / IP Addresses
