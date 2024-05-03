@@ -10,7 +10,7 @@ echo
 while true; do
 # Select Command Category
     while true; do
-        echo "Select Category:"
+        echo "Alias Categories"
         echo " 1. General"
         echo " 2. History"
 	echo " 3. Mac Shutdown / Restart"
@@ -32,7 +32,7 @@ while true; do
         echo "19. Quit"
         echo
 
-        read -r choice
+        read -r choice\?"Select Category: "
 
         echo
         case $choice in
