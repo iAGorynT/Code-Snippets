@@ -61,7 +61,7 @@ while true; do
             19) clear; echo "Alias Documentation Complete..."; echo; exit 0;;
 # Return / Enter Key Pressed
             "") clear; echo "Alias Documentation Complete..."; echo; exit 0;;
-             *) clear; echo "Invalid choice"; echo;;
+             *) clear; echo -e '\033[1mInvalid choice\033[0m'; echo;;
         esac
     done
 
