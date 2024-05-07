@@ -1,6 +1,5 @@
 tap "homebrew/autoupdate"
 tap "homebrew/bundle"
-tap "homebrew/cask-versions"
 tap "teamookla/speedtest"
 brew "btop"
 brew "iperf3"
