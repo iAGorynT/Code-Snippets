@@ -50,6 +50,8 @@ function brewapps {
 function brewtap {
 	clear
 	echo "Brew Taps..."
+	echo "Directories (usually Git Repositories) of formulae (CLI based Apps),"
+	echo "Casks (GUI based Apps), and/or external commands."
 	echo " "
 	brew tap
 }
