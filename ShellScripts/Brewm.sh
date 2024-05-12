@@ -30,11 +30,11 @@ function viewbrewfile {
 	cat ~/Brewfile
 	echo -en "\n\n\t\t\tHit any key to view App Descriptions"
 	read -k 1 line
-# Display Installed Brew File App Descriptions
+# Display Selected Brew File App Descriptions
 	clear
 	echo "App Descriptions..."
 	echo " "
-	cat ~/Brewapps
+	brewapps.sh
 }
 
 function brewapps {
