@@ -3,9 +3,12 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
+# Activate Function Library
+source $HOME/ShellScripts/FunctionLib.sh
+
 function brewdocs1 {
 	clear
-	echo "*** HomeBrew Update 1/3..."
+	brew_echo "HomeBrew Update 1/3..." 1
 	echo " "
 	brew update
 	echo " "
@@ -15,7 +18,7 @@ function brewdocs1 {
 
 function brewdocs2 {
 	clear
-	echo "*** HomeBrew Update 2/3..."
+	brew_echo "HomeBrew Update 2/3..." 1
 	echo " "
 	brew update
 	echo " "
@@ -25,7 +28,7 @@ function brewdocs2 {
 
 function brewdocs3 {
 	clear
-	echo "*** Brew Doctor 3/3..."
+	brew_echo "Brew Doctor 3/3..." 1
 	echo " "
 	brew doctor
 	echo " "
