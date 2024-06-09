@@ -95,7 +95,6 @@ while true; do
     else
 
 # Handle Invalie Input
-#       echo -e '\n\t\t\t\033[1mInvalid choice\033[0m'
         echo -e '\n\t\t\t\e[1mInvalid choice\e[0m'
         echo -en "\n\t\t\tHit any key to continue"
         read -k 1 line
