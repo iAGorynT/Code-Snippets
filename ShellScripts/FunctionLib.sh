@@ -2,15 +2,28 @@
 
 # Global Function Libraries
 
-# Function: brew_echo
+# Function: format_echo
 # Description: Format Text using the echo command and it's formatting options
-# Arguments: <TEXTSTRING> <MULTIPLE FORMAT OPTIONS>
-# Usage: brew_echo "Hello, World!" 1 4 7
+# Arguments: <TEXTSTRING> <ECHO MESSAGE TYPE-brew/std> <MULTIPLE FORMAT OPTIONS>
+# Usage: format_echo "Hello, World!" "brew" 1 4 7
 
-function brew_echo() {
+function format_echo() {
   local text="$1"
+  local echotype="$2"
+  shift
   shift
   local formats=("$@")
+
+  # Define color variables
+  BLACK='\e[0;30m'
+  RED='\e[0;31m'
+  GREEN='\e[0;32m'
+  YELLOW='\e[0;33m'
+  BLUE='\e[0;34m'
+  MAGENTA='\e[0;35m'
+  CYAN='\e[0;36m'
+  WHITE='\e[0;37m'
+  RESET='\e[0m'
 
   # Array mapping numbers to formatting options
   local -A format_map=(
@@ -35,8 +48,12 @@ function brew_echo() {
     fi
   done
 
-  # Print the formatted text with a reset at the end
-  # NOTE: ==> will be printed in BLUE
-  echo -e "\e[0;34m==>\e[0m ${format_sequence}${text}\e[0m"
+  if [ $echotype = 'brew' ]; then
+  # Print the formatted text as a HomeBrew Message with a reset at the end
+    echo -e "${BLUE}==>${RESET} ${format_sequence}${text}${RESET}"
+  else
+  # Print the formatted text as a Standard Message with a reset at the end
+    echo -e "${format_sequence}${text}${RESET}"
+  fi
 }
 
