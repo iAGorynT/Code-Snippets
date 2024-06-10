@@ -8,7 +8,7 @@ source $HOME/ShellScripts/FunctionLib.sh
 
 function brewdocs1 {
 	clear
-	brew_echo "HomeBrew Update 1/3..." 1
+	format_echo "HomeBrew Update 1/3..." "brew" 1
 	echo " "
 	brew update
 	echo " "
@@ -18,7 +18,7 @@ function brewdocs1 {
 
 function brewdocs2 {
 	clear
-	brew_echo "HomeBrew Update 2/3..." 1
+	format_echo "HomeBrew Update 2/3..." "brew" 1
 	echo " "
 	brew update
 	echo " "
@@ -28,7 +28,7 @@ function brewdocs2 {
 
 function brewdocs3 {
 	clear
-	brew_echo "Brew Doctor 3/3..." 1
+	format_echo "Brew Doctor 3/3..." "brew" 1
 	echo " "
 	brew doctor
 	echo " "

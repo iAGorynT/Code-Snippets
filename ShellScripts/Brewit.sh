@@ -8,18 +8,18 @@ echo "Brew Update, Upgrade, and Cleanup..."
 echo " "
 
 # HomeBrew Update
-brew_echo "HomeBrew Update..." 1
+format_echo "HomeBrew Update..." "brew" 1
 echo " "
 brew update
 brew upgrade
 
 # Cask Upgrade
-brew_echo "Cask Upgrade..." 1
+format_echo "Cask Upgrade..." "brew" 1
 echo " "
 brew upgrade --cask --greedy
 
 # Create New Brewfile
-brew_echo "Creating New Brewfile..." 1
+format_echo "Creating New Brewfile..." "brew" 1
 echo " "
 cd
 brew bundle dump --force
@@ -29,7 +29,7 @@ ls -al Brewfile
 echo " "
 
 # HomeBrew Cleanup
-brew_echo "HomeBrew Cleanup..." 1
+format_echo "HomeBrew Cleanup..." "brew" 1
 echo " "
 brew autoremove
 brew cleanup
