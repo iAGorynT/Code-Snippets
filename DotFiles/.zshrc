@@ -118,6 +118,7 @@ alias gh="open -a 'Github Desktop'"	# Launch Github Desktop App
 
 #=> Dev Commands
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
+alias fll="FunctionLibList.sh"			# Function Library List
 #=> End Dev Commands
 
 #=> Homebrew Commands
