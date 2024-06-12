@@ -1,5 +1,5 @@
-## Script: FunctionLibList.sh
-### Desc: Function Library List
+## Script: FunctionLibDoc.sh
+### Desc: Function Library Documentation
 Date: 06/11/2024
 
 _Documentation_
@@ -8,7 +8,7 @@ This Z shell (zsh) script lists functions from a specified script file (`Functio
 
 1. **Initialization**:
    - Clears the terminal screen.
-   - Displays a header "Function Library List...".
+   - Displays a header "Function Library Documentation...".
    - Defines search strings to identify the start (`# Function:`) and end (`# Usage:`) of function descriptions.
    - Specifies the file path for the script to read (`$HOME/ShellScripts/FunctionLib.sh`).
 
