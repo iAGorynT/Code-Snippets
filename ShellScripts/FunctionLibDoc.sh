@@ -1,9 +1,9 @@
 #!/bin/zsh
 
-# Function Library List
+# Function Library Documentation
 
 clear
-echo "Function Library List..."
+echo "Function Library Documentation..."
 echo " "
 
 # Build Search Strings
@@ -38,4 +38,7 @@ while IFS= read -r line; do
         start=false
     fi
 done < "$zshrcfile"
+
+echo "Function Library Documentation Complete..."
+echo
 
