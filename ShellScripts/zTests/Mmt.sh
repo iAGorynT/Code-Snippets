@@ -40,11 +40,6 @@ function zdaysofmonth {
 	~/bin/zTests/zDaysOfMonth.sh
 }
 
-function zlaunchchatgpt {
-	clear
-	~/bin/zTests/zLaunchChatGPT.sh
-}
-
 function menu {
 	clear
 	echo
@@ -56,7 +51,6 @@ function menu {
 	echo -e "\t5. zPassFromShortcuts"
 	echo -e "\t6. zUserinput"
 	echo -e "\t7. zDaysOfMonth"
-	echo -e "\t8. zLaunchChatGPT"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -93,9 +87,6 @@ do
 
 	7)
 	zdaysofmonth;;
-
-	8)
-	zlaunchchatgpt;;
 
 # Return / Enter Key Pressed
 	"")
