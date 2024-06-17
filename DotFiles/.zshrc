@@ -118,6 +118,7 @@ alias gh="open -a 'Github Desktop'"	# Launch Github Desktop App
 
 #=> Dev Commands
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
+alias ai="LaunchAI.sh"				# Launch AI Chatbot
 alias fdoc="FunctionLibDoc.sh"			# Function Library Documentation
 #=> End Dev Commands
 
