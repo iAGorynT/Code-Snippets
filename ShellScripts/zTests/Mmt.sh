@@ -40,6 +40,11 @@ function zdaysofmonth {
 	~/bin/zTests/zDaysOfMonth.sh
 }
 
+function zselectoption {
+	clear
+	~/bin/zTests/zSelectOption.sh
+}
+
 function menu {
 	clear
 	echo
@@ -51,6 +56,7 @@ function menu {
 	echo -e "\t5. zPassFromShortcuts"
 	echo -e "\t6. zUserinput"
 	echo -e "\t7. zDaysOfMonth"
+	echo -e "\t8. zSelectOption"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -87,6 +93,9 @@ do
 
 	7)
 	zdaysofmonth;;
+
+	8)
+	zselectoption;;
 
 # Return / Enter Key Pressed
 	"")
