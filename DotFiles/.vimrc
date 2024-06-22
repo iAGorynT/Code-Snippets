@@ -44,4 +44,4 @@ endif
 " Vim and macVim Custom Editor Settings
 
 set number
-colorscheme blue
+colorscheme mustang_vim_colorscheme_by_hcalves_d1mxd78
