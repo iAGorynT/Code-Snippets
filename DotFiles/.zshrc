@@ -46,8 +46,9 @@ alias pwgen="Pwgen.sh"			# Generate Random Password
 #=> End Encrypt / Decrypt / Security Commands
 
 #=> MacVim Commands
-alias mvedit="open -a MacVim.app $1"	# Launch macVim Editor From Terminal Command Prompt
-alias mvexplore="Mvexplore.sh"		# Open Netrw File Explorer in Home Directory
+alias mvedit="open -a MacVim.app $1"		# Launch macVim Editor From Terminal Command Prompt
+alias mvexplore="Mvexplore.sh"			# Open Netrw File Explorer in Home Directory
+alias mvcolor="clear; cd $HOME/.vim/colors; la"	# List 3rd Party Color Schemes
 #=> End MacVim Commands
 
 #=> MacDown Markdown Editor Commands
@@ -69,7 +70,7 @@ alias ipc2s="Ipc2s.sh"				# Start iPerf3 Client-to-Server Test
 alias ips2c="Ips2c.sh"				# Start iPerf3 Server-to-Client Test
 # Internet Speedtest
 alias webspeed="open -a Speedtest.app"		# Gui Based Speedtest
-alias clispeed="clear; echo 'Speedtest in progress...'; speedtest -p no" # Character Based Speedtest
+alias clispeed="clear; echo 'Speedtest in progress...'; speedtest -p yes" # Character Based Speedtest
 # Apple Network Quality Test (Note: RPM = Round Trips Per Minute, RTT = Round Trip Time)
 alias netq="clear; networkQuality -v"		# Default Network Interface
 alias netqif="clear; networkQuality -v -I $1"	# Network Interface
