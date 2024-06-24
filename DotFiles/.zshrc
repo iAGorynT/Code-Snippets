@@ -48,7 +48,7 @@ alias pwgen="Pwgen.sh"			# Generate Random Password
 #=> MacVim Commands
 alias mvedit="open -a MacVim.app $1"		# Launch macVim Editor From Terminal Command Prompt
 alias mvexplore="Mvexplore.sh"			# Open Netrw File Explorer in Home Directory
-alias mvcolor="clear; cd $HOME/.vim/colors; la"	# List 3rd Party Color Schemes
+alias mvcolor="clear; cd $HOME/.vim/colors; ls -a1"	# List 3rd Party Color Schemes
 #=> End MacVim Commands
 
 #=> MacDown Markdown Editor Commands
