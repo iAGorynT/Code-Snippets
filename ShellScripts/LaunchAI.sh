@@ -11,8 +11,8 @@ echo "Select AI Chatbot..."
 echo
 select act in "Claude" "ChatGPT" "Copilot" "Gemini" "Quit"; do
     case $act in
-        Claude  ) action="claude"; break;;
-        ChatGPT ) action="chatgpt"; break;;
+	Claude  ) action="claude"; break;;
+	ChatGPT ) action="chatgpt"; break;;
 	Copilot ) action="copilot"; break;;
 	Gemini  ) action="gemini"; break;;
 	Quit    ) action="quit"; break;;
