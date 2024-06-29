@@ -9,8 +9,9 @@ echo
 # Select Chatbot
 echo "Select AI Chatbot..."
 echo
-select act in "ChatGPT" "Copilot" "Gemini" "Quit"; do
+select act in "Claude" "ChatGPT" "Copilot" "Gemini" "Quit"; do
     case $act in
+        Claude  ) action="claude"; break;;
         ChatGPT ) action="chatgpt"; break;;
 	Copilot ) action="copilot"; break;;
 	Gemini  ) action="gemini"; break;;
@@ -19,8 +20,26 @@ select act in "ChatGPT" "Copilot" "Gemini" "Quit"; do
 done
 echo
 
+# Launch Claude
+if [ $action = "claude" ]
+    then
+
+# Search User's Application Folder; Launch Claude Web App if installed
+    launchapp=$HOME"/Applications/Claude.app"
+    if [ -r "$launchapp" ]; then
+        Open $launchapp					# Launch "Viewable" Web App 
+        echo "Claude Web Launched in Viewable State..."
+        echo
+        exit 0
+    fi
+
+# Claude Not Installed / Launched
+    echo "Claude Not Installed / Launched..."
+    echo
+    exit 0
+
 # Launch ChatGPT
-if [ $action = "chatgpt" ]
+elif [ $action = "chatgpt" ]
     then
 
 # Search System's Application Folder; Launch ChatGPT Desktop App if installed
