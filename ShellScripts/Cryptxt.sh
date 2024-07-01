@@ -1,49 +1,54 @@
 #!/bin/zsh
 
+# Clear the terminal screen
 clear
+
+# Display the title of the script
 echo "OpenSSL Text Encrypt / Decrypt"
 echo " "
 
-# Request User Input
+# Request User Input for action (encryption or decryption)
 while true; do
     read action\?"enc / dec: "
     case $action in
-        [enc]* ) break;;	# Encode text
-        [dec]* ) break;;	# Decode text
+        enc ) break;;    # Encode text
+        dec ) break;;    # Decode text
         * ) echo "Please answer enc or dec";;
     esac
 done
+
+# Request input for the string to encrypt/decrypt
 read string\?"string: "
+
+# Request password input (hidden from view)
 read -s password\?"password: "
 
-# Another way to request input using vared command
-#vared -p "enc / dec: " -c action
-#vared -p "string: " -c string
-#vared -p "password: " -c password
-
-# Skip line
+# Print a newline for better formatting
 echo -e "\n"
 
-# Check if all parameters are set, if not show an error message and exit the script
+# Check if all required inputs are provided
 if [ -z "$action" ] || [ -z "$string" ] || [ -z "$password" ]
-    then echo "You need to set all variables to run the script: enc for encryption or dec for decryption, The string to encrypt/decrypt, The password for the encryption/decryption"
-    exit 0
+    then 
+        echo "You need to set all variables to run the script: enc for encryption or dec for decryption, The string to encrypt/decrypt, The password for the encryption/decryption"
+        exit 0
 fi
 
-# If the action is encryption => encrypt the string, if the mechanism is decryption => decrypt the string
+# Perform encryption or decryption based on user input
 if [ $action = 'enc' ]
     then
-    echo "ENCODE: $string"
-    echo $string | openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$password -pbkdf2 -iter 600000 | tr -d '\n' | pbcopy
-    echo
-    pbpaste
-    echo
+        echo "ENCODE: $string"
+        # Encrypt the string using OpenSSL, copy to clipboard, and display
+        echo $string | openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$password -pbkdf2 -iter 600000 | tr -d '\n' | pbcopy
+        echo
+        pbpaste
+        echo
 elif [ $action = 'dec' ]
     then
-    echo "DECODE: $string"
-    echo
-    echo $string | openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$password -pbkdf2 -iter 600000
+        echo "DECODE: $string"
+        echo
+        # Decrypt the string using OpenSSL and display
+        echo $string | openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$password -pbkdf2 -iter 600000
 fi
 
-# Skip Line
+# Print a newline for better formatting
 echo -e "\n"
