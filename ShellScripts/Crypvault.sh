@@ -1,10 +1,11 @@
 #!/bin/zsh
 
+# Clear the terminal screen
 clear
 echo "OpenSSL Vault Encrypt / Decrypt"
 echo " "
 
-# Set Default Dir To Desktop
+# Set Default Directory To Desktop
 cd $HOME/Desktop
 
 # Select Action
@@ -13,17 +14,18 @@ echo " "
 select act in "Encrypt" "Decrypt" "View" "GitSync" "Config" "Quit"; do
     case $act in
         Encrypt ) action="enc"; break;;
-	Decrypt ) action="dec"; break;;
-	View	) action="view"; break;;
-	GitSync ) action="sync"; break;;
-	Config  ) action="conf"; break;;
-	Quit    ) action="quit"; break;;
+        Decrypt ) action="dec"; break;;
+        View    ) action="view"; break;;
+        GitSync ) action="sync"; break;;
+        Config  ) action="conf"; break;;
+        Quit    ) action="quit"; break;;
     esac
 done
 
 # Run ConfigFILES Shortcuts App
 if [ $action = "view" ]
     then
+    # Display a warning message when viewing
     osascript -e 'display dialog "WHEN VIEWING, DO NOT UPDATE SELECTED VAULT-Changes will not be saved!" with title "Caution When Viewing" with icon caution buttons {"OK"} default button "OK"' >/dev/null 2>&1
 elif [ $action = "conf" ]
     then
@@ -50,7 +52,7 @@ if [ $action != "sync" ]
     select vnam in "VaultMGR" "GitMGR"; do
         case $vnam in
             VaultMGR ) vaultname="vmgr"; break;;
-	    GitMGR   ) vaultname="gmgr"; break;;
+            GitMGR   ) vaultname="gmgr"; break;;
         esac
     done
 # Sync Can Only Be Done for GitMGR
@@ -60,7 +62,7 @@ else
     echo " "
     select vnam in "GitMGR"; do
         case $vnam in
-	    GitMGR   ) vaultname="gmgr"; break;;
+            GitMGR   ) vaultname="gmgr"; break;;
         esac
     done
 fi
@@ -85,44 +87,44 @@ fi
 # Set Vault Variables
 if [ $vaultname = "vmgr" ] 
     then
-# If Installed, Use "jq" JSON Processor for Filename Lookup
+    # If Installed, Use "jq" JSON Processor for Filename Lookup
     if jq -V >/dev/null 2>&1
         then
         filename=$(jq -r '.vaultmgr_name' $configfile)
     else 
-# Search VaultMGR JSON Config. File for Filename
+        # Search VaultMGR JSON Config. File for Filename
         str=$(cat $configfile)
         substr="vaultmgr_name"
         prefix=${str%%$substr*}
         index=${#prefix}
         nameidx=$((index + 16)) # VaultMGR
-# Create a SubString That Begins With VaultMGR Filename
+        # Create a SubString That Begins With VaultMGR Filename
         str2=$(echo $str | cut -c $nameidx-)
-# Strip Special Characters and Save Actual VaultMGR Filename
+        # Strip Special Characters and Save Actual VaultMGR Filename
         filename=$(echo $str2 | cut -d '"' -f2)
     fi
-# Initialize VaultMGR Names
+    # Initialize VaultMGR Names
     vaultdir=$filename
     vaultenc=$vaultdir".enc"
 elif [ $vaultname = "gmgr" ] 
     then
-# If Installed, Use "jq" JSON Processor for Filename Lookup
+    # If Installed, Use "jq" JSON Processor for Filename Lookup
     if jq -V >/dev/null 2>&1
         then
         filename=$(jq -r '.gitmgr_name' $configfile)
     else 
-# Search GitMGR JSON Config. File for Filename
+        # Search GitMGR JSON Config. File for Filename
         str=$(cat $configfile)
         substr="gitmgr_name"
         prefix=${str%%$substr*}
         index=${#prefix}
         nameidx=$((index + 14)) # GitMGR
-# Create a SubString That Begins With GitMGR Filename
+        # Create a SubString That Begins With GitMGR Filename
         str2=$(echo $str | cut -c $nameidx-)
-# Strip Special Characters and Save Actual GitMGR Filename
+        # Strip Special Characters and Save Actual GitMGR Filename
         filename=$(echo $str2 | cut -d '"' -f2)
     fi
-# Initialize GitMGR Names
+    # Initialize GitMGR Names
     vaultdir=$filename
     vaultenc=$vaultdir".enc"
 fi
@@ -166,14 +168,13 @@ elif ([ $action = 'dec' ] || [ $action = 'view' ]) && [ ! -f $vaultenc ]
     exit 1
 fi
 
-# If the action is encryption => encrypt the vault
-# if the action is decryption => decrypt the vault
-# if the action is sync => sync the vault with GitHUB
+# Perform the selected action
 # Encrypt
 if [ $action = 'enc' ]
     then
+    # Create tar archive, compress with gzip, and encrypt with OpenSSL
     tar -cf $vaultdir.tar $vaultdir && gzip $vaultdir.tar && openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 600000 -in $vaultdir.tar.gz -out $vaultenc && rm -f $vaultdir.tar.gz
-# Move encrypted file to iCloud and vault directory to trash
+    # Move encrypted file to iCloud and vault directory to trash
     mv -f $vaultenc $iclouddir
     rm -rf ~/.trash/$vaultdir
     mv -f $vaultdir ~/.trash
@@ -183,8 +184,9 @@ if [ $action = 'enc' ]
 # Decrypt
 elif [ $action = 'dec' ] || [ $action = 'view' ]
     then
+    # Decrypt with OpenSSL, decompress, and extract
     openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 600000 -in $vaultenc -out $vaultdir.tar.gz && tar -xzf $vaultdir.tar.gz && rm -f $vaultdir.tar.gz 
-# Move encrypted file to trash
+    # Move encrypted file to trash
     rm -rf ~/.trash/$vaultenc
     mv -f $vaultenc ~/.trash
     echo "Vault Decrypted:" $vaultdir
@@ -192,9 +194,9 @@ elif [ $action = 'dec' ] || [ $action = 'view' ]
     echo " "
     if [ $action = 'view' ]
         then
-	echo "When Done Viewing, Move $vaultdir Vault To Trash!"
-	echo " "
-# Open unecncrypted vault in finder
+        echo "When Done Viewing, Move $vaultdir Vault To Trash!"
+        echo " "
+        # Open unecncrypted vault in finder
         open $HOME/Desktop/$vaultdir
     fi
 # Sync With GitHUB
@@ -204,7 +206,7 @@ elif [ $action = 'sync' ]
     echo "GitHUB Sync Starting"
     currentDate=`date`
     echo $currentDate
-# rsync keeping all file attributes
+    # rsync keeping all file attributes
     rsync -avh $HOME/Documents/GitHub/Code-Snippets/ $HOME/Desktop/GciSttH6UsbSj7I/GitHub/Code-Snippets --delete
     echo "GitHUB Sync Completed"
     echo " "
