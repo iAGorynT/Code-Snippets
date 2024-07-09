@@ -43,5 +43,9 @@ endif
 
 " Vim and macVim Custom Editor Settings
 
+" Map L1 to open Lexplore mode - Non-Recursive Mapping
+nnoremap L1 :Lexplore<CR>:vertical resize 30<CR>
+" Display line numbers in files
 set number
+" Set default colorscheme
 colorscheme mustang_vim_colorscheme_by_hcalves_d1mxd78
