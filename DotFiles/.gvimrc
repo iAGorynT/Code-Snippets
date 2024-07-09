@@ -111,6 +111,7 @@ unlet s:cpo_save
 
 " macVim Custom Editor Settings
 
-" set guifont=Menlo:h14
+" Set Default font
+" set guifont=Menlo:h14 - Original Default
 set guifont=-monospace-:h14
 
