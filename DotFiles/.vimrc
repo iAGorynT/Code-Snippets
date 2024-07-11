@@ -43,9 +43,49 @@ endif
 
 " Vim and macVim Custom Editor Settings
 
+" Netrw Key Mapping Function
+function! NetrwMapping()
 " Map L1 to open Lexplore mode - Non-Recursive Mapping
-nnoremap L1 :Lexplore<CR>:vertical resize 30<CR>
+    nnoremap L1 :Lexplore<CR>:vertical resize 30<CR>
+endfunction
+
 " Display line numbers in files
 set number
+
 " Set default colorscheme
 colorscheme mustang_vim_colorscheme_by_hcalves_d1mxd78
+
+" NERDtree Like Setup
+" Disable the Netrw banner
+let g:netrw_banner = 0
+
+" Set the default listing style:
+" 3 = tree style listing
+let g:netrw_liststyle = 3
+
+" Set how files are opened when selected:
+" 4 = open file in previous window
+let g:netrw_browse_split = 4
+
+" Open vertical splits to the right
+let g:netrw_altv = 1
+
+" Set the width of the directory explorer to 25% of the screen
+let g:netrw_winsize = 25
+
+" Create an autocommand group netrw_mapping
+augroup netrw_mapping
+  " Clear any existing autocommands in this group
+  autocmd!
+  " When Vim starts,automatically perform key mapping
+  autocmd filetype netrw call NetrwMapping()
+augroup END
+
+" Create an autocommand group named ProjectDrawer
+augroup ProjectDrawer
+  " Clear any existing autocommands in this group
+  autocmd!
+  " When Vim starts, automatically open Netrw in the left window
+  autocmd VimEnter * :Vexplore
+augroup END
+
