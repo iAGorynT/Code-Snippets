@@ -105,8 +105,8 @@ alias ncsvr="nc -4 -u -l -v 60013"					# Open Port On Mosh Server
 alias nccli='echo "hello world" | nc -4 -v -u $DEV_IP 60013'		# Send Message To Server
 # Mosh/SSH Local/Remote DevLoc
 # Note: ~/.zshenv contains DECO_DDNS, DEV_IP
-alias moshloc="mosh --server='/usr/local/bin/mosh-server' $USER@$DEV_IP"
-alias moshrem="mosh --server='/usr/local/bin/mosh-server' $USER@$DECO_DDNS"
+alias moshloc="mosh --server='/opt/homebrew/bin/mosh-server' $USER@$DEV_IP"
+alias moshrem="mosh --server='/opt/homebrew/bin/mosh-server' $USER@$DECO_DDNS"
 alias sshloc="clear; ssh $USER@$DEV_IP"
 alias sshrem="clear; ssh $USER@$DECO_DDNS"
 # List Mosh/SSH Alias'
