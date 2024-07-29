@@ -9,7 +9,7 @@ echo
 echo "Bash: $(bash --version)" | grep -e 'version '
 
 # Homebrew
-echo "Homebrew: $(brew -v)"
+echo "Homebrew: $(brew --version)"
 
 # Homebrew Autoupdate
 echo "Homebrew Autoupdate: $(brew autoupdate version | grep -e 'Version')" # Exclude Change Log
