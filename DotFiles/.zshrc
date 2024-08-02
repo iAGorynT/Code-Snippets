@@ -140,6 +140,9 @@ alias mmt="~/bin/zTests/Mmt.sh"			# Test Menu
 alias mml="clear; grep -e '# Main Menu' -e 'alias mm' $HOME/.zshrc | grep -v ‘mml=‘"
 #=> End Main Menu Commands
 
+# Enable Colorized Directory Listings
+export CLICOLOR=1
+
 # Activate Zsh Syntax Highlighting
 # NOTE:  Ensure This Is At Very End of .zshrc
 source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
