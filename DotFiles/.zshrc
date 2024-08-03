@@ -46,7 +46,7 @@ alias pwgen="Pwgen.sh"			# Generate Random Password
 #=> End Encrypt / Decrypt / Security Commands
 
 #=> MacVim Commands
-alias mvedit="open -a MacVim.app $1"			# Launch macVim Editor From Terminal Command Prompt
+alias mvedit="Mvedit.sh $1"				# Launch macVim Editor From Terminal Command Prompt
 alias mvexplore="Mvexplore.sh"				# Open Netrw File Explorer in Home Directory
 alias mvcolor="clear; cd $HOME/.vim/colors; ls -a1"	# List 3rd Party Color Schemes
 #=> End MacVim Commands
@@ -121,6 +121,7 @@ alias gh="open -a 'Github Desktop'"	# Launch Github Desktop App
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
 alias ai="LaunchAI.sh"				# Launch AI Chatbot
 alias fdoc="FunctionLibDoc.sh"			# Function Library Documentation
+alias ctest="Colortest.sh"			# Display Color Test
 #=> End Dev Commands
 
 #=> Homebrew Commands
