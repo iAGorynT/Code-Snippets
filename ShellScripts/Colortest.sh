@@ -15,11 +15,11 @@ for x in {0..8}; do
 # Loop through background colors (40 to 47)
     for a in {40..47}; do
 # Print the escape sequence and a representation of it, then reset formatting
-      echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m ";
-    done;
+      echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "
+    done
 # Newline after each set of background colors
-    echo;
-  done;
-done;
+    echo
+  done
+done
 echo ""
 
