@@ -113,5 +113,6 @@ unlet s:cpo_save
 
 " Set Default font
 " set guifont=Menlo:h14 - Original Default
-set guifont=-monospace-:h14
+" set guifont=-monospace-:h14 - System Default
+set guifont=Jetbrains\ Mono:h14
 
