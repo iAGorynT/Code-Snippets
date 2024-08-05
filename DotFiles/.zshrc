@@ -48,7 +48,7 @@ alias pwgen="Pwgen.sh"			# Generate Random Password
 #=> MacVim Commands
 alias mvedit="Mvedit.sh $1"				# Launch macVim Editor From Terminal Command Prompt
 alias mvexplore="Mvexplore.sh"				# Open Netrw File Explorer in Home Directory
-alias mvcolor="clear; cd $HOME/.vim/colors; ls -a1"	# List 3rd Party Color Schemes
+alias mvcolor="clear; echo 'Color Schemes...'; echo; ls -1 ~/.vim/colors; echo"	# List 3rd Party Color Schemes
 #=> End MacVim Commands
 
 #=> MacDown Markdown Editor Commands
@@ -122,6 +122,7 @@ alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script F
 alias ai="LaunchAI.sh"				# Launch AI Chatbot
 alias fdoc="FunctionLibDoc.sh"			# Function Library Documentation
 alias ctest="Colortest.sh"			# Display Color Test
+alias webapps="clear; echo 'Web Apps...'; echo; ls -1 ~/Applications; echo" # List Safari Web Apps
 #=> End Dev Commands
 
 #=> Homebrew Commands
