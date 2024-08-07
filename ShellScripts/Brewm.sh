@@ -68,7 +68,7 @@ function brewautom {
 
 function mvexplore {
 	clear
-	mvexplore.sh 
+	mvedit.sh
 }
 
 function menu {
