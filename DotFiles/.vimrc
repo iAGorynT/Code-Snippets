@@ -86,6 +86,7 @@ augroup ProjectDrawer
   " Clear any existing autocommands in this group
   autocmd!
   " When Vim starts, automatically open Netrw in the left window
-  autocmd VimEnter * :Vexplore
+  " and file (if specified) in right window
+  autocmd VimEnter * if argc() == 0 | Vexplore | else | Vexplore | wincmd l | endif
 augroup END
 
