@@ -46,7 +46,7 @@ endif
 " Netrw Key Mapping Function
 function! NetrwMapping()
 " Map L1 to open Lexplore mode - Non-Recursive Mapping
-    nnoremap L1 :Lexplore<CR>:vertical resize 30<CR>
+    nnoremap L1 :Vexplore<CR>:vertical resize 30<CR>
 endfunction
 
 " Display line numbers in files
