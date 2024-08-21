@@ -199,6 +199,23 @@
             document.body.classList.toggle('dark-mode');
         }
 
+        // Function to check system default mode and set the toggle switch accordingly
+        function checkSystemMode() {
+            const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            const toggle = document.getElementById('modeToggle');
+            
+            if (prefersDarkScheme) {
+                document.body.classList.add('dark-mode');
+                toggle.checked = true;
+            } else {
+                document.body.classList.remove('dark-mode');
+                toggle.checked = false;
+            }
+        }
+
+        // Call the function on page load
+        window.onload = checkSystemMode;
+
         // Function to generate dates based on user input
         function generateDates() {
             // Get user input
