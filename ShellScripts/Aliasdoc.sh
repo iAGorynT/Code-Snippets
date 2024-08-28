@@ -75,7 +75,7 @@ while true; do
 
 # Check if line begins with Category Start
             if [[ $line == *"$catstart"* ]]; then
-	        start=true
+		start=true
             fi
 
 # If start is true, display the line
@@ -85,7 +85,7 @@ while true; do
 
 # Check if line begins with Category End
             if [[ $line == *"$catend"* ]]; then
-	        break
+		break
             fi
         done < "$zshrcfile"
 
