@@ -103,6 +103,6 @@ call plug#end()
 " Enable/Disable use of PowerLine Fonts
 let g:airline_powerline_fonts = 1
 
-" enable/disable detection of whitespace errors (mixing of spaces and tabs)
+" Enable/Disable detection of whitespace errors (mixing of spaces and tabs)
 let g:airline#extensions#whitespace#enabled = 0
 
