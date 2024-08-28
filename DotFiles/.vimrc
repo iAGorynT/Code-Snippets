@@ -90,3 +90,19 @@ augroup ProjectDrawer
   autocmd VimEnter * if argc() == 0 | Vexplore | else | Vexplore | wincmd l | endif
 augroup END
 
+" Vim-Plugins
+call plug#begin()
+
+" List plugins here
+Plug 'ryanoasis/vim-devicons'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+call plug#end()
+
+" Enable/Disable use of PowerLine Fonts
+let g:airline_powerline_fonts = 1
+
+" enable/disable detection of whitespace errors (mixing of spaces and tabs)
+let g:airline#extensions#whitespace#enabled = 0
+
