@@ -23,7 +23,7 @@ echo
 # jq
 echo "jq JSON processor: $(jq -V)"
 
-# macVim
+# MacVim
 echo
 echo "MacVim:"
 mver=$(mvim --version | grep -e 'VIM - Vi IMproved' -e 'Included patches')
