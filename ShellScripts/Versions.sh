@@ -24,10 +24,19 @@ echo
 echo "jq JSON processor: $(jq -V)"
 
 # macVim
+echo
+echo "MacVim:"
 mver=$(mvim --version | grep -e 'VIM - Vi IMproved' -e 'Included patches')
-echo "macVim Version: $mver"
+echo "Version: $mver"
+echo "Autoload..."
+ls -1 ~/.vim/autoload
+echo "Plugins..."
+ls -1 ~/.vim/plugged
+echo "Colors..."
+ls -1 ~/.vim/colors
 
 # Mosh
+echo
 mosh --version | grep -e 'mosh '
 
 # SSH
