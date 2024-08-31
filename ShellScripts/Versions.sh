@@ -34,9 +34,9 @@ echo "Plugins..."
 ls -1 ~/.vim/plugged
 echo "Colors..."
 ls -1 ~/.vim/colors
+echo
 
 # Mosh
-echo
 mosh --version | grep -e 'mosh '
 
 # SSH
