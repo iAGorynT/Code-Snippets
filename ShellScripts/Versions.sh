@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+# Activate Function Library
+source $HOME/ShellScripts/FunctionLib.sh
+
 # Display Software Versions
 clear
 echo "Software Versions..."
@@ -28,11 +31,11 @@ echo
 echo "MacVim:"
 mver=$(mvim --version | grep -e 'VIM - Vi IMproved' -e 'Included patches')
 echo "Version: $mver"
-echo "Autoload..."
+format_echo "Autoload" "std" 4
 ls -1 ~/.vim/autoload
-echo "Plugins..."
+format_echo "Plugins" "std" 4
 ls -1 ~/.vim/plugged
-echo "Colors..."
+format_echo "Colors" "std" 4
 ls -1 ~/.vim/colors
 echo
 
