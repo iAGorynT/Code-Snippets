@@ -15,6 +15,7 @@ alias penv="printenv | more"		# Display Environment Variables
 alias sver="Versions.sh"		# Display Software Versions
 alias pkgu="pkgutil --pkgs | more"	# List Installed Packages (i.e. Xcode Command Line Tools)
 alias ppi="Ppi.sh"			# Calculate Monitor PPI
+alias ltty="Listtty.sh"			# List tty Sessions
 alias ws="dscl . -read ~/ UserShell"	# Display Default Shell (Which Shell)
 alias zp="echo 'zsh Prompt: $PROMPT'"	# Show zsh Prompt Format
 #=> End General Commands
