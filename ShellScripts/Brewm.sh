@@ -12,7 +12,9 @@ function brewlist {
 	clear
 	echo "Brew List..."
 	echo " "
-	brew list
+# Changed to brew ls Because of Bug in brew list Command
+	# brew list
+	brew ls
 }
 
 function brewdep {
