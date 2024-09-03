@@ -5,7 +5,7 @@ echo "TTY Information..."
 echo 
 
 # Display Current Session tty Information
-echo "Current Terminal Session: $(tty)"
+echo "Current Terminal Session: $(tty)  Type:" $TERM
 echo
 
 # Display All tty Information for User
