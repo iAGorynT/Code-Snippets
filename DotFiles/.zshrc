@@ -152,13 +152,22 @@ alias mml="clear; grep -e '# Main Menu' -e 'alias mm' $HOME/.zshrc | grep -v ‘
 # Enable Colorized Directory Listings
 export CLICOLOR=1
 
-# Activate Zsh Syntax Highlighting
-# NOTE:  Ensure This Is At Very End of .zshrc
-source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 # Activate Zsh Command Prompt Theme / Layout
 source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Enable Homebrew Completions
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+  autoload -Uz compinit
+  compinit
+fi
+
+# Activate Zsh Syntax Highlighting
+# NOTE:  Ensure This is at Very End of .zshrc
+source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
