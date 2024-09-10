@@ -33,9 +33,7 @@ format_echo "HomeBrew Cleanup..." "brew" 1
 echo " "
 brew autoremove
 brew cleanup
-# Changed to brew ls Because of Bug in brew list Command
-# brew list
-brew ls
+brew list
 
 echo " "
 echo "Brew Update, Upgrade, and Cleanup Completed!"
