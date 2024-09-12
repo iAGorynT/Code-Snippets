@@ -46,7 +46,7 @@ endif
 " Netrw Key Mapping Function
 function! NetrwMapping()
 " Map L1 to open Lexplore mode - Non-Recursive Mapping
-    nnoremap L1 :Vexplore<CR>:vertical resize 30<CR>
+    nnoremap L1 :Lexplore<CR>:vertical resize 30<CR>
 endfunction
 
 " Display line numbers in files
@@ -86,8 +86,9 @@ augroup ProjectDrawer
   " Clear any existing autocommands in this group
   autocmd!
   " When Vim starts, automatically open Netrw in the left window
-  " and file (if specified) in right window
-  autocmd VimEnter * if argc() == 0 | Vexplore | else | Vexplore | wincmd l | endif
+  " and file (if specified) in right window (Note: Use Vexplore to place Netrw
+  " in the Right Window)
+  autocmd VimEnter * if argc() == 0 | Lexplore | else | Lexplore | wincmd l | endif
 augroup END
 
 " Vim-Plugins
