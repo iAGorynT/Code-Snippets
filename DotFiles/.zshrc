@@ -64,7 +64,7 @@ alias mdedit="open -a MacDown.app $1"	# Launch MacDown From Terminal Command Pro
 
 #=> Terminal List Commands
 alias la="ls -a"					# List All
-alias ll="ls -al"					# Long List
+alias ll="ls -al"					# Long List - Total at top is Block Count
 alias ss="clear; cd $HOME/ShellScripts; ll"		# Show Scripts
 alias sst="clear; cd $HOME/ShellScripts/zTests; ll"	# Show Test Scripts
 alias lc="echo -n 'Number of Files:'; ls | wc -l" 	# List File Count
