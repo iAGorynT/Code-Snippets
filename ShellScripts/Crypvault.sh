@@ -17,12 +17,13 @@ while true; do
     # Select Action
     echo "Select Action..."
     echo " "
-    select act in "Encrypt" "Decrypt" "View" "GitSync" "Config" "Quit"; do
+    select act in "Encrypt" "Decrypt" "View" "GitSync" "Backup" "Config" "Quit"; do
         case $act in
             Encrypt ) action="enc"; break;;
             Decrypt ) action="dec"; break;;
             View    ) action="view"; break;;
             GitSync ) action="sync"; break;;
+            Backup  ) action="back"; break;;
             Config  ) action="conf"; break;;
             Quit    ) action="quit"; break;;
         esac
@@ -107,6 +108,7 @@ while true; do
         # Initialize VaultMGR Names
         vaultdir=$filename
         vaultenc=$vaultdir".enc"
+	configjson="vaultmgr_config.json"
     elif [ $vaultname = "gmgr" ]; then
         # If Installed, Use "jq" JSON Processor for Filename Lookup
         if jq -V >/dev/null 2>&1; then
@@ -126,6 +128,7 @@ while true; do
         # Initialize GitMGR Names
         vaultdir=$filename
         vaultenc=$vaultdir".enc"
+	configjson="gitmgr_config.json"
     fi
 
     # Load Hash_CFG
@@ -202,11 +205,36 @@ while true; do
         # rsync keeping all file attributes
         rsync -avh $HOME/Documents/GitHub/Code-Snippets/ $HOME/Desktop/GciSttH6UsbSj7I/GitHub/Code-Snippets --delete
         echo "GitHUB Sync Completed"
-        echo " "
+	read
+    # Vault Backup - iCloud to Thumb Drive and Downloads zVault
+    elif [ $action = 'back' ]; then
+	clear
+	echo "Backing up" $vaultdir
+	echo " "
+	# Set iCloud File Location
+	copyfile=$HOME/Library/Mobile\ Documents/com\~apple\~CloudDocs/$vaultenc
+	# Set Vault Config File Location
+	copyjson=$HOME'/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files/'$configjson
+	# Check If Thumb Drive is Mounted (Optional)
+	diskutil list external | grep 'Private' &>/dev/null
+	MountStatus=$?
+	if [ $MountStatus -eq 0 ]; then
+	    echo "Backing up to Private..."
+	# Copy iCloud Encrypted Vault to BruKasa Thumb Drive if Mounted
+	    cp $copyfile /Volumes/Private
+	    cp $copyjson /Volumes/Private/Shortcuts\ Config\ Files
+	fi
+	# Copy iCloud Encrypted Vault to Downloads zVault Backup
+	echo "Backing up to Downloads..."
+	cp $copyfile $HOME/Downloads/zVault\ Backup
+	cp $copyjson $HOME/Downloads/zVault\ Backup/Shortcuts\ Config\ Files	
+	echo " "
+        echo "Vault Backup Completed"
 	read
     fi
 
     # Pause before next iteration
+    echo " "
     echo "Press Enter to continue..."
     read
 done
