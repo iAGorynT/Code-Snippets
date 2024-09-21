@@ -80,13 +80,14 @@ while true; do
     elif [ $vaultname = "gmgr" ]; then
         configfile=$HOME'/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files/gitmgr_config.json'
     fi
-    if grep -q -w PFE $configfile; then 
-        echo " "
-        echo "Vault Encryption Type is Paranoia PFE, Use VaultMGR or GitMGR..."
-        echo " "
-	read
-        continue
+    
+    # Determine Type of Encryption Used on Vault
+    if grep -q -w SSL $configfile; then 
+        encryptype="SSL"   
+    else
+        encryptype="PFE"
     fi
+    echo "Vault Encryption Used: "$encryptype
 
     # Set Vault Variables
     if [ $vaultname = "vmgr" ]; then
@@ -171,8 +172,14 @@ while true; do
     # Perform the selected action
     # Encrypt
     if [ $action = 'enc' ]; then
-        # Create tar archive, compress with gzip, and encrypt with OpenSSL
-        tar -cf $vaultdir.tar $vaultdir && gzip $vaultdir.tar && openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 1000000 -in $vaultdir.tar.gz -out $vaultenc && rm -f $vaultdir.tar.gz
+	if [ $encryptype = 'SSL' ]; then
+            # SSL Encrypt
+            # Create tar archive, compress with gzip, and encrypt with OpenSSL
+            tar -cf $vaultdir.tar $vaultdir && gzip $vaultdir.tar && openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 1000000 -in $vaultdir.tar.gz -out $vaultenc && rm -f $vaultdir.tar.gz
+        else
+	    # PFE Encrypt
+            java -Xmx1g -jar /Applications/Utilities/SSE/ssefenc.jar $vaultdir $hash_cfg twofish
+        fi
         # Move encrypted file to iCloud and vault directory to trash
         mv -f $vaultenc $iclouddir
         rm -rf ~/.trash/$vaultdir
@@ -182,8 +189,14 @@ while true; do
         echo " "
     # Decrypt
     elif [ $action = 'dec' ] || [ $action = 'view' ]; then
-        # Decrypt with OpenSSL, decompress, and extract
-        openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 1000000 -in $vaultenc -out $vaultdir.tar.gz && tar -xzf $vaultdir.tar.gz && rm -f $vaultdir.tar.gz 
+	if [ $encryptype = 'SSL' ]; then
+            # SSL Decrypt
+            # Decrypt with OpenSSL, decompress, and extract
+            openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 1000000 -in $vaultenc -out $vaultdir.tar.gz && tar -xzf $vaultdir.tar.gz && rm -f $vaultdir.tar.gz 
+        else
+            # PFE Decrypt
+	    java -Xmx1g -jar /Applications/Utilities/SSE/ssefenc.jar $vaultenc $hash_cfg
+        fi
         # Move encrypted file to trash
         rm -rf ~/.trash/$vaultenc
         mv -f $vaultenc ~/.trash
