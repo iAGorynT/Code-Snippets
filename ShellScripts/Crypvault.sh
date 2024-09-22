@@ -7,40 +7,58 @@ display_header() {
     echo " "
 }
 
+# Function to get filename from JSON config
+get_filename_from_config() {
+    local config_file=$1
+    local key=$2
+
+    if command -v jq >/dev/null 2>&1; then
+        jq -r ".$key" "$config_file"
+    else 
+        local str=$(cat "$config_file")
+        local substr="$key"
+        local prefix=${str%%$substr*}
+        local index=${#prefix}
+        local name_index=$((index + ${#key} + 3)) # +3 for "_name"
+        local str2=$(echo "$str" | cut -c $name_index-)
+        echo "$str2" | cut -d '"' -f2
+    fi
+}
+
 # Main loop
 while true; do
     display_header
 
     # Set Default Directory To Desktop
-    cd $HOME/Desktop
+    cd "$HOME/Desktop"
 
     # Select Action
     echo "Select Action..."
     echo " "
-    select act in "Encrypt" "Decrypt" "View" "GitSync" "Backup" "Config" "Quit"; do
-        case $act in
-            Encrypt ) action="enc"; break;;
-            Decrypt ) action="dec"; break;;
-            View    ) action="view"; break;;
-            GitSync ) action="sync"; break;;
-            Backup  ) action="back"; break;;
-            Config  ) action="conf"; break;;
-            Quit    ) action="quit"; break;;
+    select action in "Encrypt" "Decrypt" "View" "GitSync" "Backup" "Config" "Quit"; do
+        case $action in
+            Encrypt) action="enc"; break;;
+            Decrypt) action="dec"; break;;
+            View)    action="view"; break;;
+            GitSync) action="sync"; break;;
+            Backup)  action="back"; break;;
+            Config)  action="conf"; break;;
+            Quit)    action="quit"; break;;
         esac
     done
 
     # Check if user wants to quit
-    if [ $action = "quit" ]; then
+    if [[ $action == "quit" ]]; then
         echo " "
         echo "OpenSSL Vault Enc/Dec Completed"
         exit 0
     fi
 
     # Run ConfigFILES Shortcuts App
-    if [ $action = "view" ]; then
+    if [[ $action == "view" ]]; then
         # Display a warning message when viewing
         osascript -e 'display dialog "WHEN VIEWING, DO NOT UPDATE SELECTED VAULT-Changes will not be saved!" with title "Caution When Viewing" with icon caution buttons {"OK"} default button "OK"' >/dev/null 2>&1
-    elif [ $action = "conf" ]; then
+    elif [[ $action == "conf" ]]; then
         echo " "
         echo "Standby... ConfigFILES Running"
         shortcuts run "ConfigFILES"
@@ -50,200 +68,155 @@ while true; do
     fi
     
     # Select Vault Type
-    # All Actions Except Sync
-    if [ $action != "sync" ]; then
-        echo " "
-        echo "Select Vault Type..."
-        echo " "
-        select vnam in "VaultMGR" "GitMGR"; do
-            case $vnam in
-                VaultMGR ) vaultname="vmgr"; break;;
-                GitMGR   ) vaultname="gmgr"; break;;
+    echo " "
+    echo "Select Vault Type..."
+    echo " "
+    if [[ $action != "sync" ]]; then
+        select vault_type in "VaultMGR" "GitMGR"; do
+            case $vault_type in
+                VaultMGR) vault_name="vmgr"; break;;
+                GitMGR)   vault_name="gmgr"; break;;
             esac
         done
-    # Sync Can Only Be Done for GitMGR
     else
-        echo " "
-        echo "Select Vault Type..."
-        echo " "
-        select vnam in "GitMGR"; do
-            case $vnam in
-                GitMGR   ) vaultname="gmgr"; break;;
+        select vault_type in "GitMGR"; do
+            case $vault_type in
+                GitMGR) vault_name="gmgr"; break;;
             esac
         done
     fi
     echo " "
 
     # Set Vault Configuration File Location
-    if [ $vaultname = "vmgr" ]; then
-        configfile=$HOME'/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files/vaultmgr_config.json'
-    elif [ $vaultname = "gmgr" ]; then
-        configfile=$HOME'/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files/gitmgr_config.json'
+    config_dir="$HOME/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files"
+    if [[ $vault_name == "vmgr" ]]; then
+        config_file="$config_dir/vaultmgr_config.json"
+    elif [[ $vault_name == "gmgr" ]]; then
+        config_file="$config_dir/gitmgr_config.json"
     fi
     
     # Determine Type of Encryption Used on Vault
-    if grep -q -w SSL $configfile; then 
-        encryptype="SSL"   
+    if grep -q -w SSL "$config_file"; then 
+        encrypt_type="SSL"   
     else
-        encryptype="PFE"
+        encrypt_type="PFE"
     fi
-    echo "Vault Encryption Used: "$encryptype
+    echo "Vault Encryption Used: $encrypt_type"
 
     # Set Vault Variables
-    if [ $vaultname = "vmgr" ]; then
-        # If Installed, Use "jq" JSON Processor for Filename Lookup
-        if jq -V >/dev/null 2>&1; then
-            filename=$(jq -r '.vaultmgr_name' $configfile)
-        else 
-            # Search VaultMGR JSON Config. File for Filename
-            str=$(cat $configfile)
-            substr="vaultmgr_name"
-            prefix=${str%%$substr*}
-            index=${#prefix}
-            nameidx=$((index + 16)) # VaultMGR
-            # Create a SubString That Begins With VaultMGR Filename
-            str2=$(echo $str | cut -c $nameidx-)
-            # Strip Special Characters and Save Actual VaultMGR Filename
-            filename=$(echo $str2 | cut -d '"' -f2)
-        fi
-        # Initialize VaultMGR Names
-        vaultdir=$filename
-        vaultenc=$vaultdir".enc"
-	configjson="vaultmgr_config.json"
-    elif [ $vaultname = "gmgr" ]; then
-        # If Installed, Use "jq" JSON Processor for Filename Lookup
-        if jq -V >/dev/null 2>&1; then
-            filename=$(jq -r '.gitmgr_name' $configfile)
-        else 
-            # Search GitMGR JSON Config. File for Filename
-            str=$(cat $configfile)
-            substr="gitmgr_name"
-            prefix=${str%%$substr*}
-            index=${#prefix}
-            nameidx=$((index + 14)) # GitMGR
-            # Create a SubString That Begins With GitMGR Filename
-            str2=$(echo $str | cut -c $nameidx-)
-            # Strip Special Characters and Save Actual GitMGR Filename
-            filename=$(echo $str2 | cut -d '"' -f2)
-        fi
-        # Initialize GitMGR Names
-        vaultdir=$filename
-        vaultenc=$vaultdir".enc"
-	configjson="gitmgr_config.json"
+    if [[ $vault_name == "vmgr" ]]; then
+        filename=$(get_filename_from_config "$config_file" "vaultmgr_name")
+        # config_json="vaultmgr_config.json"
+    elif [[ $vault_name == "gmgr" ]]; then
+        filename=$(get_filename_from_config "$config_file" "gitmgr_name")
+        # config_json="gitmgr_config.json"
     fi
 
+    # Initialize Vault Names
+    vault_dir="$filename"
+    vault_enc="$vault_dir.enc"
+
     # Load Hash_CFG
-    # Set Secret Type
-    stype="Hash_CFG"
-    # Set Account
-    acct=$USER
+    secret_type="Hash_CFG"
+    account="$USER"
 
     # Lookup Secret in Keychain
-    if ! secret=$(security find-generic-password -w -s "$stype" -a "$acct"); then
-      echo "Secret Not Found, error $?"
-      continue
+    if ! secret=$(security find-generic-password -w -s "$secret_type" -a "$account"); then
+        echo "Secret Not Found, error $?"
+        continue
     fi
 
     # Set File Hash
-    hash_cfg=$(echo $secret | base64 --decode)
+    hash_cfg=$(echo "$secret" | base64 --decode)
 
-    # If Decrypting Vault, Move Vault from iCloud to Desktop
-    iclouddir=$HOME'/Library/Mobile Documents/com~apple~CloudDocs'
-    icloudenc=$iclouddir/$vaultenc
-    if [ $action = "dec" ] && [ -f $icloudenc ]; then
-        mv -i $icloudenc $HOME/Desktop
-    elif [ $action = "view" ] && [ -f $icloudenc ]; then
-        cp -i $icloudenc $HOME/Desktop
+    # Handle iCloud operations
+    icloud_dir="$HOME/Library/Mobile Documents/com~apple~CloudDocs"
+    icloud_enc="$icloud_dir/$vault_enc"
+    if [[ $action == "dec" || $action == "view" ]] && [[ -f $icloud_enc ]]; then
+        if [[ $action == "dec" ]]; then
+            mv -i "$icloud_enc" "$HOME/Desktop"
+        else
+            cp -i "$icloud_enc" "$HOME/Desktop"
+        fi
     fi
 
-    # Check For Vault Direcory or Encrypted File On Desktop
-    if ([ $action = 'enc' ] || [ $action = 'sync' ]) && [ ! -d $vaultdir ]; then
-        echo "Vault Directory missing on Desktop:" $vaultdir
+    # Check For Vault Directory or Encrypted File On Desktop
+    if [[ $action == "enc" || $action == "sync" ]] && [[ ! -d $vault_dir ]]; then
+        echo "Vault Directory missing on Desktop: $vault_dir"
         echo " "
-	read
+        read -k 1
         continue
-    elif ([ $action = 'dec' ] || [ $action = 'view' ]) && [ ! -f $vaultenc ]; then
-        echo "Encrypted Vault missing on Desktop:" $vaultenc
+    elif [[ $action == "dec" || $action == "view" ]] && [[ ! -f $vault_enc ]]; then
+        echo "Encrypted Vault missing on Desktop: $vault_enc"
         echo " "
-	read
+        read -k 1
         continue
     fi
 
     # Perform the selected action
-    # Encrypt
-    if [ $action = 'enc' ]; then
-	if [ $encryptype = 'SSL' ]; then
-            # SSL Encrypt
-            # Create tar archive, compress with gzip, and encrypt with OpenSSL
-            tar -cf $vaultdir.tar $vaultdir && gzip $vaultdir.tar && openssl enc -base64 -e -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 1000000 -in $vaultdir.tar.gz -out $vaultenc && rm -f $vaultdir.tar.gz
-        else
-	    # PFE Encrypt
-            java -Xmx1g -jar /Applications/Utilities/SSE/ssefenc.jar $vaultdir $hash_cfg twofish
-        fi
-        # Move encrypted file to iCloud and vault directory to trash
-        mv -f $vaultenc $iclouddir
-        rm -rf ~/.trash/$vaultdir
-        mv -f $vaultdir ~/.trash
-        echo "Vault Encrypted:" $vaultdir
-        echo "Note:  Encrypted Vault Moved To iCloud, Encrypted Directory Moved To Trash"
-        echo " "
-    # Decrypt
-    elif [ $action = 'dec' ] || [ $action = 'view' ]; then
-	if [ $encryptype = 'SSL' ]; then
-            # SSL Decrypt
-            # Decrypt with OpenSSL, decompress, and extract
-            openssl enc -base64 -d -aes-256-cbc -salt -pass pass:$hash_cfg -pbkdf2 -iter 1000000 -in $vaultenc -out $vaultdir.tar.gz && tar -xzf $vaultdir.tar.gz && rm -f $vaultdir.tar.gz 
-        else
-            # PFE Decrypt
-	    java -Xmx1g -jar /Applications/Utilities/SSE/ssefenc.jar $vaultenc $hash_cfg
-        fi
-        # Move encrypted file to trash
-        rm -rf ~/.trash/$vaultenc
-        mv -f $vaultenc ~/.trash
-        echo "Vault Decrypted:" $vaultdir
-        echo "Note:  Encrypted Vault Moved To Trash"
-        echo " "
-        if [ $action = 'view' ]; then
-            echo "When Done Viewing, Move $vaultdir Vault To Trash!"
+    case $action in
+        enc)
+            if [[ $encrypt_type == "SSL" ]]; then
+                # SSL Encrypt
+                tar -cf "$vault_dir.tar" "$vault_dir" && 
+                gzip "$vault_dir.tar" && 
+                openssl enc -base64 -e -aes-256-cbc -salt -pass pass:"$hash_cfg" -pbkdf2 -iter 1000000 -in "$vault_dir.tar.gz" -out "$vault_enc" && 
+                rm -f "$vault_dir.tar.gz"
+            else
+                # PFE Encrypt
+                java -Xmx1g -jar /Applications/Utilities/SSE/ssefenc.jar "$vault_dir" "$hash_cfg" twofish
+            fi
+            mv -f "$vault_enc" "$icloud_dir"
+            rm -rf ~/.trash/"$vault_dir"
+            mv -f "$vault_dir" ~/.trash
+            echo "Vault Encrypted: $vault_dir"
+            echo "Note: Encrypted Vault Moved To iCloud, Encrypted Directory Moved To Trash"
+            ;;
+        dec|view)
+            if [[ $encrypt_type == "SSL" ]]; then
+                # SSL Decrypt
+                openssl enc -base64 -d -aes-256-cbc -salt -pass pass:"$hash_cfg" -pbkdf2 -iter 1000000 -in "$vault_enc" -out "$vault_dir.tar.gz" && 
+                tar -xzf "$vault_dir.tar.gz" && 
+                rm -f "$vault_dir.tar.gz"
+            else
+                # PFE Decrypt
+                java -Xmx1g -jar /Applications/Utilities/SSE/ssefenc.jar "$vault_enc" "$hash_cfg"
+            fi
+            rm -rf ~/.trash/"$vault_enc"
+            mv -f "$vault_enc" ~/.trash
+            echo "Vault Decrypted: $vault_dir"
+            echo "Note: Encrypted Vault Moved To Trash"
+            if [[ $action == "view" ]]; then
+                echo "When Done Viewing, Move $vault_dir Vault To Trash!"
+                open "$HOME/Desktop/$vault_dir"
+            fi
+            ;;
+        sync)
+            clear
+            echo "GitHUB Sync Starting"
+            current_date=$(date)
+            echo "$current_date"
+            rsync -avh "$HOME/Documents/GitHub/Code-Snippets/" "$HOME/Desktop/GciSttH6UsbSj7I/GitHub/Code-Snippets" --delete
+            echo "GitHUB Sync Completed"
+            ;;
+        back)
+            clear
+            echo "Backing up $vault_dir"
             echo " "
-            # Open unecncrypted vault in finder
-            open $HOME/Desktop/$vaultdir
-        fi
-    # Sync With GitHUB
-    elif [ $action = 'sync' ]; then
-        clear
-        echo "GitHUB Sync Starting"
-        currentDate=`date`
-        echo $currentDate
-        # rsync keeping all file attributes
-        rsync -avh $HOME/Documents/GitHub/Code-Snippets/ $HOME/Desktop/GciSttH6UsbSj7I/GitHub/Code-Snippets --delete
-        echo "GitHUB Sync Completed"
-	read
-    # Vault Backup - iCloud to Thumb Drive and Downloads zVault
-    elif [ $action = 'back' ]; then
-        clear
-        echo "Backing up" $vaultdir
-        echo " "
-        # Check If Thumb Drive is Mounted (Optional)
-        diskutil list external | grep 'Private' &>/dev/null
-        MountStatus=$?
-        if [ $MountStatus -eq 0 ]; then
-            echo "Backing up to Private..."
-        # Copy iCloud Encrypted Vault to BruKasa Thumb Drive if Mounted
-            cp $icloudenc /Volumes/Private
-            cp $configfile /Volumes/Private/Shortcuts\ Config\ Files
-        fi
-        # Copy iCloud Encrypted Vault to Downloads zVault Backup
-        echo "Backing up to Downloads..."
-        cp $icloudenc $HOME/Downloads/zVault\ Backup
-        cp $configfile $HOME/Downloads/zVault\ Backup/Shortcuts\ Config\ Files	
-        echo " "
-        echo "Vault Backup Completed"
-        read
-    fi
+            if diskutil list external | grep -q 'Private'; then
+                echo "Backing up to Private..."
+                cp "$icloud_enc" "/Volumes/Private"
+                cp "$config_file" "/Volumes/Private/Shortcuts Config Files"
+            fi
+            echo "Backing up to Downloads..."
+            cp "$icloud_enc" "$HOME/Downloads/zVault Backup"
+            cp "$config_file" "$HOME/Downloads/zVault Backup/Shortcuts Config Files"
+            echo "Vault Backup Completed"
+            ;;
+    esac
 
     # Pause before next iteration
     echo " "
-    echo "Press Enter to continue..."
-    read
+    echo "Press any key to continue..."
+    read -k 1
 done
