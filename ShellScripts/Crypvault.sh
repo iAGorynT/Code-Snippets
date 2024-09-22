@@ -221,29 +221,29 @@ while true; do
 	read
     # Vault Backup - iCloud to Thumb Drive and Downloads zVault
     elif [ $action = 'back' ]; then
-	clear
-	echo "Backing up" $vaultdir
-	echo " "
-	# Set iCloud File Location
-	copyfile=$icloudenc
-	# Set Vault Config File Location
-	copyjson=$configfile
-	# Check If Thumb Drive is Mounted (Optional)
-	diskutil list external | grep 'Private' &>/dev/null
-	MountStatus=$?
-	if [ $MountStatus -eq 0 ]; then
-	    echo "Backing up to Private..."
-	# Copy iCloud Encrypted Vault to BruKasa Thumb Drive if Mounted
-	    cp $copyfile /Volumes/Private
-	    cp $copyjson /Volumes/Private/Shortcuts\ Config\ Files
-	fi
-	# Copy iCloud Encrypted Vault to Downloads zVault Backup
-	echo "Backing up to Downloads..."
-	cp $copyfile $HOME/Downloads/zVault\ Backup
-	cp $copyjson $HOME/Downloads/zVault\ Backup/Shortcuts\ Config\ Files	
-	echo " "
+        clear
+        echo "Backing up" $vaultdir
+        echo " "
+        # Set iCloud File Location
+        copyfile=$icloudenc
+        # Set Vault Config File Location
+        copyjson=$configfile
+        # Check If Thumb Drive is Mounted (Optional)
+        diskutil list external | grep 'Private' &>/dev/null
+        MountStatus=$?
+        if [ $MountStatus -eq 0 ]; then
+            echo "Backing up to Private..."
+        # Copy iCloud Encrypted Vault to BruKasa Thumb Drive if Mounted
+            cp $copyfile /Volumes/Private
+            cp $copyjson /Volumes/Private/Shortcuts\ Config\ Files
+        fi
+        # Copy iCloud Encrypted Vault to Downloads zVault Backup
+        echo "Backing up to Downloads..."
+        cp $copyfile $HOME/Downloads/zVault\ Backup
+        cp $copyjson $HOME/Downloads/zVault\ Backup/Shortcuts\ Config\ Files	
+        echo " "
         echo "Vault Backup Completed"
-	read
+        read
     fi
 
     # Pause before next iteration
