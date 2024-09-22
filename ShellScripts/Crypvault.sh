@@ -225,10 +225,8 @@ while true; do
 	echo "Backing up" $vaultdir
 	echo " "
 	# Set iCloud File Location
-	# copyfile=$HOME/Library/Mobile\ Documents/com\~apple\~CloudDocs/$vaultenc
 	copyfile=$icloudenc
 	# Set Vault Config File Location
-	# copyjson=$HOME'/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files/'$configjson
 	copyjson=$configfile
 	# Check If Thumb Drive is Mounted (Optional)
 	diskutil list external | grep 'Private' &>/dev/null
