@@ -74,7 +74,7 @@ while true; do
     fi
     echo " "
 
-    # Confirm that Vault ConfigFILE Encryption Type is OpenSSL
+    # Set Vault Configuration File Location
     if [ $vaultname = "vmgr" ]; then
         configfile=$HOME'/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files/vaultmgr_config.json'
     elif [ $vaultname = "gmgr" ]; then
