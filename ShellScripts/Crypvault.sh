@@ -1,5 +1,9 @@
 #!/bin/zsh
 
+# Save passed Vault Type if supplied
+# Note: Parameter value should be "vmgr", "gmgr", or left blank
+vaultpassed=$1
+
 # Function to clear screen and display header
 display_header() {
     clear
@@ -32,18 +36,28 @@ while true; do
     # Set Default Directory To Desktop
     cd "$HOME/Desktop"
 
-    # Select Action
+    # Define common actions
+    common_actions=("Encrypt" "Decrypt" "View")
+    
+    # Add "GitSync" for non-vmgr case
+    if [[ $vaultpassed != "vmgr" ]]; then
+        common_actions+=("GitSync")
+    fi
+
+    # Add remaining common actions
+    common_actions+=("Backup" "Config" "Quit")
+
     echo "Select Action..."
     echo " "
-    select action in "Encrypt" "Decrypt" "View" "GitSync" "Backup" "Config" "Quit"; do
+    select action in "${common_actions[@]}"; do
         case $action in
-            Encrypt) action="enc"; break;;
-            Decrypt) action="dec"; break;;
-            View)    action="view"; break;;
-            GitSync) action="sync"; break;;
-            Backup)  action="back"; break;;
-            Config)  action="conf"; break;;
-            Quit)    action="quit"; break;;
+            Encrypt)  action="enc"; break;;
+            Decrypt)  action="dec"; break;;
+            View)     action="view"; break;;
+            GitSync)  action="sync"; break;;
+            Backup)   action="back"; break;;
+            Config)   action="conf"; break;;
+            Quit)     action="quit"; break;;
         esac
     done
 
@@ -68,22 +82,24 @@ while true; do
     fi
     
     # Select Vault Type
-    echo " "
-    echo "Select Vault Type..."
-    echo " "
-    if [[ $action != "sync" ]]; then
-        select vault_type in "VaultMGR" "GitMGR"; do
+    if [ -z "$vaultpassed" ]; then
+        echo " "
+        echo "Select Vault Type..."
+        echo " "
+        # Define common vaults
+        if [[ $action != "sync" ]]; then
+            common_vaults=("VaultMGR" "GitMGR")
+        else
+            common_vaults=("GitMGR")
+        fi
+        select vault_type in "${common_vaults[@]}"; do
             case $vault_type in
                 VaultMGR) vault_name="vmgr"; break;;
                 GitMGR)   vault_name="gmgr"; break;;
             esac
         done
     else
-        select vault_type in "GitMGR"; do
-            case $vault_type in
-                GitMGR) vault_name="gmgr"; break;;
-            esac
-        done
+        vault_name=$vaultpassed
     fi
     echo " "
 
