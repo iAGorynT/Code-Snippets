@@ -6,7 +6,7 @@ echo "App Descriptions..."
 echo " "
 
 # Array of app names
-apps=("btop:" "iperf3:" "jq:" "qlmarkdown:" "macdown:" "mosh:" "speedtest:" "balenaetcher:" "github:" "macvim:" "syntax-highlight:" "tabby:")
+apps=("iperf3:" "jq:" "qlmarkdown:" "macdown:" "mosh:" "speedtest:" "balenaetcher:" "github:" "macvim:" "syntax-highlight:" "tabby:")
 
 # Function to check if a line contains an app name
 contains_app() {
