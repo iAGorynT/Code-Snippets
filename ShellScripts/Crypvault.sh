@@ -85,7 +85,7 @@ while true; do
             if [[ $action == "view" ]]; then
             # Display a warning message when viewing
                 osascript -e 'display dialog "WHEN VIEWING, DO NOT UPDATE SELECTED VAULT-Changes will not be saved!" with title "Caution When Viewing" with icon caution buttons {"OK"} default button "OK"' >/dev/null 2>&1
-	    fi
+            fi
             ;;
         conf)
             # Run ConfigFILES Shortcuts App
