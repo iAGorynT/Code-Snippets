@@ -45,7 +45,7 @@ while true; do
     fi
 
     # Add remaining common actions
-    common_actions+=("Backup" "Config" "Quit")
+    common_actions+=("Backup" "Config" "Reset" "Quit")
 
     echo "Select Action..."
     echo " "
@@ -57,30 +57,47 @@ while true; do
             GitSync)  action="sync"; break;;
             Backup)   action="back"; break;;
             Config)   action="conf"; break;;
+            Reset)    action="rset"; break;;
             Quit)     action="quit"; break;;
         esac
     done
 
-    # Check if user wants to quit
-    if [[ $action == "quit" ]]; then
-        echo " "
-        echo "OpenSSL Vault Enc/Dec Completed"
-        exit 0
-    fi
+    # Perform the selected action
+    case $action in
+        quit)
+            # Check if user wants to quit
+            if [[ $action == "quit" ]]; then
+                echo " "
+                echo "OpenSSL Vault Enc/Dec Completed"
+                exit 0
+            fi
+            ;;
+        rset)
+            # Reset settings to All Vaults
+            vaultpassed=''
+            echo " "
+            echo "Settings reset to All Vaults..."
+            read -k 1
+            continue
+            ;;
+        view)
+            # Display Warning message
+            if [[ $action == "view" ]]; then
+            # Display a warning message when viewing
+                osascript -e 'display dialog "WHEN VIEWING, DO NOT UPDATE SELECTED VAULT-Changes will not be saved!" with title "Caution When Viewing" with icon caution buttons {"OK"} default button "OK"' >/dev/null 2>&1
+	    fi
+            ;;
+        conf)
+            # Run ConfigFILES Shortcuts App
+            echo " "
+            echo "Standby... ConfigFILES Running"
+            shortcuts run "ConfigFILES"
+            echo "ConfigFILES Complete..."
+            echo " "
+            continue
+            ;;
+    esac
 
-    # Run ConfigFILES Shortcuts App
-    if [[ $action == "view" ]]; then
-        # Display a warning message when viewing
-        osascript -e 'display dialog "WHEN VIEWING, DO NOT UPDATE SELECTED VAULT-Changes will not be saved!" with title "Caution When Viewing" with icon caution buttons {"OK"} default button "OK"' >/dev/null 2>&1
-    elif [[ $action == "conf" ]]; then
-        echo " "
-        echo "Standby... ConfigFILES Running"
-        shortcuts run "ConfigFILES"
-        echo "ConfigFILES Complete..."
-        echo " "
-        continue
-    fi
-    
     # Select Vault Type
     if [ -z "$vaultpassed" ]; then
         echo " "
