@@ -137,6 +137,7 @@ alias brewit="Brewit.sh"				# Update Homebrew
 alias brewdep="clear; brew deps --formula --installed"	# List Dependencies
 alias brewdocm="Brewdocm.sh"				# Brew Doctor
 alias brewtap="clear; brew tap"				# List All Taps
+alias brewapp="Brewappuninstall.sh"			# Brew App Uninstaller
 #=> End Homebrew Commands
 
 #=> Main Menu Commands
