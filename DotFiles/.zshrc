@@ -104,21 +104,16 @@ alias sshon="sudo systemsetup -setremotelogin on; sudo systemsetup -getremotelog
 alias sshoff="sudo systemsetup -setremotelogin off; sudo systemsetup -getremotelogin"
 alias sshlist="ssh-add -l"
 alias sshdir="Sshdir.sh"
-#=> End SSH Commands
-
-#=> Mosh Commands
 # NetCat Network Port Troubleshooting For Mosh Server
 alias ncsvr="nc -4 -u -l -v 60013"					# Open Port On Mosh Server
 alias nccli='echo "hello world" | nc -4 -v -u $DEV_IP 60013'		# Send Message To Server
-# Mosh/SSH Local/Remote DevLoc
+# SSH Local/Remote DevLoc
 # Note: ~/.zshenv contains DECO_DDNS, DEV_IP
-alias moshloc="mosh --ssh='ssh -i $HOME/zVlt/id_ed25519' --server='/opt/homebrew/bin/mosh-server' --port=60009 $USER@$DEV_IP"
-alias moshrem="mosh --ssh='ssh -i $HOME/zVlt/id_ed25519' --server='/opt/homebrew/bin/mosh-server' --port=60010 $USER@$DECO_DDNS"
 alias sshloc="clear; ssh -i '$HOME/zVlt/id_ed25519' $USER@$DEV_IP"
 alias sshrem="clear; ssh -i '$HOME/zVlt/id_ed25519' $USER@$DECO_DDNS"
-# List Mosh/SSH Alias'
-alias ra="clear; grep -e '# Mosh/SSH' -e 'mosh ' -e 'ssh ' $HOME/.zshrc | grep -v ‘ra=‘"
-#=> End Mosh Commands
+# List SSH Alias'
+alias ra="clear; grep -e '# SSH' -e 'mosh ' -e 'ssh ' $HOME/.zshrc | grep -v ‘ra=‘"
+#=> End SSH Commands
 
 #=> Github Commands
 alias gh="open -a 'Github Desktop'"	# Launch Github Desktop App

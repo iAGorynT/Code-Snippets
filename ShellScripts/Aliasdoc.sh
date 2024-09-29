@@ -18,7 +18,6 @@ categories=(
     "Preference Pane"
     "Time Machine"
     "SSH"
-    "Mosh"
     "Github"
     "Dev"
     "Homebrew"
