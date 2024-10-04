@@ -15,7 +15,7 @@ echo "Bash: $(bash --version)" | grep -e 'version '
 echo "Homebrew: $(brew --version)"
 
 # Homebrew Autoupdate
-echo "Homebrew Autoupdate: $(brew autoupdate version | grep -e 'Version')" # Exclude Change Log
+# echo "Homebrew Autoupdate: $(brew autoupdate version | grep -e 'Version')" # Exclude Change Log
 
 # Java
 echo
