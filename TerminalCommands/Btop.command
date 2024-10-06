@@ -1,4 +1,0 @@
-#! /bin/zsh
-
-btop
-exit
