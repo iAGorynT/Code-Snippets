@@ -1,0 +1,19 @@
+DOW_Inline.html
+https://github.com/iAGorynT/Code-Snippets/blob/main/Html/DOW_Inline.html
+Prod - https://rawcdn.githack.com/iAGorynT/Code-Snippets/55536ab46bec75fdbfbb1398de2ad35c86eb3ce9/Html/DOW_Inline.html
+Dev - https://raw.githack.com/iAGorynT/Code-Snippets/main/Html/DOW_Inline.html
+
+DOW_Links.html
+https://github.com/iAGorynT/Code-Snippets/blob/main/Html/DOW_Links.html
+Prod - https://rawcdn.githack.com/iAGorynT/Code-Snippets/f26388c40d17cf1455785f46061785067562a6da/Html/DOW_Links.html
+Dev - https://raw.githack.com/iAGorynT/Code-Snippets/main/Html/DOW_Links.html
+
+script.js
+https://github.com/iAGorynT/Code-Snippets/blob/main/Html/script.js
+Prod - https://rawcdn.githack.com/iAGorynT/Code-Snippets/55536ab46bec75fdbfbb1398de2ad35c86eb3ce9/Html/script.js
+Dev - https://raw.githack.com/iAGorynT/Code-Snippets/main/Html/script.js
+
+styles.css
+https://github.com/iAGorynT/Code-Snippets/blob/main/Html/styles.css
+Prod - https://rawcdn.githack.com/iAGorynT/Code-Snippets/55536ab46bec75fdbfbb1398de2ad35c86eb3ce9/Html/styles.css
+Dev - https://raw.githack.com/iAGorynT/Code-Snippets/main/Html/styles.css
