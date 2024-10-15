@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Generator - Light/Dark Mode Toggle</title>
+    <style>
+        /* CSS variables for easy color management */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --primary-color: #4a90e2;
+            --secondary-color: #f0f0f0;
+            --accent-color: #e74c3c;
+        }
+
+        /* Base styles */
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Main container styles */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header styles */
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Mode switch positioning */
+        .mode-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        /* Form element styles */
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        /* Button styles */
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #357abd;
+        }
+
+        /* Output area styles */
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--bg-color);
+            border-radius: 4px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #output p {
+            margin: 10px 0;
+            padding: 5px;
+            border-bottom: 1px solid var(--secondary-color);
+        }
+
+        /* Dark mode styles */
+        .dark-mode {
+            --bg-color: #222222;
+            --text-color: #ffffff;
+            --secondary-color: #333333;
+        }
+
+        /* Toggle Switch Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .mode-switch {
+                position: static;
+                text-align: right;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Light/Dark mode toggle switch -->
+        <div class="mode-switch">
+            <label class="switch">
+                <input type="checkbox" id="modeToggle" tabindex="5">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <h2>Date Generator</h2>
+
+        <!-- Input form for date generation -->
+        <label for="month">Month:</label>
+        <select id="month" tabindex="1"></select>
+
+        <label for="year">Year (YYYY):</label>
+        <input type="number" id="year" required tabindex="2">
+
+        <label for="dayOfWeek">Day of Week:</label>
+        <select id="dayOfWeek" tabindex="3"></select>
+
+        <button id="generateButton" tabindex="4">Generate Dates</button>
+
+        <!-- Output area for generated dates -->
+        <div id="output"></div>
+    </div>
+
+    <script>
+        // DOM element selections
+        const modeToggle = document.getElementById('modeToggle');
+        const monthSelect = document.getElementById('month');
+        const dayOfWeekSelect = document.getElementById('dayOfWeek');
+        const yearInput = document.getElementById('year');
+        const generateButton = document.getElementById('generateButton');
+        const output = document.getElementById('output');
+
+        // Arrays for populating select elements
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        /**
+         * Populates a select element with options
+         * @param {HTMLSelectElement} select - The select element to populate
+         * @param {string[]} options - Array of option texts
+         */
+        function populateSelect(select, options) {
+            options.forEach((option, index) => {
+                const el = document.createElement('option');
+                el.textContent = option;
+                el.value = index;
+                select.appendChild(el);
+            });
+        }
+
+        // Populate month and day of week selects
+        populateSelect(monthSelect, months);
+        populateSelect(dayOfWeekSelect, days);
+
+        /**
+         * Toggles between light and dark mode
+         */
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        /**
+         * Checks system preference for dark mode and sets initial state
+         */
+        function checkSystemMode() {
+            const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            document.body.classList.toggle('dark-mode', prefersDarkScheme);
+            modeToggle.checked = prefersDarkScheme;
+        }
+
+        /**
+         * Generates dates based on user input and displays them
+         */
+        function generateDates() {
+            const month = parseInt(monthSelect.value) + 1; // +1 because month select uses 0-based index
+            const year = parseInt(yearInput.value);
+            const dayOfWeek = parseInt(dayOfWeekSelect.value);
+
+            // Input validation
+            if (isNaN(month) || isNaN(year)) {
+                alert('Please enter a valid month and year.');
+                return;
+            }
+
+            const dates = [];
+            const daysInMonth = new Date(year, month, 0).getDate();
+
+            // Find all dates in the month that match the selected day of week
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month - 1, day);
+                if (date.getDay() === dayOfWeek) {
+                    dates.push(date);
+                }
+            }
+
+            output.innerHTML = '';
+
+            if (dates.length === 0) {
+                output.innerHTML = '<p>No dates found for the specified criteria.</p>';
+            } else {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                // Display each found date
+                dates.forEach((date, index) => {
+                    const formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                    const daysFromToday = Math.floor((date - today) / (1000 * 60 * 60 * 24));
+            
+                    let dateString = `${index + 1}. ${formattedDate}`;
+                    // Add "days from today" if the date is in the future
+                    if (daysFromToday > 0) {
+                        dateString += ` <span style="color: var(--accent-color);">(${daysFromToday} days from today)</span>`;
+                    }
+            
+                    output.innerHTML += `<p>${dateString}</p>`;
+                });
+
+                // Calculate the number of weeks in the month
+                const firstDay = new Date(year, month - 1, 1).getDay();
+                const totalDays = daysInMonth + firstDay;
+                const weeksInMonth = Math.ceil(totalDays / 7);
+
+                // Display the number of weeks
+                output.innerHTML += `<p>Calendar weeks in ${months[month - 1]} ${year}: ${weeksInMonth}</p>`;
+            }
+        }
+
+        // Event listeners
+        modeToggle.addEventListener('change', toggleMode);
+        generateButton.addEventListener('click', generateDates);
+        window.addEventListener('load', checkSystemMode);
+    </script>
+</body>
+</html>
