@@ -1,27 +1,26 @@
 #!/bin/zsh
 
-# Update BrewitLaunchd.sh with changes when necessary.
+# This is a special Launchd Version of Brewit.sh
+# Place this file in ~/Library/LaunchAgents folder for Homebrew auto updating
+# When changes are made, be sure to Unload / Load new file into Launchd
 
-# Activate Function Library
-source $HOME/ShellScripts/FunctionLib.sh
-
-clear
 echo "Brew Update, Upgrade, and Cleanup..."
+echo $(date)
 echo " "
 
 # HomeBrew Update
-format_echo "HomeBrew Update..." "brew" 1
+echo "HomeBrew Update..."
 echo " "
 brew update
 brew upgrade
 
 # Cask Upgrade
-format_echo "Cask Upgrade..." "brew" 1
+echo "Cask Upgrade..."
 echo " "
 brew upgrade --cask --greedy
 
 # Create New Brewfile
-format_echo "Creating New Brewfile..." "brew" 1
+echo "Creating New Brewfile..."
 echo " "
 cd
 brew bundle dump --force
@@ -31,11 +30,11 @@ ls -al Brewfile
 echo " "
 
 # HomeBrew Cleanup
-format_echo "HomeBrew Cleanup..." "brew" 1
+echo "HomeBrew Cleanup..."
 echo " "
 brew autoremove
 brew cleanup
-brew list
+brew list -1
 
 echo " "
 echo "Brew Update, Upgrade, and Cleanup Completed!"
