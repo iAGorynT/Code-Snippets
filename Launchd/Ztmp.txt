@@ -1,1 +1,25 @@
+iAGorynT-Code-Snippet-Changes
+/Users/bruceguthrie/bin/Brewit.sh
+
+
+Get Info:
+launchctl list | grep local.bin.bruceguthrie.brewit
+
+Load Job:
+launchctl load ~/Library/LaunchAgents/local.bin.bruceguthrie.brewit.plist
+Newer command:
+launchctl bootstrap gui/`id -u` ~/Library/LaunchAgents/local.bin.bruceguthrie.brewit.plist
+
+Unload Job:
+launchctl unload ~/Library/LaunchAgents/local.bin.bruceguthrie.brewit.plist
+Newer command:
+aunchctl bootout gui/`id -u`/local.bin.bruceguthrie.brewit.plist
+
+Start Job (Run Script Immediately):
+launchctl start local.bin.bruceguthrie.brewit.plist
+Newer command:
+launchctl kickstart gui/`id -u`/local.bin.bruceguthrie.brewit.plist
+
+X
+main
 
