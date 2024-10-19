@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>com.bin.bruceguthrie.brewit</string>
+	<string>com.bin.$UNAME.brewit</string>
 	<key>Program</key>
-	<string>/Users/bruceguthrie/bin/BrewitLaunchd.sh</string>
+	<string>/Users/$UNAME/bin/BrewitLaunchd.sh</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>/Users/bruceguthrie/bin/BrewitLaunchd.sh</string>
+		<string>/Users/$UNAME/bin/BrewitLaunchd.sh</string>
 	</array>
 	<key>EnvironmentVariables</key>
 	<dict>
@@ -18,11 +18,11 @@
 	<key>RunAtLoad</key>
 	<true/>
 	<key>StandardErrorPath</key>
-	<string>/Users/bruceguthrie/Library/Logs/com.bin.bruceguthrie.brewit/com.bin.bruceguthrie.brewit.out</string>
+	<string>/Users/$UNAME/Library/Logs/com.bin.$UNAME.brewit/com.bin.$UNAME.brewit.out</string>
 	<key>StandardOutPath</key>
-	<string>/Users/bruceguthrie/Library/Logs/com.bin.bruceguthrie.brewit/com.bin.bruceguthrie.brewit.out</string>
+	<string>/Users/$UNAME/Library/Logs/com.bin.$UNAME.brewit/com.bin.$UNAME.brewit.out</string>
 	<key>WorkingDirectory</key>
-	<string>/Users/bruceguthrie</string>
+	<string>/Users/$UNAME</string>
 	<key>StartInterval</key>
 	<integer>86400</integer>
 	<key>LowPriorityBackgroundIO</key>
