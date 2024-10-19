@@ -1,7 +1,3 @@
-iAGorynT-Code-Snippet-Changes
-/Users/bruceguthrie/bin/Brewit.sh
-
-
 Get Info:
 launchctl list | grep local.bin.bruceguthrie.brewit
 
