@@ -1,3 +1,4 @@
+iAGorynT-Code-Snippet-Changes
 /Users/bruceguthrie/bin/Brewit.sh
 
 
@@ -18,3 +19,4 @@ Start Job (Run Script Immediately):
 launchctl start local.bin.bruceguthrie.brewit.plist
 Newer command:
 launchctl kickstart gui/`id -u`/local.bin.bruceguthrie.brewit.plist
+
