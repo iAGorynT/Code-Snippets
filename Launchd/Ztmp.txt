@@ -20,6 +20,3 @@ launchctl start local.bin.bruceguthrie.brewit.plist
 Newer command:
 launchctl kickstart gui/`id -u`/local.bin.bruceguthrie.brewit.plist
 
-X
-main
-
