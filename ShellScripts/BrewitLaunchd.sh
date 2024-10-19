@@ -34,6 +34,8 @@ echo "HomeBrew Cleanup..."
 echo " "
 brew autoremove
 brew cleanup
+echo " "
+echo "Installed Apps..."
 brew list -1
 
 echo " "
