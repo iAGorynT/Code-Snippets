@@ -1,3 +1,4 @@
+iAGorynT-Code-Snippet-Changes
 /Users/bruceguthrie/bin/Brewit.sh
 
 
@@ -20,4 +21,5 @@ Newer command:
 launchctl kickstart gui/`id -u`/local.bin.bruceguthrie.brewit.plist
 
 X
+main
 
