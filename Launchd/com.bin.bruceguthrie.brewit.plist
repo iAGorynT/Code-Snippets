@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.bin.bruceguthrie.brewit</string>
+	<key>Program</key>
+	<string>/Users/bruceguthrie/bin/BrewitLaunchd.sh</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/bruceguthrie/bin/BrewitLaunchd.sh</string>
+	</array>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>/Users/bruceguthrie/Library/Logs/com.bin.bruceguthrie.brewit/com.bin.bruceguthrie.brewit.out</string>
+	<key>StandardOutPath</key>
+	<string>/Users/bruceguthrie/Library/Logs/com.bin.bruceguthrie.brewit/com.bin.bruceguthrie.brewit.out</string>
+	<key>WorkingDirectory</key>
+	<string>/Users/bruceguthrie</string>
+	<key>StartInterval</key>
+	<integer>86400</integer>
+	<key>LowPriorityBackgroundIO</key>
+	<true/>
+	<key>LowPriorityIO</key>
+	<true/>
+	<key>ProcessType</key>
+	<string>Background</string>
+</dict>
+</plist>
