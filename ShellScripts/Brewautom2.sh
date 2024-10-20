@@ -7,12 +7,12 @@ function autoupdatestatus {
 	clear
 	echo "Brew Autoupdate Status..."
 	echo
-        # Define variables for file paths
+# Define variables for file paths
 	userplistname="com.bin.${USERNAME}.brewit.plist"
 	grepname="com.bin.${USERNAME}.brewit"
 	launchagentfolder="$HOME/Library/LaunchAgents"
 	launchagentplist="${launchagentfolder}/${userplistname}"
-	# Check Status of launchd agent
+# Check Status of launchd agent
         if launchctl list | grep -q "$grepname"; then
             echo "Launchd Agent is active."
         else
