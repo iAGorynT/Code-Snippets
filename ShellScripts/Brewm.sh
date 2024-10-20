@@ -63,7 +63,7 @@ function brewdocm {
 
 function brewautom {
 	clear
-	brewautom.sh
+	brewautom2.sh
 }
 
 function mvexplore {
