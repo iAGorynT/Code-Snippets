@@ -36,10 +36,10 @@ function autoupdatestatus {
 	    temp_file=$(mktemp)
 # Loop through each line of the file
 	    while IFS= read -r line; do
-# Check if the line starts with any of the specified days
-#               if [[ "$line" =~ ^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) ]]; then
-# Add a blank line before the line
-#                   echo "" >> "$temp_file"
+# Check if the line starts with the specified string
+#               if [[ "$line" =~ ^(Brew Update,) ]]; then
+# Add a separator line before the line
+#                   echo "==>" >> "$temp_file"
 #               fi
 # Append the original line to the temporary file
 	        echo "$line" >> "$temp_file"
