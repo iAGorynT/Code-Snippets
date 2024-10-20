@@ -23,8 +23,13 @@
 	<string>/Users/$UNAME/Library/Logs/com.bin.$UNAME.brewit/com.bin.$UNAME.brewit.out</string>
 	<key>WorkingDirectory</key>
 	<string>/Users/$UNAME</string>
-	<key>StartInterval</key>
-	<integer>86400</integer>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>8</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+	</dict>
 	<key>LowPriorityBackgroundIO</key>
 	<true/>
 	<key>LowPriorityIO</key>
