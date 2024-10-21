@@ -63,6 +63,8 @@ function autoupdatestatus {
 
         # Clean up the temporary file
         rm "$temp_file"
+    else
+        echo "Autoupdate log file not found."
     fi
 }
 
