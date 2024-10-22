@@ -3,17 +3,28 @@
 # Trap Ctrl-C and prevent it from terminating the script.
 trap 'echo -e "\nCtrl-C will not terminate $0."' INT
 
+# Set up or remove Homebrew Autoupdate using Launchd
+
+# Define variables for file paths
+template_file="$HOME/Launchd/Launchd.plist"
+userplistname="com.bin.${USERNAME}.brewit.plist"
+grepname="com.bin.${USERNAME}.brewit"
+userplist="$HOME/Launchd/${userplistname}"
+launchagentfolder="$HOME/Library/LaunchAgents"
+launchagentplist="${launchagentfolder}/${userplistname}"
+launchagentlogfolder="$HOME/Library/Logs/${grepname}"
+
+# Function to print error message and exit
+function exit_with_error() {
+    echo "Error: $1"
+    exit 1
+}
+
 # Function to check the status of the Brew autoupdate service
-function autoupdatestatus {
+function autoupdate_status {
     clear
     echo "Brew Autoupdate Status..."
     echo
-
-    # Define variables for file paths
-    userplistname="com.bin.${USERNAME}.brewit.plist"
-    grepname="com.bin.${USERNAME}.brewit"
-    launchagentfolder="$HOME/Library/LaunchAgents"
-    launchagentplist="${launchagentfolder}/${userplistname}"
 
     # Check if the launchd agent is active
     if launchctl list | grep -q "$grepname"; then
@@ -68,36 +79,94 @@ function autoupdatestatus {
     fi
 }
 
-# Function to load the Brew autoupdate service
-function autoupdateload {
+# Function to load Homebrew Autoupdate
+function load_autoupdate() {
     clear
-    echo "Load Brew Autoupdate..."
+    echo "Loading Homebrew Autoupdate..."
     echo
 
+    # Confirm Execution
     while true; do
         read yn\?"Confirm (Y/N): "
         case $yn in
-            [Yy]* ) echo; brewitload.sh; break;;
-            [Nn]* ) break;;
+            [Yy]* ) echo; break;;
+            [Nn]* ) return; break;;
             * ) echo "Please answer yes (Y) or no (N).";;
         esac
     done
+
+    # Check if the template file exists
+    if [[ ! -f $template_file ]]; then
+        exit_with_error "Launchd.plist file not found!"
+    fi
+
+    # Create LaunchAgents directory if it does not exist
+    mkdir -p "$launchagentfolder"
+
+    # Replace $UNAME placeholder with the $USERNAME value and create the user-specific plist
+    if sed "s|\$UNAME|$USERNAME|g" "$template_file" > "$userplist"; then
+        echo "User-specific Launchd.plist file created: $userplist"
+    else
+        exit_with_error "Failed to create the user-specific plist file!"
+    fi
+    echo
+
+    # Copy the user-specific plist file to LaunchAgents folder
+    if cp "$userplist" "$launchagentplist"; then
+        echo "User plist copied to Library LaunchAgents folder..."
+    else
+        exit_with_error "Failed to copy ${userplist} to ${launchagentfolder}!"
+    fi
+    echo
+
+    # Load the user-specific plist file using launchctl
+    if launchctl load "$launchagentplist"; then
+        echo "Launchd Agent ${launchagentplist} loaded successfully."
+        # Verify if the agent was loaded
+        if launchctl list | grep -q "$grepname"; then
+            echo "Launchd Agent is active."
+        else
+            echo "Warning: Launchd Agent may not be active."
+        fi
+    else
+        exit_with_error "Failed to load Launchd Agent."
+    fi
 }
 
-# Function to unload the Brew autoupdate service
-function autoupdateunload {
+# Function to unload Homebrew Autoupdate
+function unload_autoupdate() {
     clear
-    echo "Unload Brew Autoupdate..."
+    echo "Unloading/Removing Homebrew Autoupdate..."
     echo
 
+    # Confirm Execution
     while true; do
         read yn\?"Confirm (Y/N): "
         case $yn in
-            [Yy]* ) echo; brewitunload.sh; break;;
-            [Nn]* ) break;;
+            [Yy]* ) echo; break;;
+            [Nn]* ) return; break;;
             * ) echo "Please answer yes (Y) or no (N).";;
         esac
     done
+
+    # Unload the user-specific plist file using launchctl
+    if launchctl unload "$launchagentplist"; then
+        echo "Launchd Agent ${launchagentplist} unloaded successfully."
+        echo
+        # Verify if the agent was unloaded
+        if launchctl list | grep -q "$grepname"; then
+            exit_with_error "Launchd Agent is still active."
+        else
+            # Remove user-specific plist file
+            echo "Removing Launchd Agent..."
+            rm "$launchagentplist"
+            # Remove user-specific log file
+            echo "Removing Launchd Agent log file..."
+            rm -R "$launchagentlogfolder"
+        fi
+    else
+        exit_with_error "Failed to unload Launchd Agent."
+    fi
 }
 
 # Function to display the main menu
@@ -123,11 +192,11 @@ while true; do
         0)  # Exit the script
             break ;;
         1)  # Display autoupdate status
-            autoupdatestatus ;;
+            autoupdate_status ;;
         2)  # Load the autoupdate service
-            autoupdateload ;;
+            load_autoupdate ;;
         3)  # Unload the autoupdate service
-            autoupdateunload ;;
+            unload_autoupdate ;;
         "") # Exit when Enter is pressed
             break ;;
         *)  # Invalid option handling
