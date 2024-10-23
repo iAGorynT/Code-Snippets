@@ -3,7 +3,7 @@
 MacOS code snippits that can be used and shared by all.
 Included Scripts: Shortcuts Scripts, Terminal Scripts, etc.
 
-_Other Github Repositories:_
+_Other GitHub Repositories:_
 <a rel="me" href="https://github.com/iAGorynT/Brew-Autoupdate">Brew-Autoupdate</a>
 
 More on 
