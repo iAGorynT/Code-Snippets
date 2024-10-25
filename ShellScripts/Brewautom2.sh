@@ -96,6 +96,12 @@ function load_autoupdate() {
         esac
     done
 
+    # Verify Launchd Agent isn't already active
+    if is_agent_active; then
+        print_status "${COLOR_YELLOW}" "Launchd Agent is already loaded and active."
+	return
+    fi
+
     [[ -f $TEMPLATE_FILE ]] || error ${LINENO} "Launchd.plist file not found!"
 
     # Create directories if they don't exist
