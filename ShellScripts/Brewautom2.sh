@@ -107,8 +107,21 @@ function load_autoupdate() {
     # Create directories if they don't exist
     mkdir -p "$LAUNCH_AGENT_FOLDER" "$LAUNCH_AGENT_LOG_FOLDER"
 
-    # Use parameter expansion for safer substitution
-    sed "s|\$UNAME|${USERNAME//\//\\/}|g" "$TEMPLATE_FILE" > "$USER_PLIST" || 
+    # Loop until a valid hour is entered
+    while true; do
+        read UHOUR\?"What hour? (0-23): "
+        # Validate the input
+        if [[ $UHOUR =~ ^([0-9]|1[0-9]|2[0-3])$ ]]; then
+            echo "Hour: $UHOUR"
+	    echo
+            break
+        else
+            echo "Invalid input. Please enter a number between 0 and 23."
+        fi
+    done
+
+    # Use parameter expansion for safer substitution of both $UNAME and $UHOUR
+    sed -e "s|\$UNAME|${USERNAME//\//\\/}|g" -e "s|\$UHOUR|${UHOUR//\//\\/}|g" "$TEMPLATE_FILE" > "$USER_PLIST" || 
         error ${LINENO} "Failed to create user-specific plist file!"
 
     print_status "${COLOR_GREEN}" "User-specific Launchd.plist file created: $USER_PLIST"
