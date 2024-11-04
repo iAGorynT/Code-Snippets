@@ -57,7 +57,8 @@ function autoupdate_status() {
     # Check for log file
     local autolog=""
     if [[ -f "$LAUNCH_AGENT_PLIST" ]]; then
-        autolog=$(/usr/libexec/PlistBuddy -c "Print :StandardOutPath" "$LAUNCH_AGENT_PLIST" 2>/dev/null || echo "")
+        autolog=$(plutil -extract StandardOutPath raw "$LAUNCH_AGENT_PLIST" 2>/dev/null || echo "")
+#       autolog=$(/usr/libexec/PlistBuddy -c "Print :StandardOutPath" "$LAUNCH_AGENT_PLIST" 2>/dev/null || echo "")
     fi
 
     if [[ -f "$autolog" ]]; then
@@ -121,8 +122,12 @@ function load_autoupdate() {
     done
 
     # Use parameter expansion for safer substitution of both $UNAME and $UHOUR
-    sed -e "s|\$UNAME|${USERNAME//\//\\/}|g" -e "s|\$UHOUR|${UHOUR//\//\\/}|g" "$TEMPLATE_FILE" > "$USER_PLIST" || 
+    sed "s|\$UNAME|${USERNAME//\//\\/}|g" "$TEMPLATE_FILE" > "$USER_PLIST" || 
         error ${LINENO} "Failed to create user-specific plist file!"
+    plutil -replace StartCalendarInterval.Hour -integer "$UHOUR" "$USER_PLIST" || 
+        error ${LINENO} "Failed to modify plist file!"
+#    /usr/libexec/PlistBuddy -c "Set :StartCalendarInterval:Hour $UHOUR" \
+#        "$USER_PLIST" || error ${LINENO} "Failed to modify plist file!"
 
     print_status "${COLOR_GREEN}" "User-specific Launchd.plist file created: $USER_PLIST"
 
