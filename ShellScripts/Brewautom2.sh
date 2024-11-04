@@ -59,6 +59,9 @@ function autoupdate_status() {
     if [[ -f "$LAUNCH_AGENT_PLIST" ]]; then
         autolog=$(plutil -extract StandardOutPath raw "$LAUNCH_AGENT_PLIST" 2>/dev/null || echo "")
 #       autolog=$(/usr/libexec/PlistBuddy -c "Print :StandardOutPath" "$LAUNCH_AGENT_PLIST" 2>/dev/null || echo "")
+    fi
+
+    if [[ -f "$autolog" ]]; then
    	# Extract hours and minutes individually, suppressing errors
         local hour=0
         local minutes=0
@@ -73,9 +76,6 @@ function autoupdate_status() {
             minutes=$(printf "%02d" "$minutes")
             echo "Runs Daily: ${hour}:${minutes}"
         fi 
-    fi
-
-    if [[ -f "$autolog" ]]; then
         echo -en "\n\n\t\t\tPress any key to view the Autoupdate Log"
         read -k 1
         clear
