@@ -59,6 +59,20 @@ function autoupdate_status() {
     if [[ -f "$LAUNCH_AGENT_PLIST" ]]; then
         autolog=$(plutil -extract StandardOutPath raw "$LAUNCH_AGENT_PLIST" 2>/dev/null || echo "")
 #       autolog=$(/usr/libexec/PlistBuddy -c "Print :StandardOutPath" "$LAUNCH_AGENT_PLIST" 2>/dev/null || echo "")
+   	# Extract hours and minutes individually, suppressing errors
+        local hour=0
+        local minutes=0
+        hour=$(plutil -extract StartCalendarInterval.Hour raw -o - $LAUNCH_AGENT_PLIST 2>/dev/null | \
+		grep -o '^[0-9]*')
+        minutes=$(plutil -extract StartCalendarInterval.Minute raw -o - $LAUNCH_AGENT_PLIST 2>/dev/null | \
+		grep -o '^[0-9]*')
+        # Check if both hour and minutes were successfully extracted (non-empty and all digits)
+        if [[ -n $hour && -n $minutes && $hour =~ ^[0-9]+$ && $minutes =~ ^[0-9]+$ ]]; then
+            # Format and print the output with zero-padding using echo
+            hour=$(printf "%02d" "$hour")
+            minutes=$(printf "%02d" "$minutes")
+            echo "Runs Daily: ${hour}:${minutes}"
+        fi 
     fi
 
     if [[ -f "$autolog" ]]; then
