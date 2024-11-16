@@ -30,7 +30,7 @@ function error() {
 }
 trap 'error $LINENO' ERR
 
-# Helper function to check if launchd agent is active
+# Function to check if launchd agent is active
 function is_agent_active() {
     launchctl list | grep -q "$GREP_NAME"
 }
@@ -40,6 +40,13 @@ function print_status() {
     local color="$1"
     local message="$2"
     echo -e "\033[${COLOR_BOLD};${color}m${message}\033[0m"
+}
+
+# Function to empty log file
+function empty_log() {
+    echo "Logfile Emptied:  $(date)" > "$1"
+    echo >> "$1"
+    print_status "${COLOR_GREEN}" "Log File Emptied."
 }
 
 # Function to check the status of the Brew autoupdate service
@@ -90,6 +97,16 @@ function autoupdate_status() {
             }
             {print}
         ' "$autolog" | less
+
+        # Confirm empty log execution
+        while true; do
+            read yn\?"Empty Log (Y/N): "
+            case $yn in
+                [Yy]* ) empty_log "$autolog"; break;;
+                [Nn]* ) break;;
+                * ) echo "Please answer yes (Y) or no (N).";;
+            esac
+        done
     else
         print_status "${COLOR_RED}" "Autoupdate log file not found."
     fi
