@@ -62,12 +62,13 @@ alias mvexplore="Mvexplore.sh"				# Open Netrw File Explorer in Home Directory
 alias mdedit="open -a MacDown.app $1"	# Launch MacDown From Terminal Command Prompt
 #=> End MacDown Markdown Editor Commands
 
-#=> Terminal List Commands
-alias la="ls -a"					# List All
-alias ll="ls -al"					# Long List - Total at top is Block Count
-alias ss="clear; cd $HOME/ShellScripts; ll"		# Show Scripts
-alias sst="clear; cd $HOME/ShellScripts/zTests; ll"	# Show Test Scripts
-alias lc="echo -n 'Number of Files:'; ls | wc -l" 	# List File Count
+#=> Terminal List Commands 
+alias la="ls -a"                                                # List All
+alias ll="ls -al"					        # Long List - Total at top is Block Count
+alias cdh="clear; cd $HOME; pwd; echo; ll"		        # Show Home Directory
+alias ss="clear; cd $HOME/ShellScripts; pwd; echo; ll"		# Show Scripts
+alias sst="clear; cd $HOME/ShellScripts/zTests; pwd; echo; ll"	# Show Test Scripts
+alias lc="echo -n 'Number of Files:'; ls | wc -l" 	        # List File Count
 #=> End Terminal List Commands
 
 #=> Network Speedtest Commands
