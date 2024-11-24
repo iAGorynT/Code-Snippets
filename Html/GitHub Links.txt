@@ -10,7 +10,6 @@ Dev - https://raw.githack.com/iAGorynT/Code-Snippets/main/Html/DOW_Links.html
 
 script.js
 https://github.com/iAGorynT/Code-Snippets/blob/main/Html/script.js
-https://github.com/iAGorynT/Code-Snippets/blob/main/Html/script.js
 Prod - https://rawcdn.githack.com/iAGorynT/Code-Snippets/fd4977cf4ec4d228d10cb51557c9c56c69a36a6e/Html/script.js
 Dev - https://raw.githack.com/iAGorynT/Code-Snippets/main/Html/script.js
 
