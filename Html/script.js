@@ -92,14 +92,6 @@
             
                     output.innerHTML += `<p>${dateString}</p>`;
                 });
-
-                // Calculate the number of weeks in the month
-                const firstDay = new Date(year, month - 1, 1).getDay();
-                const totalDays = daysInMonth + firstDay;
-                const weeksInMonth = Math.ceil(totalDays / 7);
-
-                // Display the number of weeks
-                output.innerHTML += `<p>Calendar weeks in ${months[month - 1]} ${year}: ${weeksInMonth}</p>`;
             }
         }
 
