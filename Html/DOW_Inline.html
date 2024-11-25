@@ -265,16 +265,17 @@
             } else {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
-
+            
                 // Display each found date
                 dates.forEach((date, index) => {
                     const formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
                     const daysFromToday = Math.floor((date - today) / (1000 * 60 * 60 * 24));
+                    const weeksFromToday = (daysFromToday / 7).toFixed(2);
             
                     let dateString = `${index + 1}. ${formattedDate}`;
-                    // Add "days from today" if the date is in the future
+                    // Add "days from today" and "weeks from today" if the date is in the future
                     if (daysFromToday > 0) {
-                        dateString += ` <span style="color: var(--accent-color);">(${daysFromToday} days from today)</span>`;
+                        dateString += ` <span style="color: var(--accent-color);">(${daysFromToday} days from today, ${weeksFromToday} weeks)</span>`;
                     }
             
                     output.innerHTML += `<p>${dateString}</p>`;
