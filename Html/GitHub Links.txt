@@ -1,6 +1,6 @@
 DOW_Inline.html
 GitHub - https://github.com/iAGorynT/Code-Snippets/blob/main/Html/DOW_Inline.html
-Prod - https://rawcdn.githack.com/iAGorynT/Code-Snippets/bbcdb65d5be66a03380b5f57c44896f0fb15f707/Html/DOW_Inline.html
+Prod - https://rawcdn.githack.com/iAGorynT/Code-Snippets/c603fb5514f2c4a32fd3fec06c3994170c32ceeb/Html/DOW_Inline.html
 Dev - https://raw.githack.com/iAGorynT/Code-Snippets/main/Html/DOW_Inline.html
 
 DOW_Links.html
