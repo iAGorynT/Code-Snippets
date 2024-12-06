@@ -11,22 +11,49 @@ display_header() {
     echo " "
 }
 
-# Function to get filename from JSON config
+# Function to get filename from JSON config with improved error handling and flexibility
 get_filename_from_config() {
-    local config_file=$1
-    local key=$2
-
-    if command -v jq >/dev/null 2>&1; then
-        jq -r ".$key" "$config_file"
-    else 
-        local str=$(cat "$config_file")
-        local substr="$key"
-        local prefix=${str%%$substr*}
-        local index=${#prefix}
-        local name_index=$((index + ${#key} + 3)) # +3 for "_name"
-        local str2=$(echo "$str" | cut -c $name_index-)
-        echo "$str2" | cut -d '"' -f2
+    # Check if correct number of arguments is provided
+    if [[ $# -ne 2 ]]; then
+        echo "Usage: get_filename_from_config <config_file> <key>" >&2
+        return 1
     fi
+
+    local config_file="$1"
+    local key="$2"
+
+    # Check if config file exists
+    if [[ ! -f "$config_file" ]]; then
+        echo "Error: Config file '$config_file' not found" >&2
+        return 1
+    fi
+
+    # Prefer jq if available (faster and more robust)
+    if command -v jq >/dev/null 2>&1; then
+        # Use jq to extract the value, handling potential errors
+        local filename
+        filename=$(jq -e -r ".$key // empty" "$config_file")
+        
+        # Check if jq extraction was successful
+        if [[ -z "$filename" ]]; then
+            echo "Error: Unable to find key '$key' in config file" >&2
+            return 1
+        fi
+        
+        echo "$filename"
+        return 0
+    fi
+
+    # Fallback method using grep and sed if jq is not available
+    local filename
+    filename=$(grep -o "\"$key\": *\"[^\"]*\"" "$config_file" | sed -n "s/.*: *\"\(.*\)\"/\1/p")
+    
+    if [[ -z "$filename" ]]; then
+        echo "Error: Unable to find key '$key' in config file using fallback method" >&2
+        return 1
+    fi
+
+    echo "$filename"
 }
 
 # Main loop
