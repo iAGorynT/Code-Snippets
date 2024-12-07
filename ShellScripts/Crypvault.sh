@@ -4,19 +4,52 @@
 # Note: Parameter value should be "vmgr", "gmgr", or left blank
 vaultpassed=$1
 
+# Improved logging and error handling function
+log_message() {
+    local type="$1"
+    local message="$2"
+    local stop_execution="${3:-false}"
+
+    # Color codes
+    local GREEN='\033[0;32m'
+    local YELLOW='\033[1;33m'
+    local RED='\033[0;31m'
+    local NC='\033[0m' # No Color
+
+    # Determine color and prefix based on message type
+    case "$type" in
+        "Info")
+            echo -e "${GREEN}[INFO]${NC} $message"
+            ;;
+        "Warning")
+            echo -e "${YELLOW}[WARNING]${NC} $message" >&2
+            ;;
+        "Error")
+            echo -e "${RED}[ERROR]${NC} $message" >&2
+            
+            # Option to stop script execution
+            if [[ "$stop_execution" == "true" ]]; then
+                echo -e "${RED}Stopping script execution.${NC}" >&2
+                exit 1
+            fi
+            ;;
+        *)
+            echo "$message"
+            ;;
+    esac
+}
+
 # Function to clear screen and display header
 display_header() {
     clear
-    echo "OpenSSL Vault Encrypt / Decrypt"
-    echo " "
+    log_message "Info" "OpenSSL Vault Encrypt / Decrypt"
 }
 
 # Function to get filename from JSON config with improved error handling and flexibility
 get_filename_from_config() {
     # Check if correct number of arguments is provided
     if [[ $# -ne 2 ]]; then
-        echo "Usage: get_filename_from_config <config_file> <key>" >&2
-        return 1
+        log_message "Error" "Usage: get_filename_from_config <config_file> <key>" true
     fi
 
     local config_file="$1"
@@ -24,8 +57,7 @@ get_filename_from_config() {
 
     # Check if config file exists
     if [[ ! -f "$config_file" ]]; then
-        echo "Error: Config file '$config_file' not found" >&2
-        return 1
+        log_message "Error" "Config file '$config_file' not found" true
     fi
 
     # Prefer jq if available (faster and more robust)
@@ -36,8 +68,7 @@ get_filename_from_config() {
         
         # Check if jq extraction was successful
         if [[ -z "$filename" ]]; then
-            echo "Error: Unable to find key '$key' in config file" >&2
-            return 1
+            log_message "Error" "Unable to find key '$key' in config file" true
         fi
         
         echo "$filename"
@@ -49,8 +80,7 @@ get_filename_from_config() {
     filename=$(grep -o "\"$key\": *\"[^\"]*\"" "$config_file" | sed -n "s/.*: *\"\(.*\)\"/\1/p")
     
     if [[ -z "$filename" ]]; then
-        echo "Error: Unable to find key '$key' in config file using fallback method" >&2
-        return 1
+        log_message "Error" "Unable to find key '$key' in config file using fallback method" true
     fi
 
     echo "$filename"
@@ -74,7 +104,7 @@ while true; do
     # Add remaining common actions
     common_actions+=("Backup" "Config" "Reset" "Quit")
 
-    echo "Select Action..."
+    log_message "Info" "Select Action..."
     echo " "
     select action in "${common_actions[@]}"; do
         case $action in
@@ -94,41 +124,36 @@ while true; do
         quit)
             # Check if user wants to quit
             if [[ $action == "quit" ]]; then
-                echo " "
-                echo "OpenSSL Vault Enc/Dec Completed"
+                log_message "Info" "OpenSSL Vault Enc/Dec Completed"
                 exit 0
             fi
             ;;
         rset)
             # Reset settings to All Vaults
             vaultpassed=''
-            echo " "
-            echo "Settings reset to All Vaults..."
+            log_message "Info" "Settings reset to All Vaults..."
             read -k 1
             continue
             ;;
         view)
             # Display Warning message
             if [[ $action == "view" ]]; then
-            # Display a warning message when viewing
+                # Display a warning message when viewing
                 osascript -e 'display dialog "WHEN VIEWING, DO NOT UPDATE SELECTED VAULT-Changes will not be saved!" with title "Caution When Viewing" with icon caution buttons {"OK"} default button "OK"' >/dev/null 2>&1
             fi
             ;;
         conf)
             # Run ConfigFILES Shortcuts App
-            echo " "
-            echo "Standby... ConfigFILES Running"
+            log_message "Info" "Standby... ConfigFILES Running"
             shortcuts run "ConfigFILES"
-            echo "ConfigFILES Complete..."
-            echo " "
+            log_message "Info" "ConfigFILES Complete..."
             continue
             ;;
     esac
 
     # Select Vault Type
     if [ -z "$vaultpassed" ]; then
-        echo " "
-        echo "Select Vault Type..."
+        log_message "Info" "Select Vault Type..."
         echo " "
         # Define common vaults
         if [[ $action != "sync" ]]; then
@@ -161,15 +186,13 @@ while true; do
     else
         encrypt_type="PFE"
     fi
-    echo "Vault Encryption Used: $encrypt_type"
+    log_message "Info" "Vault Encryption Used: $encrypt_type"
 
     # Set Vault Variables
     if [[ $vault_name == "vmgr" ]]; then
         filename=$(get_filename_from_config "$config_file" "vaultmgr_name")
-        # config_json="vaultmgr_config.json"
     elif [[ $vault_name == "gmgr" ]]; then
         filename=$(get_filename_from_config "$config_file" "gitmgr_name")
-        # config_json="gitmgr_config.json"
     fi
 
     # Initialize Vault Names
@@ -182,8 +205,7 @@ while true; do
 
     # Lookup Secret in Keychain
     if ! secret=$(security find-generic-password -w -s "$secret_type" -a "$account"); then
-        echo "Secret Not Found, error $?"
-        continue
+        log_message "Error" "Secret Not Found, error $?" true
     fi
 
     # Set File Hash
@@ -202,13 +224,11 @@ while true; do
 
     # Check For Vault Directory or Encrypted File On Desktop
     if [[ $action == "enc" || $action == "sync" ]] && [[ ! -d $vault_dir ]]; then
-        echo "Vault Directory missing on Desktop: $vault_dir"
-        echo " "
+        log_message "Error" "Vault Directory missing on Desktop: $vault_dir"
         read -k 1
         continue
     elif [[ $action == "dec" || $action == "view" ]] && [[ ! -f $vault_enc ]]; then
-        echo "Encrypted Vault missing on Desktop: $vault_enc"
-        echo " "
+        log_message "Error" "Encrypted Vault missing on Desktop: $vault_enc"
         read -k 1
         continue
     fi
@@ -229,8 +249,8 @@ while true; do
             mv -f "$vault_enc" "$icloud_dir"
             rm -rf ~/.trash/"$vault_dir"
             mv -f "$vault_dir" ~/.trash
-            echo "Vault Encrypted: $vault_dir"
-            echo "Note: Encrypted Vault Moved To iCloud, Encrypted Directory Moved To Trash"
+            log_message "Info" "Vault Encrypted: $vault_dir"
+            log_message "Info" "Note: Encrypted Vault Moved To iCloud, Encrypted Directory Moved To Trash"
             ;;
         dec|view)
             if [[ $encrypt_type == "SSL" ]]; then
@@ -244,39 +264,39 @@ while true; do
             fi
             rm -rf ~/.trash/"$vault_enc"
             mv -f "$vault_enc" ~/.trash
-            echo "Vault Decrypted: $vault_dir"
-            echo "Note: Encrypted Vault Moved To Trash"
+            log_message "Info" "Vault Decrypted: $vault_dir"
+            log_message "Info" "Note: Encrypted Vault Moved To Trash"
             if [[ $action == "view" ]]; then
-                echo "When Done Viewing, Move $vault_dir Vault To Trash!"
+                log_message "Warning" "When Done Viewing, Move $vault_dir Vault To Trash!"
                 open "$HOME/Desktop/$vault_dir"
             fi
             ;;
         sync)
             clear
-            echo "GitHUB Sync Starting"
+            log_message "Info" "GitHUB Sync Starting"
             current_date=$(date)
-            echo "$current_date"
+            log_message "Info" "$current_date"
             rsync -avh "$HOME/Documents/GitHub/Code-Snippets/" "$HOME/Desktop/GciSttH6UsbSj7I/GitHub/Code-Snippets" --delete
-            echo "GitHUB Sync Completed"
+            log_message "Info" "GitHUB Sync Completed"
             ;;
         back)
             clear
-            echo "Backing up $vault_dir"
+            log_message "Info" "Backing up $vault_dir"
             echo " "
             if diskutil list external | grep -q 'Private'; then
-                echo "Backing up to Private..."
+                log_message "Info" "Backing up to Private..."
                 cp "$icloud_enc" "/Volumes/Private"
                 cp "$config_file" "/Volumes/Private/Shortcuts Config Files"
             fi
-            echo "Backing up to Downloads..."
+            log_message "Info" "Backing up to Downloads..."
             cp "$icloud_enc" "$HOME/Downloads/zVault Backup"
             cp "$config_file" "$HOME/Downloads/zVault Backup/Shortcuts Config Files"
-            echo "Vault Backup Completed"
+            log_message "Info" "Vault Backup Completed"
             ;;
     esac
 
     # Pause before next iteration
     echo " "
-    echo "Press any key to continue..."
+    log_message "Info" "Press any key to continue..."
     read -k 1
 done
