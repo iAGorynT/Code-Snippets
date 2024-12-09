@@ -49,11 +49,6 @@ function sshmenu {
 	Sshm.sh
 }
 
-function runbtop {
-	clear
-	btop 
-}
-
 function menu {
 	clear
 	echo
@@ -66,7 +61,6 @@ function menu {
 	echo -e "\t6. Internet Speed Test"
 	echo -e "\t7. Apple Network Quality Test"
 	echo -e "\t8. SSH Command Menu"
-	echo -e "\t9. Run Btop"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -106,9 +100,6 @@ do
 
 	8)
 	sshmenu;;
-
-	9)
-	runbtop;;
 
 # Return / Enter Key Pressed
         "")
