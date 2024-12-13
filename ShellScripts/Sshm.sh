@@ -5,7 +5,7 @@ trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
 function setsshpw {
 	clear
-	sshpw.sh
+	Sshpw.sh
 }
 
 function turnsshon {
@@ -27,7 +27,7 @@ function showsshstat {
 
 function listsshdir {
 	clear
-	sshdir.sh
+	Sshdir.sh
 }
 
 function menu {
