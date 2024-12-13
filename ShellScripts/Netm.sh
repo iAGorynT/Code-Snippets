@@ -3,34 +3,22 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
-function infomenu {
+function clispeed {
 	clear
-	Infom.sh
+	echo 'Speedtest in progress...'; speedtest -p yes
 }
 
-function netmenu {
+function netq {
 	clear
-	Netm.sh
-}
-
-function sshmenu {
-	clear
-	Sshm.sh
-}
-
-function crypmenu {
-	clear
-	Crypm.sh
+	networkQuality -v
 }
 
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tOps Menu\n"
-	echo -e "\t1. Info Menu"
-	echo -e "\t2. Network Menu"
-	echo -e "\t3. SSH Menu"
-	echo -e "\t4. Crypt Menu"
+	echo -e "\t\t\tNetwork Menu\n"
+	echo -e "\t1. Internet Speed Test"
+	echo -e "\t2. Apple Network Quality Test"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -48,16 +36,10 @@ do
 	break ;;
 
 	1)
-	infomenu;;
+	clispeed;;
 
 	2)
-	netmenu;;
-
-	3)
-	sshmenu;;
-
-	4)
-	crypmenu;;
+	netq;;
 
 # Return / Enter Key Pressed
         "")

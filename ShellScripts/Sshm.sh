@@ -33,7 +33,7 @@ function listsshdir {
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tSSH Command Menu\n"
+	echo -e "\t\t\tSSH Menu\n"
 	echo -e "\t1. Set SSH Password"
 	echo -e "\t2. Turn SSH On"
 	echo -e "\t3. Turn SSH Off"
