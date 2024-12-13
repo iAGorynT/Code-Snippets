@@ -3,34 +3,30 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
-function infomenu {
+function enigma {
 	clear
-	Infom.sh
+        # Run Enigma Shortcuts App
+        echo "Info" "Standby... Enigma Running"
+        shortcuts run "Enigma"
+        echo "Info" "Enigma Complete..."
+        continue
 }
 
-function netmenu {
-	clear
-	Netm.sh
+function cryptxt {
+	Cryptxt.sh
 }
 
-function sshmenu {
-	clear
-	Sshm.sh
-}
-
-function crypmenu {
-	clear
-	Crypm.sh
+function crypvault {
+	Crypvault.sh
 }
 
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tOps Menu\n"
-	echo -e "\t1. Info Menu"
-	echo -e "\t2. Network Menu"
-	echo -e "\t3. SSH Menu"
-	echo -e "\t4. Crypt Menu"
+	echo -e "\t\t\tCrypt Menu\n"
+	echo -e "\t1. Enigma Shortcut"
+	echo -e "\t2. SSL Cryptxt"
+	echo -e "\t3. SSL Crypvault"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -48,16 +44,13 @@ do
 	break ;;
 
 	1)
-	infomenu;;
+	enigma;;
 
 	2)
-	netmenu;;
+	cryptxt;;
 
 	3)
-	sshmenu;;
-
-	4)
-	crypmenu;;
+	crypvault;;
 
 # Return / Enter Key Pressed
         "")

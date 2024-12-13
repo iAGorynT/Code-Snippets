@@ -3,34 +3,46 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
-function infomenu {
+function hname {
 	clear
-	Infom.sh
+	Hname.sh
 }
 
-function netmenu {
+function penv {
 	clear
-	Netm.sh
+	echo "Environment Variables..."
+	echo " "
+	printenv | more
 }
 
-function sshmenu {
+function sver {
 	clear
-	Sshm.sh
+	Versions.sh
 }
 
-function crypmenu {
+function pkgu {
 	clear
-	Crypm.sh
+	echo "Installed Packages..."
+	echo " "
+	pkgutil --pkgs | more
+}
+
+function pall {
+	clear
+	echo "Particulars Information..."
+	echo " "
+	particulars -a
 }
 
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tOps Menu\n"
-	echo -e "\t1. Info Menu"
-	echo -e "\t2. Network Menu"
-	echo -e "\t3. SSH Menu"
-	echo -e "\t4. Crypt Menu"
+	echo -e "\t\t\tInfo Menu\n"
+	echo -e "\t1. Hostname"
+	echo -e "\t2. Environment Variables"
+	echo -e "\t3. Software Versions"
+	echo -e "\t4. Installed Packages"
+	echo -e "\t5. Particulars Information"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -48,16 +60,19 @@ do
 	break ;;
 
 	1)
-	infomenu;;
+	hname;;
 
 	2)
-	netmenu;;
+	penv;;
 
 	3)
-	sshmenu;;
+	sver;;
 
 	4)
-	crypmenu;;
+	pkgu;;
+
+	5)
+	pall;;
 
 # Return / Enter Key Pressed
         "")
