@@ -39,9 +39,6 @@ format_echo "Colors" "std" 4
 ls -1 ~/.vim/colors
 echo
 
-# Mosh
-mosh --version | grep -e 'mosh '
-
 # SSH
 # Had to run ssh command and pipe it to echo -n (no new line)
 # in order to get results on one line.  Just trying to echo
