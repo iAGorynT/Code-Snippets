@@ -34,6 +34,11 @@ function pall {
 	particulars -a
 }
 
+function dstats {
+	clear
+	Dstats.sh
+}
+
 function menu {
 	clear
 	echo
@@ -43,6 +48,7 @@ function menu {
 	echo -e "\t3. Software Versions"
 	echo -e "\t4. Installed Packages"
 	echo -e "\t5. Particulars Information"
+	echo -e "\t6. Disk Stats"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -73,6 +79,9 @@ do
 
 	5)
 	pall;;
+
+	6)
+	dstats;;
 
 # Return / Enter Key Pressed
         "")

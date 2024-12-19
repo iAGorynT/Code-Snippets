@@ -10,6 +10,7 @@ alias ca="clear; cat ~/.zshrc | more"	# Display .zshrc Contents
 alias da="Aliasdoc.sh"			# Display .zshrc Contents Using Doc Script
 alias clr="clear"			# Clear Screen
 alias dsleep="pmset displaysleepnow"	# Put Mac Display To Sleep
+alias dstats="Dstats.sh"	        # Display Disk Stats
 alias hname="Hname.sh"			# Display Hostname / IP Addresses
 alias penv="printenv | more"		# Display Environment Variables
 alias sver="Versions.sh"		# Display Software Versions
