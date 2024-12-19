@@ -19,8 +19,8 @@ get_mac_disk_space() {
     
     # Get disk information
     local storage_info=$(system_profiler SPStorageDataType)
-    local total_size=$(echo "$storage_info" | grep "Capacity:" | head -1 | awk '{print $2$3}')
-    local free_size=$(echo "$storage_info" | grep "Free:" | head -1 | awk '{print $2$3}')
+    local total_size=$(echo "$storage_info" | grep "Capacity:" | head -1 | awk '{print $2 " " $3}')
+    local free_size=$(echo "$storage_info" | grep "Free:" | head -1 | awk '{print $2 " " $3}')
     
     # Get byte values using df
     local total_bytes=$(df -b "$mount_point" | tail -1 | awk '{print $2}')
@@ -53,6 +53,9 @@ get_mac_disk_space() {
     else
         echo "\nCannot calculate percentage (division by zero)"
     fi
+
+    # Display Macintosh HD Info Window
+    shortcuts run "Mac HD Info"
 }
 
 # Run the function
