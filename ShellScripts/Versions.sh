@@ -51,6 +51,14 @@ echo "OpenSSL: $(openssl version)"
 # Python
 echo "Python3: $(python3 --version)"
 
+# Rosetta 2
+# Check for the presence of the Rosetta 2 installation receipt
+if command -v lsbom >/dev/null && lsbom -f /Library/Apple/System/Library/Receipts/com.apple.pkg.RosettaUpdateAuto.bom >/dev/null 2>&1; then
+    echo "Rosetta 2: Installed"
+else
+    echo "Rosetta 2: NOT installed"
+fi
+
 # XCode Command Line Tools
 echo
 echo "Xcode Command Line Tools:"
