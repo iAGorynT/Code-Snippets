@@ -6,7 +6,21 @@ trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 CLOSE_FINDER_WINDOWS=0
 
 function close_finder_windows() {
-    osascript -e 'tell application "Finder" to close every window'
+    local window_name="$1"
+    osascript <<EOF > /dev/null 2>&1
+    tell application "System Events"
+        tell process "Finder"
+            set allWindows to (every window whose name contains "$window_name")
+            repeat with w in allWindows
+                try
+                    if exists w then
+                        click button 1 of w
+                    end if
+                end try
+            end repeat
+        end tell
+    end tell
+EOF
 }
 
 function hname {
@@ -99,7 +113,7 @@ do
     echo -en "\n\n\t\t\tHit any key to continue"
     read -k 1 line
     if [ $CLOSE_FINDER_WINDOWS -eq 1 ]; then
-        close_finder_windows
+	close_finder_windows "Macintosh HD"
     fi
     CLOSE_FINDER_WINDOWS=0
 done
