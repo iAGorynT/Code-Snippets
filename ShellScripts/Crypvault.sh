@@ -129,7 +129,7 @@ while true; do
             if [[ $action == "quit" ]]; then
                 # Stop Terminal App Launcher
                 if osascript -e 'application "Terminal" is running' >/dev/null 2>&1; then
-		    log_message "Info" "Stopping Terminal App Launcher"
+                    log_message "Info" "Stopping Terminal App Launcher"
                     osascript -e 'tell application "Terminal" to quit' >/dev/null 2>&1
                 fi
                 log_message "Info" "OpenSSL Vault Enc/Dec Completed"
