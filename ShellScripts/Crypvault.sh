@@ -72,7 +72,9 @@ get_filename_from_config() {
             log_message "Error" "Unable to find key '$key' in config file" true
         fi
         
-        echo "$filename"
+        # Changed from echo to printf to suppress displaying filename
+        # echo "$filename"
+        printf "%s" "$filename"
         return 0
     fi
 
@@ -106,7 +108,7 @@ while true; do
     common_actions+=("Backup" "Config" "Reset" "Quit")
 
     log_message "Info" "Select Action..."
-    echo " "
+    echo 
     select action in "${common_actions[@]}"; do
         case $action in
             Encrypt)  action="enc"; break;;
@@ -127,8 +129,8 @@ while true; do
             if [[ $action == "quit" ]]; then
                 # Stop Terminal App Launcher
                 if osascript -e 'application "Terminal" is running' >/dev/null 2>&1; then
-                    osascript -e 'tell application "Terminal" to quit' >/dev/null 2>&1
 		    log_message "Info" "Stopping Terminal App Launcher"
+                    osascript -e 'tell application "Terminal" to quit' >/dev/null 2>&1
                 fi
                 log_message "Info" "OpenSSL Vault Enc/Dec Completed"
                 exit 0
@@ -160,7 +162,7 @@ while true; do
     # Select Vault Type
     if [ -z "$vaultpassed" ]; then
         log_message "Info" "Select Vault Type..."
-        echo " "
+        echo 
         # Define common vaults
         if [[ $action != "sync" ]]; then
             common_vaults=("VaultMGR" "GitMGR")
@@ -176,7 +178,7 @@ while true; do
     else
         vault_name=$vaultpassed
     fi
-    echo " "
+    echo 
 
     # Set Vault Configuration File Location
     config_dir="$HOME/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files"
@@ -288,7 +290,7 @@ while true; do
         back)
             clear
             log_message "Info" "Backing up $vault_dir"
-            echo " "
+            echo 
             if diskutil list external | grep -q 'Private'; then
                 log_message "Info" "Backing up to Private..."
                 cp "$icloud_enc" "/Volumes/Private"
@@ -302,7 +304,7 @@ while true; do
     esac
 
     # Pause before next iteration
-    echo " "
+    echo 
     log_message "Info" "Press any key to continue..."
     read -k 1
 done
