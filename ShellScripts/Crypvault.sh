@@ -2,7 +2,8 @@
 
 # Save passed Vault Type if supplied
 # Note: Parameter value should be "vmgr", "gmgr", or left blank
-vaultpassed=$1
+#vaultpassed=$1
+vaultpassed=${1:-}
 
 # Improved logging and error handling function
 log_message() {
@@ -124,6 +125,11 @@ while true; do
         quit)
             # Check if user wants to quit
             if [[ $action == "quit" ]]; then
+                # Stop Terminal App Launcher
+                if osascript -e 'application "Terminal" is running' >/dev/null 2>&1; then
+                    osascript -e 'tell application "Terminal" to quit' >/dev/null 2>&1
+		    log_message "Info" "Stopping Terminal App Launcher"
+                fi
                 log_message "Info" "OpenSSL Vault Enc/Dec Completed"
                 exit 0
             fi
