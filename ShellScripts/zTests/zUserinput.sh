@@ -135,7 +135,7 @@ default answer ""' \
 -e 'text returned of result')
 # Display Entered Text on Command Line
 echo "Your text is: $textin"
-# Set Focus Back To Termius App
-focustermius=$(osascript -e 'tell app "Termius" to activate')
+# Set Focus Back To Tabby App
+focustabby=$(osascript -e 'tell app "Tabby" to activate')
 echo
 
