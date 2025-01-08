@@ -4,11 +4,11 @@
 trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
 # Activate Function Library
-source $HOME/ShellScripts/FunctionLib.sh
+source $HOME/ShellScripts/FLibFormatEcho.sh
 
 function brewdocs1 {
 	clear
-	format_echo "HomeBrew Update 1/3..." "brew" 1
+	format_echo "HomeBrew Update 1/3..." "none" "brew"
 	echo " "
 	brew update
 	echo " "
@@ -18,7 +18,7 @@ function brewdocs1 {
 
 function brewdocs2 {
 	clear
-	format_echo "HomeBrew Update 2/3..." "brew" 1
+	format_echo "HomeBrew Update 2/3..." "none" "brew"
 	echo " "
 	brew update
 	echo " "
@@ -28,7 +28,7 @@ function brewdocs2 {
 
 function brewdocs3 {
 	clear
-	format_echo "Brew Doctor 3/3..." "brew" 1
+	format_echo "Brew Doctor 3/3..." "none" "brew"
 	echo " "
 	brew doctor
 	echo " "

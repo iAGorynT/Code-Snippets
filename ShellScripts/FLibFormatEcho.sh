@@ -1,9 +1,9 @@
 #!/bin/zsh
-
 # Text formatting library for ZSH scripts
-# Usage: format_echo [text] [color] [format options...]
+# Usage: format_echo [text] [color] [format options...] [echotype]
 # Colors: black, red, green, yellow, blue, magenta, cyan, white
 # Format options: bold, dim, italic, underline, blink, reverse, hidden
+# Echotype: brew (optional, for HomeBrew-style messages)
 
 # ANSI escape code components
 declare -A colors=(
@@ -30,6 +30,10 @@ declare -A formats=(
 
 # Reset all formatting
 reset="\033[0m"
+# Define blue color with bold for brew style
+blue="\033[1;34m"
+# Define bold format for brew style text
+bold="\033[1m"
 
 # Function to validate color input
 validate_color() {
@@ -57,8 +61,20 @@ validate_format() {
 format_echo() {
     local text=$1
     local color=${2:-none}  # Default color is 'none' if not specified
+    local echotype=""       # Initialize echotype as empty
     shift 1  # Remove first argument (text)
     [[ $# -gt 0 ]] && shift 1  # Remove second argument (color) only if it exists
+
+    # Process remaining arguments
+    local format_args=()
+    while [[ $# -gt 0 ]]; do
+        if [[ $1 == "brew" ]]; then
+            echotype="brew"
+        else
+            format_args+=($1)
+        fi
+        shift
+    done
 
     # Validate color if it's not 'none'
     if [[ $color != "none" ]]; then
@@ -74,8 +90,8 @@ format_echo() {
         format_codes+=($color_code)
     fi
 
-    # Process additional format options
-    for opt in $@; do
+    # Process format options
+    for opt in $format_args; do
         if validate_format $opt; then
             format_codes+=(${formats[$opt]})
         fi
@@ -83,8 +99,13 @@ format_echo() {
 
     # Print formatted text
     if [[ ${#format_codes} -eq 0 ]]; then
-        # No formatting needed
-        echo -e "${text}"
+        if [[ $echotype == "brew" ]]; then
+            # Print the formatted text as a HomeBrew Message with a reset at the end
+            echo -e "${blue}==>${reset} ${bold}${text}${reset}"
+        else
+            # No formatting needed
+            echo -e "${text}"
+        fi
     else
         # Join format codes with semicolons and apply formatting
         local format_string=$(IFS=\;; echo "${format_codes[*]}")
@@ -113,6 +134,7 @@ info_echo() {
 show_examples() {
     echo "Format Library Examples:"
     format_echo "Text without color or formatting"
+    format_echo "Text with brew style" none brew
     format_echo "Regular colored text" "blue"
     format_echo "Bold text without color" none "bold"
     format_echo "Bold colored text" "green" "bold"
