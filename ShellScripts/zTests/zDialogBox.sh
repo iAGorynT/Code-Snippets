@@ -7,8 +7,8 @@ clear
 
 # Make sure to use a word other than "Cancel" to stop.  Cancel will throw an error and cause 
 # the script to abort.
-ans="$(osascript -e 'display dialog "OK to Continue or Quit to Stop Script?" with title "Continue Script" buttons {"OK", "Quit"} default button "OK"')"
-
+# ans="$(osascript -e 'display dialog "OK to Continue or Quit to Stop Script?" with title "Continue Script" buttons {"OK", "Quit"} default button "OK"')"
+ans="$(osascript -e 'display dialog "OK to Continue or Quit to Stop Script?" with title "Continue Script" buttons {"OK", "Quit"} default button "OK"' 2>/dev/null)"
 if [ "$ans" = "button returned:OK" ]; then
     echo "Yes, continue script..."
     echo

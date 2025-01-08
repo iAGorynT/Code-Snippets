@@ -124,7 +124,7 @@ alias gh="open -a 'Github Desktop'"	# Launch Github Desktop App
 #=> Dev Commands
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
 alias ai="LaunchAI.sh"				# Launch AI Chatbot
-alias fdoc="FLibFormatEchoDoc.sh"		# List FLibFormatEchoDoc.sh Documentation
+alias fdoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
 alias ctest="Colortest.sh"			# Display Color Test
 alias webapps="clear; echo 'Web Apps...'; echo; ls --color=never -1 ~/Applications; echo" # List Safari Web Apps
 #=> End Dev Commands
