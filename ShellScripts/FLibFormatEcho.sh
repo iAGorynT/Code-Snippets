@@ -1,5 +1,7 @@
 #!/bin/zsh
-# Text formatting library for ZSH scripts
+
+# Function: FLibFormatEcho.sh 
+# Desc: Text formatting library for ZSH scripts
 # Usage: format_echo [text] [color] [format options...] [echotype]
 # Colors: black, red, green, yellow, blue, magenta, cyan, white
 # Format options: bold, dim, italic, underline, blink, reverse, hidden
@@ -31,9 +33,11 @@ declare -A formats=(
 # Reset all formatting
 reset="\033[0m"
 # Define blue color with bold for brew style
-blue="\033[1;34m"
+brewblue="\033[1;34m"
+# Define Brown color with bold for brew style
+brewbrown="\033[1;38;5;136m"
 # Define bold format for brew style text
-bold="\033[1m"
+brewbold="\033[1m"
 
 # Function to validate color input
 validate_color() {
@@ -101,7 +105,7 @@ format_echo() {
     if [[ ${#format_codes} -eq 0 ]]; then
         if [[ $echotype == "brew" ]]; then
             # Print the formatted text as a HomeBrew Message with a reset at the end
-            echo -e "${blue}==>${reset} ${bold}${text}${reset}"
+            echo -e "${brewbrown}==>${reset} ${brewbold}${text}${reset}"
         else
             # No formatting needed
             echo -e "${text}"
