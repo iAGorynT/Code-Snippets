@@ -3,6 +3,9 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
+# Activate Function Library
+source $HOME/ShellScripts/FLibFormatEcho.sh
+
 function brewit {
 	clear
 	brewit.sh
@@ -10,37 +13,35 @@ function brewit {
 
 function brewlist {
 	clear
-	echo "Brew List..."
-	echo " "
+	format_echo "Brew List..." "yellow" "bold"
+	echo
 	brew list
 }
 
 function brewdep {
 	clear
-	echo "Brew Dependencies..."
-	echo " "
+	format_echo "Brew Dependencies..." "yellow" "bold"
+	echo
 	brew deps --formula --installed | more
 }
 
 function viewbrewfile {
 # Display Brew File Contents
 	clear
-	echo "Brew File..."
-	echo " "
+	format_echo "Brew File..." "yellow" "bold"
+	echo
 	cat ~/Brewfile
 	echo -en "\n\n\t\t\tHit any key to view App Descriptions"
 	read -k 1 line
 # Display Selected Brew File App Descriptions
 	clear
-	echo "App Descriptions..."
-	echo " "
 	brewapps.sh
 }
 
 function brewapps {
 	clear
-	echo "Brew App Listing..."
-	echo " "
+	format_echo "Brew App Listing..." "yellow" "bold"
+	echo
 # Formatted Listing
 	brew desc --eval-all $(brew list) | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | more
 # For Unformatted Listing
@@ -49,10 +50,10 @@ function brewapps {
 
 function brewtap {
 	clear
-	echo "Brew Taps..."
-	echo "Directories (usually Git Repositories) of formulae (CLI based Apps),"
-	echo "Casks (GUI based Apps), and/or external commands."
-	echo " "
+	format_echo "Brew Taps..." "yellow" "bold"
+	format_echo "Directories (usually Git Repositories) of formulae (CLI based Apps)," "green" "bold"
+	format_echo "Casks (GUI based Apps), and/or external commands." "green" "bold"
+	echo
 	brew tap
 }
 

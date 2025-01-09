@@ -12,8 +12,8 @@ function brewdocs1 {
 	echo " "
 	brew update
 	echo " "
-	echo "Fix any errors and continue with Step 2"
-	echo "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting"	
+	format_echo "Fix any errors and continue with Step 2" "green" "bold"
+	format_echo "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting" "green" "bold"	
 }
 
 function brewdocs2 {
@@ -22,8 +22,8 @@ function brewdocs2 {
 	echo " "
 	brew update
 	echo " "
-	echo "Fix any errors and continue with Step 3"
-	echo "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting"	
+	format_echo "Fix any errors and continue with Step 3" "green" "bold"
+	format_echo "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting" "green" "bold"
 }
 
 function brewdocs3 {
@@ -32,8 +32,8 @@ function brewdocs3 {
 	echo " "
 	brew doctor
 	echo " "
-	echo "Fix any errors to complete Brew Doctor Recovery"
-	echo "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting"
+	format_echo "Fix any errors to complete Brew Doctor Recovery" "green" "bold"
+	format_echo "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting" "green" "bold"
 }
 
 function menu {

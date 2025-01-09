@@ -1,8 +1,11 @@
 #!/bin/zsh
 
+# Activate Function Library
+source $HOME/ShellScripts/FLibFormatEcho.sh
+
 # List Selected Application Descriptions
 clear
-echo "App Descriptions..."
+format_echo "App Descriptions..." "yellow" "bold"
 echo " "
 
 # Array of app names
