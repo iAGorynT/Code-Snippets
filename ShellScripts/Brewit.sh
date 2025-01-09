@@ -6,7 +6,7 @@
 source $HOME/ShellScripts/FLibFormatEcho.sh
 
 clear
-echo "Brew Update, Upgrade, and Cleanup..."
+format_echo "Brew Update, Upgrade, and Cleanup..." "yellow" "bold"
 echo " "
 
 # HomeBrew Update
@@ -38,5 +38,5 @@ brew cleanup
 brew list
 
 echo " "
-echo "Brew Update, Upgrade, and Cleanup Completed!"
+format_echo "Brew Update, Upgrade, and Cleanup Completed!" "green" "bold"
 echo " "

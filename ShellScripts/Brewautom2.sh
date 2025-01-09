@@ -52,7 +52,7 @@ function empty_log() {
 # Function to check the status of the Brew autoupdate service
 function autoupdate_status() {
     clear
-    print_status "${COLOR_BLUE}" "Brew Autoupdate Status..."
+    print_status "${COLOR_YELLOW}" "Brew Autoupdate Status..."
     echo
 
     if is_agent_active; then

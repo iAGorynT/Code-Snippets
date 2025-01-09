@@ -5,7 +5,7 @@ source $HOME/ShellScripts/FLibFormatEcho.sh
 
 # Display Software Versions
 clear
-echo "Software Versions..."
+format_echo "Software Versions..." yellow bold
 echo
 
 # Bash
@@ -19,7 +19,7 @@ echo "Homebrew: $(brew --version)"
 
 # Java
 echo
-echo "Java:"
+format_echo "Java:" yellow underline
 java --version
 echo
 
@@ -28,14 +28,14 @@ echo "jq JSON processor: $(jq -V)"
 
 # MacVim
 echo
-echo "MacVim:"
+format_echo "MacVim:" yellow underline
 mver=$(mvim --version | grep -e 'VIM - Vi IMproved' -e 'Included patches')
 echo "Version: $mver"
-format_echo "Autoload" "none" "underline"
+format_echo "Autoload" "white" "underline"
 ls -1 ~/.vim/autoload
-format_echo "Plugins" "none" "underline"
+format_echo "Plugins" "white" "underline"
 ls --color=never -1 ~/.vim/plugged
-format_echo "Colors" "none" "underline"
+format_echo "Colors" "white" "underline"
 ls -1 ~/.vim/colors
 echo
 
@@ -54,14 +54,14 @@ echo "Python3: $(python3 --version)"
 # Rosetta2
 # Check for the presence of the Rosetta 2 installation receipt
 if command -v lsbom >/dev/null && lsbom -f /Library/Apple/System/Library/Receipts/com.apple.pkg.RosettaUpdateAuto.bom >/dev/null 2>&1; then
-    echo "Rosetta2: Installed"
+    format_echo "Rosetta2: Installed" "green" "bold"
 else
-    echo "Rosetta2: NOT installed"
+    format_echo "Rosetta2: NOT installed" "red" "bold"
 fi
 
 # XCode Command Line Tools
 echo
-echo "Xcode Command Line Tools:"
+format_echo "Xcode Command Line Tools:" "yellow" "underline"
 pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
 echo
 
