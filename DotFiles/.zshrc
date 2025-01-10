@@ -55,8 +55,8 @@ alias pwgen="Pwgen.sh"			# Generate Random Password
 #=> End Encrypt / Decrypt / Security Commands
 
 #=> MacVim Commands
-alias mvedit="Mvedit.sh $1"				# Launch macVim Editor From Terminal Command Prompt
-alias mvexplore="Mvexplore.sh"				# Open Netrw File Explorer in Home Directory
+alias mvedit="Mvedit.sh $1"		# Launch macVim Editor From Terminal Command Prompt
+alias mvexplore="Mvexplore.sh"		# Open Netrw File Explorer in Home Directory
 #=> End MacVim Commands
 
 #=> MacDown Markdown Editor Commands
