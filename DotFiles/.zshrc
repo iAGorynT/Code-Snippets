@@ -123,6 +123,7 @@ alias gh="open -a 'Github Desktop'"	# Launch Github Desktop App
 
 #=> Dev Commands
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
+alias dsync="Devsync.sh"			# Dev to GitHUB Sync
 alias ai="LaunchAI.sh"				# Launch AI Chatbot
 alias fdoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
 alias ctest="Colortest.sh"			# Display Color Test
