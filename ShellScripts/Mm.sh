@@ -20,7 +20,7 @@ function ipm {
 
 function testm {
 	clear
-	~/bin/zTests/mmt.sh
+	$HOME/ShellScripts/zTests/mmt.sh
 }
 
 function menu {
