@@ -14,6 +14,8 @@ echo
 
 # DotFiles Sync
 format_echo "Syncing DotFiles..." "green"
+rsync -avhl "$HOME/.gvimrc" "$HOME/Documents/GitHub/Code-Snippets/DotFiles" --delete
+rsync -avhl "$HOME/.vimrc" "$HOME/Documents/GitHub/Code-Snippets/DotFiles" --delete
 rsync -avhl "$HOME/.zshrc" "$HOME/Documents/GitHub/Code-Snippets/DotFiles" --delete
 echo
 
