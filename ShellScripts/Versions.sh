@@ -19,7 +19,7 @@ echo "Homebrew: $(brew --version)"
 
 # Java
 echo
-format_echo "Java:" yellow underline
+info_echo "Java:"
 java --version
 echo
 
@@ -28,7 +28,7 @@ echo "jq JSON processor: $(jq -V)"
 
 # MacVim
 echo
-format_echo "MacVim:" yellow underline
+info_echo "MacVim:"
 mver=$(mvim --version | grep -e 'VIM - Vi IMproved' -e 'Included patches')
 echo "Version: $mver"
 format_echo "Autoload" "white" "underline"
@@ -54,14 +54,14 @@ echo "Python3: $(python3 --version)"
 # Rosetta2
 # Check for the presence of the Rosetta 2 installation receipt
 if command -v lsbom >/dev/null && lsbom -f /Library/Apple/System/Library/Receipts/com.apple.pkg.RosettaUpdateAuto.bom >/dev/null 2>&1; then
-    format_echo "Rosetta2: Installed" "green" "bold"
+    info_echo "Rosetta2: Installed"
 else
-    format_echo "Rosetta2: NOT installed" "red" "bold"
+    error_echo "Rosetta2: NOT installed"
 fi
 
 # XCode Command Line Tools
 echo
-format_echo "Xcode Command Line Tools:" "yellow" "underline"
+info_echo "Xcode Command Line Tools:"
 pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
 echo
 

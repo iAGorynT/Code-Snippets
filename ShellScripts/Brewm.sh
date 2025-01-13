@@ -51,8 +51,8 @@ function brewapps {
 function brewtap {
 	clear
 	format_echo "Brew Taps..." "yellow" "bold"
-	format_echo "Directories (usually Git Repositories) of formulae (CLI based Apps)," "green" "bold"
-	format_echo "Casks (GUI based Apps), and/or external commands." "green" "bold"
+	info_echo "Directories (usually Git Repositories) of formulae (CLI based Apps),"
+	info_echo "Casks (GUI based Apps), and/or external commands."
 	echo
 	brew tap
 }

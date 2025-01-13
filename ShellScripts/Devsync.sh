@@ -21,14 +21,14 @@ fi
 source "$FORMAT_LIBRARY"
 
 function sync_shellscripts() {
-    format_echo "Syncing ShellScripts..." "green"
+    info_echo "Syncing ShellScripts..."
     rsync -avhl --delete \
         "$SOURCE_DIR/" \
         "$TARGET_BASE_DIR/ShellScripts"
 }
 
 function sync_dotfiles() {
-    format_echo "Syncing DotFiles..." "green"
+    info_echo "Syncing DotFiles..."
     for dotfile in "${DOTFILES[@]}"; do
         rsync -avhl --delete \
             "$HOME/$dotfile" \
@@ -54,7 +54,7 @@ function main() {
     sync_dotfiles
     echo
 
-    format_echo "Sync Completed!" "green" "bold"
+    success_echo "Sync Completed!"
 }
 
 # Execute main function if script is being run directly (not sourced)

@@ -38,5 +38,5 @@ brew cleanup
 brew list
 
 echo " "
-format_echo "Brew Update, Upgrade, and Cleanup Completed!" "green" "bold"
+success_echo "Brew Update, Upgrade, and Cleanup Completed!"
 echo " "
