@@ -2,8 +2,13 @@
 
 # Update BrewitLaunchd.sh with changes when necessary.
 
-# Activate Function Library
-source $HOME/ShellScripts/FLibFormatEcho.sh
+# Source function library with error handling
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatEcho.sh"
+if [[ ! -f "$FORMAT_LIBRARY" ]]; then
+    echo "Error: Required library $FORMAT_LIBRARY not found" >&2
+    exit 1
+fi
+source "$FORMAT_LIBRARY"
 
 clear
 format_echo "Brew Update, Upgrade, and Cleanup..." "yellow" "bold"
