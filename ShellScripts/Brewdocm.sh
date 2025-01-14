@@ -3,8 +3,13 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
-# Activate Function Library
-source $HOME/ShellScripts/FLibFormatEcho.sh
+# Source function library with error handling
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatEcho.sh"
+if [[ ! -f "$FORMAT_LIBRARY" ]]; then
+    echo "Error: Required library $FORMAT_LIBRARY not found" >&2
+    exit 1
+fi
+source "$FORMAT_LIBRARY"
 
 function brewdocs1 {
 	clear
