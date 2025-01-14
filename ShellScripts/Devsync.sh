@@ -38,8 +38,7 @@ function sync_dotfiles() {
 
 function check_macvim() {
     if pgrep -i "MacVim" >/dev/null; then
-        error_echo "MacVim is Running! Quit and Rerun Devsync..."
-        exit 1
+        error_echo "MacVim is Running! Quit and Rerun Devsync..." true
     fi
 }
 
