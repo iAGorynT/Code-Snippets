@@ -119,19 +119,30 @@ format_echo() {
 
 # Helper functions for common use cases
 error_echo() {
-    format_echo "$1" "red" "bold"
+    local message=$1
+    local stop_execution=${2:-false}  # Optional parameter with default value of false
+    
+    format_echo "$message" "red" "bold"
+    
+    if [[ $stop_execution == true ]]; then
+        format_echo "Stopping script execution." "red" "bold"
+        exit 1
+    fi
 }
 
 success_echo() {
-    format_echo "$1" "green" "bold"
+    local message=$1
+    format_echo "$message" "green" "bold"
 }
 
 warning_echo() {
-    format_echo "$1" "yellow" "bold"
+    local message=$1
+    format_echo "$message" "yellow" "bold"
 }
 
 info_echo() {
-    format_echo "$1" "blue" "bold"
+    local message=$1
+    format_echo "$message" "blue" "bold"
 }
 
 # Example usage function
