@@ -68,7 +68,7 @@ function dstats {
 function menu {
     clear
     echo
-    echo -e "\t\t\tInfo Menu\n"
+    echo -e "\t\t\t\033[33;1mInfo Menu\033[0m\n"
     echo -e "\t1. Hostname"
     echo -e "\t2. Environment Variables"
     echo -e "\t3. Software Versions"

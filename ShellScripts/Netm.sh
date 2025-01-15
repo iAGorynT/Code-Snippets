@@ -16,7 +16,7 @@ function netq {
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tNetwork Menu\n"
+	echo -e "\t\t\t\033[33;1mNetwork Menu\033[0m\n"
 	echo -e "\t1. Internet Speed Test"
 	echo -e "\t2. Apple Network Quality Test"
 	echo -e "\t0. Exit Menu\n\n"
