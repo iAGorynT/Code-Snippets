@@ -26,7 +26,7 @@ function testm {
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tMain Menu\n"
+	echo -e "\t\t\t\033[33;1mMain Menu\033[0m\n"
 	echo -e "\t1. Homebrew Menu"
 	echo -e "\t2. Ops Menu"
 	echo -e "\t3. Iperf3 Menu"

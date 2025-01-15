@@ -48,7 +48,7 @@ function zselectoption {
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tTest Menu\n"
+	echo -e "\t\t\t\033[33;1mTest Menu\033[0m\n"
 	echo -e "\t1. zDialogBox"
 	echo -e "\t2. zJQJsonConfig"
 	echo -e "\t3. zJsonConfig"
