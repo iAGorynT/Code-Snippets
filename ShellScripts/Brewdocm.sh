@@ -44,7 +44,7 @@ function brewdocs3 {
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tBrew Doctor Recovery Menu\n"
+	echo -e "\t\t\t\033[33;1mBrew Doctor Recovery Menu\033[0m\n"
 	echo -e "\t1. HomeBrew Update 1"
 	echo -e "\t2. HomeBrew Update 2"
 	echo -e "\t3. Brew Doctor Recovery"

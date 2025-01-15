@@ -23,7 +23,7 @@ function crypvault {
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tCrypt Menu\n"
+	echo -e "\t\t\t\033[33;1mCrypt Menu\033[0m\n"
 	echo -e "\t1. Enigma Shortcut"
 	echo -e "\t2. SSL Cryptxt"
 	echo -e "\t3. SSL Crypvault"
