@@ -80,7 +80,7 @@ function mvexplore {
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tHomeBrew Menu\n"
+	echo -e "\t\t\t\033[33;1mHomeBrew Menu\033[0m\n"
 	echo -e "\t1. Brewit"
 	echo -e "\t2. Brew List"
 	echo -e "\t3. Brew Dependencies"

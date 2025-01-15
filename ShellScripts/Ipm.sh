@@ -27,7 +27,7 @@ function ooklainternettest {
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tiPerf Network Speedtest Menu\n"
+	echo -e "\t\t\t\033[33;1miPerf3 Menu\033[0m\n"
 	echo -e "\t1. Start iPerf Server"
 	echo -e "\t2. Client to Server Speedtest"
 	echo -e "\t3. Server to Client Speedtest"

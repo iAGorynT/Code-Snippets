@@ -26,7 +26,7 @@ function crypmenu {
 function menu {
 	clear
 	echo
-	echo -e "\t\t\tOps Menu\n"
+	echo -e "\t\t\t\033[33;1mOps Menu\033[0m\n"
 	echo -e "\t1. Info Menu"
 	echo -e "\t2. Network Menu"
 	echo -e "\t3. SSH Menu"
