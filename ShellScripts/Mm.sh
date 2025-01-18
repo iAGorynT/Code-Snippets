@@ -13,6 +13,11 @@ function opsm {
 	opsm.sh
 }
 
+function devm {
+	clear
+	devm.sh
+}
+
 function ipm {
 	clear
 	ipm.sh
@@ -29,8 +34,9 @@ function menu {
 	echo -e "\t\t\t\033[33;1mMain Menu\033[0m\n"
 	echo -e "\t1. Homebrew Menu"
 	echo -e "\t2. Ops Menu"
-	echo -e "\t3. Iperf3 Menu"
-	echo -e "\t4. Test Menu"
+	echo -e "\t3. Dev Menu"
+	echo -e "\t4. Iperf3 Menu"
+	echo -e "\t5. Test Menu"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -54,9 +60,12 @@ do
 	opsm;;
 
 	3)
-	ipm;;
+	devm;;
 
 	4)
+	ipm;;
+
+	5)
 	testm;;
 
 # Return / Enter Key Pressed
