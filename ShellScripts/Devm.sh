@@ -32,9 +32,9 @@ function crypvault {
 	Crypvault.sh $vault_name
 }
 
-function crypmenu {
+function bsum {
 	clear
-	Crypm.sh
+	BackupSummary.sh
 }
 
 function menu {
@@ -44,6 +44,7 @@ function menu {
 	echo -e "\t1. Devsync"
 	echo -e "\t2. GitHub Desktop"
 	echo -e "\t3. Crypvault"
+	echo -e "\t4. Backup Summary"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
 	read -k 1 option
@@ -68,6 +69,9 @@ do
 
 	3)
 	crypvault;;
+
+	4)
+	bsum;;
 
 # Return / Enter Key Pressed
         "")
