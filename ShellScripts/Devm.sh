@@ -41,9 +41,9 @@ function menu {
 	clear
 	echo
 	echo -e "\t\t\t\033[33;1mDev Menu\033[0m\n"
-	echo -e "\t1. Devsync"
-	echo -e "\t2. GitHub Desktop"
-	echo -e "\t3. Crypvault"
+	echo -e "\t1. Devsync (Dev to Local Repo)"
+	echo -e "\t2. GitHub Desktop (Local Repo to GitHub)"
+	echo -e "\t3. Crypvault (Local Repo to iCloud)"
 	echo -e "\t4. Backup Summary"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
