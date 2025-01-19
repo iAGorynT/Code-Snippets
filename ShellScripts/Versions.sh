@@ -54,7 +54,11 @@ ssh -V | echo -n "OpenSSH: "
 echo "OpenSSL: $(openssl version)"
 
 # Python
-echo "Python3: $(python3 --version)"
+echo
+info_echo "Python3:"
+python3 --version
+python3 -m pip --version | sed 's/\(.*\)from.*/\1/'
+echo
 
 # Rosetta2
 # Check for the presence of the Rosetta 2 installation receipt
