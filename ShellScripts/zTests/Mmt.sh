@@ -59,11 +59,10 @@ function menu {
 	echo -e "\t8. zSelectOption"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
-	read -k 1 option
-# Test If Return / Enter Key Pressed; Replace Linefeed Character With Empty Character
-	if [[ "$option" == *$'\n'* ]]; then
-	    option=""
-	fi
+        # Read entire input instead of just one character
+        read option
+        # Remove any whitespace
+        option=$(echo $option | tr -d '[:space:]')
 }
 
 while [ 1 ]

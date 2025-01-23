@@ -21,38 +21,42 @@ function menu {
 	echo -e "\t2. Apple Network Quality Test"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
-	read -k 1 option
-# Test If Return / Enter Key Pressed; Replace Linefeed Character With Empty Character
-        if [[ "$option" == *$'\n'* ]]; then
-            option=""
-        fi
+        # Read entire input instead of just one character
+        read option
+        # Remove any whitespace
+        option=$(echo $option | tr -d '[:space:]')
 }
 
-while [ 1 ]
-do
-	menu
-	case $option in
-	0)
-	break ;;
-
-	1)
-	clispeed;;
-
-	2)
-	netq;;
-
-# Return / Enter Key Pressed
-        "")
-        break ;;
-
-	*)
-	clear
-	echo "Sorry, wrong selection";;
+while true; do
+    menu
+    # Check if input is a valid number
+    if [[ $option =~ ^[0-9]+$ ]]; then
+        case $option in
+            0)
+                break 
+		;;
+	    1)
+	        clispeed
+		;;
+	    2)
+	        netq
+		;;
+	    *)
+	        clear
+	        echo "Sorry, wrong selection"
+		;;
 	esac
-	echo -en "\n\n\t\t\tHit any key to continue"
-	read -k 1 line
+    # Handle empty input (Enter key)
+    elif [[ -z "$option" ]]; then
+        break
+    else
+        clear
+        echo "Please enter a valid number"
+    fi
+    echo -en "\n\n\t\t\tHit any key to continue"
+    read -k 1 line
 done
-clear
 
+clear
 # Reset Trap Ctl-C
 trap INT

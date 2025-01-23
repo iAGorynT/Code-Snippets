@@ -3,6 +3,14 @@
 # Brew App Uninstaller
 # This script provides an interactive menu to uninstall Homebrew packages (formulae and casks).
 
+# Source function library with error handling
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatEcho.sh"
+if [[ ! -f "$FORMAT_LIBRARY" ]]; then
+    echo "Error: Required library $FORMAT_LIBRARY not found" >&2
+    exit 1
+fi
+source "$FORMAT_LIBRARY"
+
 # Function to display menu
 function show_menu() {
     local i=1
@@ -16,9 +24,9 @@ function show_menu() {
 
 # Function to fetch installed packages
 function fetch_packages() {
-    echo "Fetching installed formulae..."
+    info_echo "Fetching installed formulae..."
     formulae=($(brew list --formula))
-    echo "Fetching installed casks..."
+    info_echo "Fetching installed casks..."
     casks=($(brew list --cask))
     all_packages=("${formulae[@]}" "${casks[@]}")
 }
@@ -45,7 +53,7 @@ function uninstall_package() {
 
 # Main script
 clear
-echo "Brew App Uninstaller..."
+format_echo "Brew App Uninstaller..." "yellow" "bold"
 echo
 
 # Initialize package lists
@@ -59,7 +67,7 @@ while true; do
         exit 0
     fi
 
-    echo "Installed Homebrew packages:"
+    info_echo "Installed Homebrew packages:"
     show_menu "${all_packages[@]}"
 
     read "choice?Enter the number of the package you want to uninstall (0 to exit): "
@@ -67,7 +75,7 @@ while true; do
 
     if [[ $choice =~ ^[0-9]+$ ]]; then
         if (( choice == 0 )); then
-            echo "Exiting. No packages were uninstalled."
+            info_echo "Exiting. No packages were uninstalled."
             exit 0
         elif (( choice <= ${#all_packages[@]} )); then
             selected_package=${all_packages[$choice]}
