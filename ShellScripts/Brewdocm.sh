@@ -50,10 +50,10 @@ function menu {
 	echo -e "\t3. Brew Doctor Recovery"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
-        # Read entire input instead of just one character
-        read option
-        # Remove any whitespace
-        option=$(echo $option | tr -d '[:space:]')
+	# Read entire input instead of just one character
+	read option
+	# Remove any whitespace
+	option=$(echo $option | tr -d '[:space:]')
 }
 
 while true; do
