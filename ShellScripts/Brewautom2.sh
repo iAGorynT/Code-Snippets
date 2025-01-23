@@ -226,23 +226,35 @@ function show_menu() {
     echo -e "\t2. Load Autoupdate"
     echo -e "\t3. Unload Autoupdate"
     echo -e "\t0. Exit"
-    
-    echo -en "\n\tEnter your choice (0-3): "
-    read -k 1 option
+    echo -en "\t\tEnter an Option: "
+
+    # Read entire input instead of just one character
+    read option
+    # Remove any whitespace
+    option=$(echo $option | tr -d '[:space:]')
     echo
 }
 
 # Main loop
 while true; do
     show_menu
-    case $option in
-        0) break ;;
-        1) autoupdate_status ;;
-        2) load_autoupdate ;;
-        3) unload_autoupdate ;;
-        $'\n') break ;;
-        *) print_status "${COLOR_RED}" "\n\tInvalid selection. Please try again." ;;
-    esac
+    # Check if input is a valid number
+    if [[ $option =~ ^[0-9]+$ ]]; then
+        case $option in
+            0) break ;;
+            1) autoupdate_status ;;
+            2) load_autoupdate ;;
+            3) unload_autoupdate ;;
+            # *) clear; echo "Sorry, wrong selection" ;;
+	    *) clear; print_status "${COLOR_RED}" "\n\tSorry, wrong selection" ;;
+        esac
+    # Handle empty input (Enter key)
+    elif [[ -z "$option" ]]; then
+        break
+    else
+        clear
+        print_status "${COLOR_RED}" "\n\tPlease enter a valid number"
+    fi
     echo -en "\n\tPress any key to continue"
     read -k 1
 done
