@@ -83,6 +83,19 @@ function main {
         print_header "JSON Files in /Volumes/Private/Shortcuts Config Files"
         search_files "$shortcuts_private" "*.json"
     fi	
+
+    # Ask to Eject Brukasa Thumb Drive
+    if [[ "$brukasa_disk" == "true" ]]; then
+        echo
+        while true; do
+            read yn\?"Eject Private Thumb Drive (Y/N): "
+            case $yn in
+                [Yy]* ) diskutil eject /Volumes/Private; break;;
+                [Nn]* ) break;;
+                * ) echo "Please answer yes (Y) or no (N).";;
+            esac
+        done
+    fi
 }
 
 # Run main function
