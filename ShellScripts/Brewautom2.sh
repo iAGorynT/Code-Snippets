@@ -245,7 +245,7 @@ while true; do
             1) autoupdate_status ;;
             2) load_autoupdate ;;
             3) unload_autoupdate ;;
-	    *) clear; print_status "${COLOR_RED}" "\n\tSorry, wrong selection" ;;
+            *) clear; print_status "${COLOR_RED}" "\n\tSorry, wrong selection" ;;
         esac
     # Handle empty input (Enter key)
     elif [[ -z "$option" ]]; then
