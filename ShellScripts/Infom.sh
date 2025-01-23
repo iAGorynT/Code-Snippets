@@ -77,46 +77,54 @@ function menu {
     echo -e "\t6. Disk Stats"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
-    read -k 1 option
-    # Test If Return / Enter Key Pressed; Replace Linefeed Character With Empty Character
-    if [[ "$option" == *$'\n'* ]]; then
-        option=""
-    fi
+    # Read entire input instead of just one character
+    read option
+    # Remove any whitespace
+    option=$(echo $option | tr -d '[:space:]')
 }
 
-while [ 1 ]
-do
+while true; do
     menu
-    case $option in
-    0)
-    break ;;
-    1)
-    hname;;
-    2)
-    penv;;
-    3)
-    sver;;
-    4)
-    pkgu;;
-    5)
-    pall;;
-    6)
-    dstats;;
-    # Return / Enter Key Pressed
-    "")
-    break ;;
-    *)
-    clear
-    echo "Sorry, wrong selection"
-    CLOSE_FINDER_WINDOWS=0;;
-    esac
+    # Check if input is a valid number
+    if [[ $option =~ ^[0-9]+$ ]]; then
+        case $option in
+            0)
+                break ;;
+            1)
+                hname;;
+            2)
+                penv;;
+            3)
+                sver;;
+            4)
+                pkgu;;
+            5)
+                pall;;
+            6)
+                dstats;;
+            # Return / Enter Key Pressed
+            "")
+                break ;;
+            *)
+                clear
+                echo "Sorry, wrong selection"
+                CLOSE_FINDER_WINDOWS=0;;
+        esac
+    # Handle empty input (Enter key)
+    elif [[ -z "$option" ]]; then
+        break
+    else
+        clear
+        echo "Please enter a valid number"
+    fi
     echo -en "\n\n\t\t\tHit any key to continue"
     read -k 1 line
     if [ $CLOSE_FINDER_WINDOWS -eq 1 ]; then
-	close_finder_windows "Macintosh HD"
+        close_finder_windows "Macintosh HD"
     fi
     CLOSE_FINDER_WINDOWS=0
 done
+
 clear
 # Reset Trap Ctl-C
 trap INT
