@@ -49,6 +49,24 @@ function! NetrwMapping()
     nnoremap L1 :Lexplore<CR>:vertical resize 30<CR>
 endfunction
 
+" Toggle Copilot on and off
+let g:copilot_enabled = v:true
+
+function! ToggleCopilot()
+  if g:copilot_enabled
+    Copilot disable
+    let g:copilot_enabled = v:false
+    echo "Copilot disabled"
+  else
+    Copilot enable
+    let g:copilot_enabled = v:true
+    echo "Copilot enabled"
+  endif
+endfunction
+
+" Map Ctrl+p to toggle Copilot
+nnoremap <C-p> :call ToggleCopilot()<CR>
+
 " Display line numbers in files
 set number
 
@@ -98,6 +116,7 @@ call plug#begin()
 Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'github/copilot.vim'
 
 call plug#end()
 
