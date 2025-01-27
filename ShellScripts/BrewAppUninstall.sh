@@ -47,6 +47,7 @@ function uninstall_package() {
     else
         brew uninstall "$package"
     fi
+    brew autoremove
     echo "$package has been uninstalled."
     all_packages=("${(@)all_packages:#$package}")
 }
