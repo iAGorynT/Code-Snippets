@@ -44,6 +44,11 @@ format_echo "Colors" "white" "underline"
 ls -1 ~/.vim/colors
 echo
 
+# Node / Npm
+echo "Node: $(node --version)"
+echo "Npm: $(npm --version)"
+echo
+
 # SSH
 # Had to run ssh command and pipe it to echo -n (no new line)
 # in order to get results on one line.  Just trying to echo
@@ -77,5 +82,5 @@ echo
 # Zsh
 echo "Zsh: $(zsh --version)"
 
-echo
+# echo
 

@@ -118,7 +118,7 @@ alias ra="clear; grep -e '# SSH' -e 'ssh ' $HOME/.zshrc | grep -v ‘ra=‘"
 #=> End SSH Commands
 
 #=> Github Commands
-alias gh="open -a 'Github Desktop'"	# Launch Github Desktop App
+alias ghd="open -a 'Github Desktop'"	# Launch Github Desktop App
 #=> End Github Commands
 
 #=> Dev Commands
