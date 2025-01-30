@@ -47,7 +47,6 @@ echo
 # Node / Npm
 echo "Node: $(node --version)"
 echo "Npm: $(npm --version)"
-echo
 
 # SSH
 # Had to run ssh command and pipe it to echo -n (no new line)

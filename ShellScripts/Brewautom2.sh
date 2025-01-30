@@ -46,7 +46,17 @@ function print_status() {
 function empty_log() {
     echo "Logfile Emptied:  $(date)" > "$1"
     echo >> "$1"
-    print_status "${COLOR_GREEN}" "Log File Emptied."
+
+    # Extract the full line containing "Logfile"
+    logfileline=$(grep "Logfile" "$1" 2>/dev/null)
+
+    # Check if the line was found
+    if [[ -n "${logfileline}" ]]; then
+        print_status "${COLOR_GREEN}" "${logfileline}"
+    else
+        print_status "${COLOR_RED}" "Logfile Line not found"
+    fi
+    # print_status "${COLOR_GREEN}" "Log File Emptied."
 }
 
 # Function to check the status of the Brew autoupdate service
