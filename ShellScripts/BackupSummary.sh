@@ -49,6 +49,19 @@ function search_files {
     done | sort -t'|' -k1,1 | sed 's/|/ | /g' || error_echo "Error searching in $dir" >&2
 }
 
+# Function to eject thumb drive
+function eject_drive {
+    local which_drive=$1
+
+    # Run diskutil eject and capture its output
+    local eject_output=$(diskutil eject "$which_drive" 2>&1)
+    
+    # Only display output if it's not empty
+    if [[ -n "$eject_output" ]]; then
+        info_echo "$eject_output"
+    fi
+}
+
 # Main script
 function main {
     local downloads_path="$HOME/Downloads/zVault Backup"
@@ -90,7 +103,7 @@ function main {
         while true; do
             read yn\?"Eject Private Thumb Drive (Y/N): "
             case $yn in
-                [Yy]* ) diskutil eject /Volumes/Private; break;;
+                [Yy]* ) eject_drive "$private_path"; break;;
                 [Nn]* ) break;;
                 * ) echo "Please answer yes (Y) or no (N).";;
             esac
