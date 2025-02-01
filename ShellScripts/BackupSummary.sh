@@ -33,6 +33,8 @@ function search_files {
     local dir=$1
     local pattern=$2
     local maxdepth=${3:-1}  # Optional parameter, defaults to 1
+    # Declare local variable outside loop to avoid subshell scoping issues
+    local size
     
     if ! check_directory "$dir"; then
         return 1
