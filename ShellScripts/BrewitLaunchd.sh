@@ -19,13 +19,34 @@ echo "Cask Upgrade..."
 echo " "
 brew upgrade --cask --greedy
 
-# Create New Brewfile
-echo "Creating New Brewfile..."
+# Create temporary Brewfile
+echo "Creating temporary Brewfile..."
 echo " "
 cd
-brew bundle dump --force
-chmod 644 Brewfile
-echo "Brewfile created in: $(pwd)"
+brew bundle dump --file=Brewfile.new
+
+# Check if previous Brewfile exists
+if [[ -f Brewfile ]]; then
+    echo "Comparing with existing Brewfile..."
+    
+    # Compare files, ignoring whitespace
+    if diff -w Brewfile Brewfile.new > /dev/null; then
+        echo "No changes detected. Keeping existing Brewfile."
+        rm Brewfile.new
+    else
+        echo "Changes detected. Updating Brewfile..."
+        mv Brewfile Brewfile.backup
+        mv Brewfile.new Brewfile
+        chmod 644 Brewfile
+        echo "Backup of previous Brewfile created as: Brewfile.backup"
+    fi
+else
+    echo "No existing Brewfile found. Creating new one..."
+    mv Brewfile.new Brewfile
+    chmod 644 Brewfile
+fi
+
+echo "Current Brewfile location: $(pwd)"
 ls -al Brewfile
 echo " "
 
