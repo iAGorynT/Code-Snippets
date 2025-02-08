@@ -5,7 +5,7 @@
 # Usage: format_echo [text] [color] [format options...] [echotype]
 # Colors: black, red, green, yellow, blue, magenta, cyan, white
 # Format options: bold, dim, italic, underline, blink, reverse, hidden
-# Echotype: brew (optional, for HomeBrew-style messages)
+# Echotype: brew/brewl (optional, for HomeBrew-style messages)
 
 # ANSI escape code components
 declare -A colors=(
@@ -73,7 +73,11 @@ format_echo() {
     local format_args=()
     while [[ $# -gt 0 ]]; do
         if [[ $1 == "brew" ]]; then
+            # Brew style
             echotype="brew"
+        elif [[ $1 == "brewl" ]]; then
+            # Brew Launchd style
+            echotype="brewl"
         else
             format_args+=($1)
         fi
@@ -106,6 +110,9 @@ format_echo() {
         if [[ $echotype == "brew" ]]; then
             # Print the formatted text as a HomeBrew Message with a reset at the end
             echo -e "${brewbrown}==>${reset} ${brewbold}${text}${reset}"
+        elif [[ $echotype == "brewl" ]]; then
+            # Print the formatted text as a HomeBrew Launchd Message
+            echo -e "==> ${text}"
         else
             # No formatting needed
             echo -e "${text}"
@@ -150,6 +157,7 @@ show_examples() {
     echo "Format Library Examples:"
     format_echo "Text without color or formatting"
     format_echo "Text with brew style" none brew
+    format_echo "Text with brewl style" none brewl
     format_echo "Regular colored text" "blue"
     format_echo "Bold text without color" none "bold"
     format_echo "Bold colored text" "green" "bold"
