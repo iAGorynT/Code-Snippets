@@ -11,6 +11,9 @@ readonly DOTFILES=(
     ".vimrc"
     ".zshrc"
 )
+readonly BREWFILES=(
+    "Brewfile"
+)
 
 # Source function library with error handling
 FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatEcho.sh"
@@ -36,6 +39,15 @@ function sync_dotfiles() {
     done
 }
 
+function sync_brewfiles() {
+    info_echo "Syncing BrewFiles..."
+    for brewfile in "${BREWFILES[@]}"; do
+        rsync -avhl --delete \
+            "$HOME/$brewfile" \
+            "$TARGET_BASE_DIR/HomeBrew"
+    done
+}
+
 function check_macvim() {
     if pgrep -i "MacVim" >/dev/null; then
         error_echo "MacVim is Running! Quit and Rerun Devsync..." true
@@ -51,6 +63,8 @@ function main() {
     sync_shellscripts
     echo
     sync_dotfiles
+    echo
+    sync_brewfiles
     echo
 
     success_echo "Sync Completed!"
