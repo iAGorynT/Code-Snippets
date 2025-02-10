@@ -119,6 +119,7 @@ alias ra="clear; grep -e '# SSH' -e 'ssh ' $HOME/.zshrc | grep -v ‘ra=‘"
 
 #=> Github Commands
 alias ghd="open -a 'Github Desktop'"	# Launch Github Desktop App
+alias ghdl="GithubDownloader.sh" 	# Download Github Files
 #=> End Github Commands
 
 #=> Dev Commands
