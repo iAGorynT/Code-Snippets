@@ -1,48 +1,34 @@
 #!/bin/zsh
-
 download_github_file() {
-    # Check if curl is installed
-    if ! command -v curl &>/dev/null; then
-        echo "Error: curl is not installed. Please install curl to use this script."
-        return 3
-    fi
+    # Early exit if curl is not installed
+    command -v curl &>/dev/null || { printf >&2 "Error: curl is not installed. Please install curl to use this script.\n"; return 3; }
 
-    # Check if all required arguments are provided
-    if [ "$#" -ne 4 ]; then
-        echo "Usage: $0 owner repo branch filepath"
-        echo "Example: $0 microsoft vscode main README.md"
-        return 1
-    fi
+    # Validate argument count
+    [[ "$#" -eq 4 ]] || { 
+        printf >&2 "Usage: %s owner repo branch filepath\n" "$0"
+        printf >&2 "Example: %s microsoft vscode main README.md\n" "$0"
+        return 1 
+    }
 
-    local owner=$1
-    local repo=$2
-    local branch=$3
-    local filepath=$4
+    local owner=$1 repo=$2 branch=$3 filepath=$4
     local github_raw_url="https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filepath}"
     local filename=$(basename "$filepath")
     
-    # Check if the file already exists and prompt for overwrite
-    if [ -f "$filename" ]; then
-        read "overwrite?File $filename already exists. Overwrite? (y/N): "
-        if [[ ! "$overwrite" =~ ^[Yy]$ ]]; then
-            echo "Download canceled."
-            return 1
-        fi
-    fi
+    # Prompt for overwrite with printf
+    [[ -f "$filename" ]] && {
+        printf "File %s exists. Overwrite? (y/N) " "$filename"
+        read -q || { printf "\nDownload canceled.\n"; return 1; }
+        printf "\n"
+    }
 
-    # Attempt to download the file
-    echo "Downloading ${filename} from ${github_raw_url}..."
-    
-    if curl -L -o "$filename" "$github_raw_url"; then
-        echo "Successfully downloaded ${filename}"
-        echo "File saved as: $(pwd)/${filename}"
+    # Streamlined download with error handling
+    if curl -L -f -s -o "$filename" "$github_raw_url"; then
+        printf "Downloaded %s to %s\n" "$filename" "$(pwd)/${filename}"
         return 0
     else
-        echo "Error: Failed to download the file from ${github_raw_url}"
+        printf >&2 "Error: Failed to download file from %s\n" "$github_raw_url"
         return 2
     fi
 }
-
 download_github_file "$@"
-# Pass the function's return status to the shell
 exit $?
