@@ -97,6 +97,7 @@ alias pp="la /system/library/Preferencepanes | more"	# List Preference Panes
 #=> Time Machine Commands
 alias tmb="Tmb.sh"				# Run Time-Machine Backup
 alias tms="Tms.sh"				# List Time Machine Snapshots
+alias tmdelete="sudo TmDelete.sh"		# Delete All Time Machine Snapshots
 #=> End Time Machine Commands
 
 #=> SSH Commands

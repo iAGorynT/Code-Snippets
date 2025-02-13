@@ -22,6 +22,11 @@ function crypmenu {
 	Crypm.sh
 }
 
+function tmmenu {
+	clear
+	Tmm.sh
+}
+
 function validate_input {
     local input=$1
     # Remove whitespace and check if input is numeric
@@ -37,6 +42,7 @@ function menu {
     echo -e "\t2. Network Menu"
     echo -e "\t3. SSH Menu"
     echo -e "\t4. Crypt Menu"
+    echo -e "\t5. Time Machine Menu"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     # Read entire input instead of just one character
@@ -64,6 +70,9 @@ while true; do
                 ;;
             4)
                 crypmenu
+                ;;
+            5)
+                tmmenu
                 ;;
             *)
                 clear
