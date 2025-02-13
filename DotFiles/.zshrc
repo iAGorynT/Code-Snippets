@@ -96,6 +96,7 @@ alias pp="la /system/library/Preferencepanes | more"	# List Preference Panes
 
 #=> Time Machine Commands
 alias tmb="Tmb.sh"				# Run Time-Machine Backup
+alias tms="Tms.sh"				# List Time Machine Snapshots
 #=> End Time Machine Commands
 
 #=> SSH Commands
@@ -127,7 +128,8 @@ alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script F
 alias dsync="Devsync.sh"			# Dev to GitHUB Sync
 alias bsum="BackupSummary.sh"			# Crypvault Backup Summary
 alias ai="LaunchAI.sh"				# Launch AI Chatbot
-alias fdoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
+alias fedoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
+alias fpdoc="FLibFormatPrintfDoc.sh"		# List FLibFormatPrintf.sh Documentation
 alias ctest="Colortest.sh"			# Display Color Test
 alias webapps="clear; echo 'Web Apps...'; echo; ls --color=never -1 ~/Applications; echo" # List Safari Web Apps
 #=> End Dev Commands
