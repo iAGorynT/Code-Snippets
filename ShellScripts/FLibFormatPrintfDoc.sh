@@ -3,7 +3,7 @@
 # Function Library Documentation
 
 # Source function library with error handling
-FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatEcho.sh"
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 if [[ ! -f "$FORMAT_LIBRARY" ]]; then
     echo "Error: Required library $FORMAT_LIBRARY not found" >&2
     exit 1
@@ -11,7 +11,7 @@ fi
 source "$FORMAT_LIBRARY"
 
 clear
-format_echo "Function Library Format Echo Documentation..." yellow bold
+format_printf "Function Library Format Printf Documentation..." yellow bold
 echo " "
 
 # Build Search Strings
@@ -21,7 +21,7 @@ liststart="# Function:"
 listend="# Echotype:"
 
 # Initialize Variables
-zshrcfile="$HOME/ShellScripts/FLibFormatEcho.sh"
+zshrcfile="$HOME/ShellScripts/FLibFormatPrintf.sh"
 if [[ ! -r "$zshrcfile" ]]; then
     echo "File not found or not readable: $zshrcfile"
     echo
@@ -52,6 +52,6 @@ echo
 show_examples
 echo
 
-format_echo "Function Library Documentation Complete..." green bold
+format_printf "Function Library Documentation Complete..." green bold
 echo
 
