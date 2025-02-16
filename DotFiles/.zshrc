@@ -171,6 +171,9 @@ then
   compinit
 fi
 
+# CoPilot Aliases
+eval "$(gh copilot alias -- zsh)"
+
 # Activate Zsh Syntax Highlighting
 # NOTE:  Ensure This is at Very End of .zshrc
 source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
