@@ -66,9 +66,7 @@ alias mdedit="Mdedit.sh $1"		# Launch MacDown From Terminal Command Prompt
 #=> Terminal List Commands 
 alias la="ls -a"                                                # List All
 alias ll="ls -al"					        # Long List - Total at top is Block Count
-alias cdh="clear; cd $HOME; pwd; echo; ll"		        # Show Home Directory
-alias ss="clear; cd $HOME/ShellScripts; pwd; echo; ll"		# Show Scripts
-alias sst="clear; cd $HOME/ShellScripts/zTests; pwd; echo; ll"	# Show Test Scripts
+alias zj="zjump" 		                                # Jump to Directory
 alias lc="echo -n 'Number of Files:'; ls | wc -l" 	        # List File Count
 #=> End Terminal List Commands
 
@@ -173,6 +171,10 @@ fi
 
 # CoPilot Aliases
 eval "$(gh copilot alias -- zsh)"
+
+# zJump - Jump to Frequent Directories
+# Note: zJump is a Shell Function
+source ~/bin/zJump.sh
 
 # Activate Zsh Syntax Highlighting
 # NOTE:  Ensure This is at Very End of .zshrc
