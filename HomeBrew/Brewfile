@@ -1,5 +1,7 @@
 tap "homebrew/bundle"
 tap "teamookla/speedtest"
+brew "gh"
+brew "git"
 brew "iperf3"
 brew "jq"
 brew "node"
