@@ -25,7 +25,7 @@ source "$FORMAT_LIBRARY"
 
 function sync_shellscripts() {
     info_echo "Syncing ShellScripts..."
-    rsync -avhl --delete \
+    rsync -avhl --delete --exclude '.DS_Store' \
         "$SOURCE_DIR/" \
         "$TARGET_BASE_DIR/ShellScripts"
 }
