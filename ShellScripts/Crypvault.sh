@@ -284,7 +284,7 @@ while true; do
             log_message "Info" "GitHUB Sync Starting"
             current_date=$(date)
             log_message "Info" "$current_date"
-            rsync -avh "$HOME/Documents/GitHub/Code-Snippets/" "$HOME/Desktop/GciSttH6UsbSj7I/GitHub/Code-Snippets" --delete
+            rsync -avh "$HOME/Documents/GitHub/Code-Snippets/" "$HOME/Desktop/GciSttH6UsbSj7I/GitHub/Code-Snippets" --delete --exclude '.DS_Store'
             log_message "Info" "GitHUB Sync Completed"
             ;;
         back)
