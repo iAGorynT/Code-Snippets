@@ -21,10 +21,7 @@ function crypvault {
 }
 
 function gauthenticator {
-	clear
-	echo "Gauth Authenticator..."
-	echo
-	gauth
+	Gauth.sh
 }
 
 function menu {
