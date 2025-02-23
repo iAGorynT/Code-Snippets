@@ -16,6 +16,15 @@ echo
 # Bash
 echo "Bash: $(bash --version)" | grep -e 'version '
 
+# GitHub
+echo
+info_echo "GitHub"
+# Git
+echo "Git: $(git --version)"
+# Github CLI
+echo "GitHub CLI: $(gh --version)" | grep -e 'version '
+echo
+
 # Homebrew
 echo "Homebrew: $(brew --version)"
 
