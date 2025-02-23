@@ -1,7 +1,5 @@
 #!/usr/bin/env expect
-
-# This script is used to automate the authentication process for gauth
-# It will send the password to the gauth process and wait for the codes to be displayed
+# This script automates the authentication process for gauth and copies current code to clipboard
 
 # Set timeout for expect commands (in seconds)
 set timeout 10
@@ -33,10 +31,13 @@ expect {
     }
 }
 
-# Wait for the code display
+# Wait for and capture the code display
 expect {
-    -re {.*\[.*\]} {
-        # Successfully got the codes
+    -re {([0-9]{6})\s+([0-9]{6})\s+([0-9]{6})} {
+        # Extract the current (middle) code and copy to clipboard
+        set current_code $expect_out(2,string)
+        exec echo $current_code | pbcopy
+        puts "\nCurrent code ($current_code) copied to clipboard!"
         exit 0
     }
     timeout {
