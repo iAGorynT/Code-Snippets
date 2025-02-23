@@ -14,7 +14,7 @@ format_echo "App Descriptions..." "yellow" "bold"
 echo " "
 
 # Array of app names
-apps=("iperf3:" "jq:" "qlmarkdown:" "macdown:" "speedtest:" "github:" "macvim:" "syntax-highlight:" "tabby:")
+apps=("gauth:" "iperf3:" "jq:" "qlmarkdown:" "macdown:" "speedtest:" "github:" "macvim:" "syntax-highlight:")
 
 # Function to check if a line contains an app name
 contains_app() {

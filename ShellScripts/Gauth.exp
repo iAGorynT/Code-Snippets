@@ -1,0 +1,48 @@
+#!/usr/bin/env expect
+
+# This script is used to automate the authentication process for gauth
+# It will send the password to the gauth process and wait for the codes to be displayed
+#
+# Set timeout for expect commands (in seconds)
+set timeout 10
+
+# Get password from environment variable for security
+set pw $env(GAUTH_PASSWORD)
+if {![info exists env(GAUTH_PASSWORD)]} {
+    puts "Error: GAUTH_PASSWORD environment variable not set"
+    exit 1
+}
+
+# Error handling procedure
+proc handle_error {message} {
+    puts "Error: $message"
+    exit 1
+}
+
+# Main authentication process
+spawn gauth
+expect {
+    "Encryption password: " {
+        send "$pw\r"
+    }
+    timeout {
+        handle_error "Timeout waiting for password prompt"
+    }
+    eof {
+        handle_error "gauth process ended unexpectedly"
+    }
+}
+
+# Wait for the code display
+expect {
+    -re {.*\[.*\]} {
+        # Successfully got the codes
+        exit 0
+    }
+    timeout {
+        handle_error "Timeout waiting for authentication codes"
+    }
+    eof {
+        handle_error "gauth process ended unexpectedly before showing codes"
+    }
+}
