@@ -20,6 +20,13 @@ function crypvault {
 	Crypvault.sh
 }
 
+function gauthenticator {
+	clear
+	echo "Gauth Authenticator..."
+	echo
+	gauth
+}
+
 function menu {
 	clear
 	echo
@@ -27,6 +34,7 @@ function menu {
 	echo -e "\t1. Enigma Shortcut"
 	echo -e "\t2. SSL Cryptxt"
 	echo -e "\t3. SSL Crypvault"
+	echo -e "\t4. Gauth Authenticator"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
         # Read entire input instead of just one character
@@ -51,6 +59,9 @@ while true; do
 		;;
 	    3)
 	        crypvault
+		;;
+	    4)
+	        gauthenticator
 		;;
             *)
                 clear
