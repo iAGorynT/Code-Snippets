@@ -2,7 +2,7 @@
 
 # This script is used to automate the authentication process for gauth
 # It will send the password to the gauth process and wait for the codes to be displayed
-#
+
 # Set timeout for expect commands (in seconds)
 set timeout 10
 
