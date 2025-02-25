@@ -11,6 +11,13 @@ if {![info exists env(GAUTH_PASSWORD)]} {
     exit 1
 }
 
+# Get record key from environment variable for processing
+set rkey $env(GAUTH_KEY)
+if {![info exists env(GAUTH_KEY)]} {
+    puts "Error: GAUTH_KEY environment variable not set"
+    exit 1
+}
+
 # Error handling procedure
 proc handle_error {message} {
     puts "Error: $message"
@@ -18,7 +25,7 @@ proc handle_error {message} {
 }
 
 # Main authentication process
-spawn gauth
+spawn gauth $rkey
 expect {
     "Encryption password: " {
         send "$pw\r"
