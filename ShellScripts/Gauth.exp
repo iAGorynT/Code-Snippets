@@ -4,28 +4,42 @@
 # Set timeout for expect commands (in seconds)
 set timeout 10
 
-# Get password from environment variable for security
-set pw $env(GAUTH_PASSWORD)
-if {![info exists env(GAUTH_PASSWORD)]} {
-    puts "Error: GAUTH_PASSWORD environment variable not set"
-    exit 1
-}
-
-# Get record key from environment variable for processing
-set rkey $env(GAUTH_KEY)
-if {![info exists env(GAUTH_KEY)]} {
-    puts "Error: GAUTH_KEY environment variable not set"
-    exit 1
-}
-
 # Error handling procedure
 proc handle_error {message} {
-    puts "Error: $message"
+    puts stderr "Error: $message"
     exit 1
 }
 
+# Signal handling procedure
+proc cleanup {} {
+    puts stderr "\nScript interrupted"
+    exit 2
+}
+
+# Setup proper signal handling in Tcl/Expect
+trap {cleanup} SIGINT
+trap {cleanup} SIGTERM
+
+# Get required environment variables
+if {![info exists env(GAUTH_PASSWORD)]} {
+    handle_error "GAUTH_PASSWORD environment variable not set"
+}
+set pw $env(GAUTH_PASSWORD)
+
+if {![info exists env(GAUTH_KEY)]} {
+    handle_error "GAUTH_KEY environment variable not set"
+}
+set rkey $env(GAUTH_KEY)
+
 # Main authentication process
-spawn gauth $rkey
+log_user 0  # Suppress echoing of sensitive information
+
+# Start the gauth process
+if {[catch {spawn gauth $rkey} err]} {
+    handle_error "Failed to start gauth: $err"
+}
+
+# Handle password prompt
 expect {
     "Encryption password: " {
         send "$pw\r"
@@ -38,12 +52,19 @@ expect {
     }
 }
 
-# Wait for and capture the code display
+# Wait for and capture the code display with improved regex
 expect {
-    -re {([0-9]{6})\s+([0-9]{6})\s+([0-9]{6})} {
+    -re {([0-9]{6})\s+\*?([0-9]{6})\*?\s+([0-9]{6})} {
         # Extract the current (middle) code and copy to clipboard
         set current_code $expect_out(2,string)
-        exec echo $current_code | pbcopy
+        
+        # Use catch to handle clipboard operation failures
+        if {[catch {exec echo $current_code | pbcopy} result]} {
+            handle_error "Failed to copy to clipboard: $result"
+        }
+        
+        # Re-enable user output to show the result
+        log_user 1
         puts "\nCurrent code ($current_code) copied to clipboard!"
         exit 0
     }
