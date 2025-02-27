@@ -40,7 +40,7 @@ displayhdr() {
 # Function to get authentication code
 get_auth_code() {
     displayhdr
-    Gauth.exp  # Assuming this gets the actual authentication code
+    Gauth.exp  # Get the actual authentication code
 }
 
 # Main function
