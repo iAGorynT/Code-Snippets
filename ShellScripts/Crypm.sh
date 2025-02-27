@@ -24,6 +24,10 @@ function gauthenticator {
 	Gauth.sh
 }
 
+function gmanager {
+	GauthMgr.sh
+}
+
 function menu {
 	clear
 	echo
@@ -32,6 +36,7 @@ function menu {
 	echo -e "\t2. SSL Cryptxt"
 	echo -e "\t3. SSL Crypvault"
 	echo -e "\t4. Gauth Authenticator"
+	echo -e "\t5. Gauth Manager"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
         # Read entire input instead of just one character
@@ -59,6 +64,9 @@ while true; do
 		;;
 	    4)
 	        gauthenticator
+		;;
+	    5)
+	        gmanager
 		;;
             *)
                 clear
