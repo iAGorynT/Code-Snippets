@@ -9,6 +9,7 @@ typeset -A ZJUMP_DIRS=(
     [dl]="$HOME/Downloads"
     [ss]="$HOME/ShellScripts"
     [sst]="$HOME/ShellScripts/zTests"
+    [py]="$HOME/PythonCode"
     [gha]="$HOME/Documents/GitHub/Brew-Autoupdate"
     [ghs]="$HOME/Documents/GitHub/Code-Snippets"
 )
