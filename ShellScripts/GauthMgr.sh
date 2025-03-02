@@ -42,7 +42,7 @@ encrypt_file() {
     return 0
 }
 
-# function to initialize the configuration
+# Function to initialize the configuration
 initconfig() {
     warning_printf "WARNING: This will remove all existing Authenticator Keys. They cannot be recovered!"
     printf "\nDo you want to continue? (y/n): "
