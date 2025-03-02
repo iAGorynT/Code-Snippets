@@ -4,7 +4,8 @@
 set -euo pipefail
 
 # Script configuration
-readonly SOURCE_DIR="$HOME/ShellScripts"
+readonly SHELL_DIR="$HOME/ShellScripts"
+readonly PYCODE_DIR="$HOME/PythonCode"
 readonly TARGET_BASE_DIR="$HOME/Documents/GitHub/Code-Snippets"
 readonly DOTFILES=(
     ".gvimrc"
@@ -26,8 +27,15 @@ source "$FORMAT_LIBRARY"
 function sync_shellscripts() {
     info_echo "Syncing ShellScripts..."
     rsync -avhl --delete --exclude '.DS_Store' \
-        "$SOURCE_DIR/" \
+        "$SHELL_DIR/" \
         "$TARGET_BASE_DIR/ShellScripts"
+}
+
+function sync_pythoncode () {
+    info_echo "Syncing PythonCode..."
+    rsync -avhl --delete --exclude '.DS_Store' \
+        "$PYCODE_DIR/" \
+        "$TARGET_BASE_DIR/PythonCode"
 }
 
 function sync_dotfiles() {
@@ -61,6 +69,8 @@ function main() {
 
     check_macvim
     sync_shellscripts
+    echo
+    sync_pythoncode
     echo
     sync_dotfiles
     echo

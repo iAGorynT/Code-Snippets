@@ -177,6 +177,13 @@ eval "$(gh copilot alias -- zsh)"
 source ~/bin/zJump.sh
 
 # Activate Zsh Syntax Highlighting
-# NOTE:  Ensure This is at Very End of .zshrc
 source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# Pyenv - Python Version Manager
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"
+
+# Activate Zsh Syntax Highlighting
+# NOTE:  Ensure This is at Very End of .zshrc
+source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
