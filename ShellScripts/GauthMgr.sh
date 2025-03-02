@@ -42,6 +42,38 @@ encrypt_file() {
     return 0
 }
 
+# function to initialize the configuration
+initconfig() {
+    warning_printf "WARNING: This will remove all existing Authenticator Keys. They cannot be recovered!"
+    printf "\nDo you want to continue? (y/n): "
+    read -rk1 response
+    printf "\n"
+    
+    case ${(L)response} in  # Lowercase conversion
+        y) 
+            # Create example config
+            echo "Example:examplekey" > "$DECRYPTED_FILE"
+            encrypt_file
+            
+            if [ $? -eq 0 ]; then
+                success_printf "Configuration initialized successfully."
+                printf "\n"
+                success_printf "Gauth Manager must exit and be restarted to continue."
+                printf "\n"
+                # Exit the script
+                exit 0
+            else
+                error_printf "Failed to initialize configuration." true
+                return 1
+            fi
+            ;;
+        *) 
+            info_printf "Initialization cancelled."
+            return 0
+            ;;
+    esac
+}
+
 # Display header function
 display_header() {
     clear
@@ -80,6 +112,10 @@ process_operation() {
     display_header
     
     case "$operation" in
+        "init")
+            info_printf "Initializing configuration..."
+            initconfig
+            ;;
         "add")
             info_printf "Adding key: $GAUTH_KEY..."
             export GAUTH_ACTION="-a"
@@ -113,22 +149,26 @@ select_operation() {
     info_printf "Select an operation:"
     printf "\n"
     
-    local operations=("Add" "Remove" "Dump" "Exit")
+    local operations=("Init" "Add" "Remove" "Dump" "Exit")
     select op in "${operations[@]}"; do
         case $REPLY in
             1)
-                return_operation="add"
+                return_operation="init"
                 break
                 ;;
             2)
-                return_operation="remove"
+                return_operation="add"
                 break
                 ;;
             3)
-                return_operation="dump"
+                return_operation="remove"
                 break
                 ;;
             4)
+                return_operation="dump"
+                break
+                ;;
+            5)
                 return_operation="exit"
                 break
                 ;;
@@ -225,6 +265,14 @@ main() {
     # Exit if user selected exit
     if [[ "$operation" == "exit" ]]; then
         return 2
+    fi
+    
+    # For init operation, no key selection needed
+    if [[ "$operation" == "init" ]]; then
+        if ! process_operation "$operation"; then
+            return 1
+        fi
+        return 0
     fi
     
     # For add operation, prompt for new key name
