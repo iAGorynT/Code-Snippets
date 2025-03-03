@@ -99,8 +99,10 @@ class OTPManager:
         """Generate OTP code for a given name"""
         if name in self.secrets:
             totp = pyotp.TOTP(self.secrets[name])
-            return totp.now()
-        return None
+            current_code = totp.now()
+            next_code = totp.at(time.time() + 30)
+            return current_code, next_code
+        return None, None
     
     def list_names(self):
         """List all saved OTP names"""
@@ -148,8 +150,8 @@ def main():
         names = manager.list_names()
         if names:
             for idx, name in enumerate(sorted(names), 1):
-                code = manager.get_code(name)
-                print(f"{idx}. {name}: {code}")
+                current_code, next_code = manager.get_code(name)
+                print(f"{idx}. {name}: Current OTP: {current_code}, Next OTP: {next_code}")
         else:
             print("No OTP entries found. Add one using option 'a'.")
         
