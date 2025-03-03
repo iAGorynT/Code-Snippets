@@ -71,6 +71,7 @@ echo
 info_echo "Python3:"
 python3 --version
 python3 -m pip --version | sed 's/\(.*\)from.*/\1/'
+pyenv --version
 echo
 
 # Rosetta2
