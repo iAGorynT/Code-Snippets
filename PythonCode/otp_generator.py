@@ -107,10 +107,32 @@ class OTPManager:
     def list_names(self):
         """List all saved OTP names"""
         return list(self.secrets.keys())
+    
+    def get_raw_secrets(self):
+        """Get the raw secrets JSON for display"""
+        return json.dumps(self.secrets, indent=2)
 
 def clear_screen():
     """Clear the terminal screen"""
     os.system('cls' if os.name == 'nt' else 'clear')
+
+def dump_option(manager):
+    """
+    Display the contents of the encrypted keys file and wait for user input.
+    
+    Args:
+        manager (OTPManager): The OTP manager instance
+    """
+    clear_screen()
+    print("\033[1;34mDisplaying contents of encrypted keys file:\033[0m")
+    print("\n")
+    
+    # Display the raw secrets data
+    raw_secrets = manager.get_raw_secrets()
+    print(raw_secrets)
+    
+    print("\n")
+    input("Press Enter to continue...")
 
 def main():
     # Configuration for keychain access
@@ -159,6 +181,7 @@ def main():
         print("a - Add new OTP secret")
         print("r - Remove OTP secret")
         print("f - Refresh codes")
+        print("d - Dump raw keys file contents")  # Added new option
         print("q - Quit")
         
         choice = input("\nEnter option: ").lower()
@@ -183,6 +206,9 @@ def main():
         elif choice == 'f':
             # Refresh is just continuing the loop, which redraws the screen
             continue
+        
+        elif choice == 'd':  # Added new case for dump option
+            dump_option(manager)
             
         elif choice == 'q':
             break
