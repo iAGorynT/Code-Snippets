@@ -32,6 +32,10 @@ function otppy {
 	python3 ~/PythonCode/otp_generator.py
 }
 
+function otpzsh {
+	ZshOtpGenerator.sh
+}
+
 function menu {
 	clear
 	echo
@@ -42,6 +46,7 @@ function menu {
 	echo -e "\t4. Gauth Authenticator"
 	echo -e "\t5. Gauth Manager"
 	echo -e "\t6. OTP Python Manager"
+	echo -e "\t7. Zsh Authenticator"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
         # Read entire input instead of just one character
@@ -75,6 +80,9 @@ while true; do
 		;;
 	    6)
 	        otppy
+		;;
+	    7)
+	        otpzsh
 		;;
             *)
                 clear
