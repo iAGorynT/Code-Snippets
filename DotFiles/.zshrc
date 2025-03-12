@@ -128,6 +128,7 @@ alias dsync="Devsync.sh"			# Dev to GitHUB Sync
 alias bsum="BackupSummary.sh"			# Crypvault Backup Summary
 alias otpg="Gauth.sh"                           # Generate Gauth OTP
 alias otpp="python3 ~/PythonCode/otp_generator.py"    # Generate Python OTP
+alias otpz="ZshOtpGenerator.sh"                 # Generate zsh OTP
 alias ai="LaunchAI.sh"				# Launch AI Chatbot
 alias fedoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
 alias fpdoc="FLibFormatPrintfDoc.sh"		# List FLibFormatPrintf.sh Documentation
