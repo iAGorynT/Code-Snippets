@@ -11,13 +11,21 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 def get_password_from_keychain(service_name, account_name):
-    """Retrieve password from Mac Keychain"""
+    """Retrieve password from Mac Keychain and decode it from base64"""
     try:
         cmd = ['security', 'find-generic-password', '-s', service_name, '-a', account_name, '-w']
-        password = subprocess.check_output(cmd).decode('utf-8').strip()
-        return password
+        encoded_password = subprocess.check_output(cmd).decode('utf-8').strip()
+        # Decode the password from base64
+        decoded_password = base64.b64decode(encoded_password).decode('utf-8')
+        return decoded_password
     except subprocess.CalledProcessError:
         print(f"Could not retrieve password for {service_name}/{account_name} from Keychain")
+        return None
+    except base64.binascii.Error:
+        print(f"Retrieved password is not valid base64 for {service_name}/{account_name}")
+        return None
+    except UnicodeDecodeError:
+        print(f"Decoded bytes could not be converted to UTF-8 for {service_name}/{account_name}")
         return None
 
 class OTPManager:

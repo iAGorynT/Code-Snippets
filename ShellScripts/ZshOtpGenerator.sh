@@ -1,18 +1,22 @@
 #!/usr/bin/env zsh
+
 # Check if oath-toolkit is installed
 if ! command -v oathtool &> /dev/null; then
-    printf "Error: oathtool is required but not installed.\n"
-    printf "Please install oath-toolkit package:\n"
-    printf "  - On Debian/Ubuntu: sudo apt-get install oath-toolkit\n"
-    printf "  - On macOS: brew install oath-toolkit\n"
-    printf "  - On Fedora: sudo dnf install oath-toolkit\n"
+    error_print "Error: oathtool is required but not installed." false
+    error_print "Please install oath-toolkit package:" false
+    error_print "  - On Debian/Ubuntu: sudo apt-get install oath-toolkit" false
+    error_print "  - On macOS: brew install oath-toolkit" false
+    error_print "  - On Fedora: sudo dnf install oath-toolkit" true
     exit 1
 fi
 
-TOTP_FILE="$HOME/.otp_secrets_zsh.txt"
+# Set secure file locations
+ENCRYPTED_FILE="$HOME/.otp_secrets_zsh.enc"
+DECRYPTED_FILE="$(mktemp)"
+
 # Check if file exists and is readable
-if [[ ! -r "$TOTP_FILE" ]]; then
-    printf "Error: Cannot read file '%s'\n" "$TOTP_FILE"
+if [[ ! -r "$ENCRYPTED_FILE" ]]; then
+    error_print "Error: Cannot read file '$ENCRYPTED_FILE'" true
     exit 1
 fi
 
@@ -27,6 +31,57 @@ BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
+
+# Function to print error messages
+error_print() {
+    local message="$1"
+    local exit_after="${2:-false}"
+    
+    printf "${RED}%s${NC}\n" "$message" >&2
+    
+    if [[ "$exit_after" == "true" ]]; then
+        exit 1
+    fi
+}
+
+# Function to retrieve password from keychain
+get_password() {
+    # Load Hash_CFG
+    local secret_type="OTPGenerator"
+    local account="MasterPassword"
+
+    # Lookup Secret in Keychain
+    local secret
+    if ! secret=$(security find-generic-password -w -s "$secret_type" -a "$account"); then
+        error_print "Secret Not Found, error $?" true
+        return 1
+    fi
+
+    # Set File Hash and Temporary Environment variable
+    GAUTH_PASSWORD=$(echo "$secret" | base64 --decode)
+    
+    if [[ -z "$GAUTH_PASSWORD" ]]; then
+        error_print "Failed to decode password" true
+        return 1
+    fi
+
+    return 0
+}
+
+# Function for decryption of otp secrets file
+decrypt_file() {
+    if ! openssl enc -d -aes-256-cbc -salt -pass pass:"$GAUTH_PASSWORD" -pbkdf2 -iter 1000000 -in "$ENCRYPTED_FILE" -out "$DECRYPTED_FILE" 2>/dev/null; then
+	error_print "Error: Decryption failed." true
+	return 1
+    fi
+    
+    if [[ ! -s "$DECRYPTED_FILE" ]]; then
+        error_print "Error: Decrypted file is empty." true
+        return 1
+    fi
+    
+    return 0
+}
 
 # Function to calculate seconds until next TOTP rotation
 calculate_seconds_remaining() {
@@ -131,7 +186,7 @@ clear_and_display() {
         printf "\n"
         
         counter=$((counter + 1))
-    done < "$TOTP_FILE"
+    done < "$DECRYPTED_FILE"
     
     # Help text at bottom
     printf "\n${PURPLE}Commands: q:quit, r:refresh, <number>:copy code${NC}\n"
@@ -146,18 +201,32 @@ ask_to_quit() {
     read -r -k 1 "response?TOTP period ended. Would you like to quit? (y/n): "
     echo ""
     if [[ "$response" =~ ^[Yy]$ ]]; then
-        exit 0
+        cleanup_and_exit
     fi
+}
+
+# Function to cleanup and exit
+cleanup_and_exit() {
+    # Securely remove the decrypted file
+    if [[ -f "$DECRYPTED_FILE" ]]; then
+        rm -P "$DECRYPTED_FILE" 2>/dev/null || rm "$DECRYPTED_FILE"
+    fi
+    
+    # Unset the password variable
+    unset GAUTH_PASSWORD
+    
+    echo -e "\n${BLUE}Exiting TOTP viewer. Goodbye!${NC}"
+    exit 0
 }
 
 # Function to handle key presses
 handle_key_press() {
     local key="$1"
-    local num_entries=$(grep -v '^#' "$TOTP_FILE" | grep -v '^\s*$' | wc -l)
+    local num_entries=$(grep -v '^#' "$DECRYPTED_FILE" | grep -v '^\s*$' | wc -l)
     
     if [[ "$key" =~ ^[Qq]$ ]]; then
         # Quit
-        exit 0
+        cleanup_and_exit
     elif [[ "$key" =~ ^[Rr]$ ]]; then
         # Refresh (do nothing, loop will refresh)
         return
@@ -185,14 +254,14 @@ handle_key_press() {
             fi
             
             counter=$((counter + 1))
-        done < "$TOTP_FILE"
+        done < "$DECRYPTED_FILE"
         
         if [[ -n "$selected_totp" ]]; then
             if copy_to_clipboard "$selected_totp"; then
                 echo -e "\n${GREEN}Copied TOTP for $selected_name to clipboard!${NC}"
                 sleep 1
             else
-                echo -e "\n${YELLOW}Could not copy to clipboard - clipboard tool not available${NC}"
+                error_print "\nCould not copy to clipboard - clipboard tool not available" false
                 echo -e "TOTP for $selected_name: ${GREEN}$selected_totp${NC}"
                 sleep 2
             fi
@@ -232,7 +301,7 @@ fi
 enable_non_blocking
 
 # Trap Ctrl+C to exit gracefully
-trap "echo -e \"\n${BLUE}Exiting TOTP viewer. Goodbye!${NC}\"; exit 0" SIGINT
+trap "cleanup_and_exit" SIGINT
 
 # Print startup message
 echo "Starting TOTP viewer..."
@@ -240,6 +309,9 @@ echo "Press 'q' to quit anytime"
 sleep 1
 
 # Main loop
+get_password || exit 1
+decrypt_file || exit 1
+
 while true; do
     clear_and_display
     seconds_remaining=$?
