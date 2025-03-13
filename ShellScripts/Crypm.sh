@@ -36,6 +36,10 @@ function otpzsh {
 	ZshOtpGenerator.sh
 }
 
+function otpzshmgr {
+	ZshOtpManager.sh
+}
+
 function menu {
 	clear
 	echo
@@ -44,9 +48,10 @@ function menu {
 	echo -e "\t2. SSL Cryptxt"
 	echo -e "\t3. SSL Crypvault"
 	echo -e "\t4. Gauth Authenticator"
-	echo -e "\t5. Gauth Manager"
-	echo -e "\t6. OTP Python Manager"
+	echo -e "\t5. Gauth OTP Manager"
+	echo -e "\t6. Python Authenticator / OTP Manager"
 	echo -e "\t7. Zsh Authenticator"
+	echo -e "\t8. Zsh OTP Manager"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
         # Read entire input instead of just one character
@@ -83,6 +88,9 @@ while true; do
 		;;
 	    7)
 	        otpzsh
+		;;
+	    8)
+	        otpzshmgr
 		;;
             *)
                 clear

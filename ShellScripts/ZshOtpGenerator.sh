@@ -304,6 +304,7 @@ enable_non_blocking
 trap "cleanup_and_exit" SIGINT
 
 # Print startup message
+clear
 echo "Starting TOTP viewer..."
 echo "Press 'q' to quit anytime"
 sleep 1
