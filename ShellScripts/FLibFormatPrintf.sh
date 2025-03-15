@@ -152,22 +152,27 @@ info_printf() {
     format_printf "$message" "blue" "bold"
 }
 
-# Example usage function
-show_examples() {
-    printf "Format Library Examples:\n"
-    format_printf "Text without color or formatting"
-    format_printf "Text with brew style" none brew
-    format_printf "Text with brewl style" none brewl
-    format_printf "Regular colored text" "blue"
-    format_printf "Bold text without color" none "bold"
-    format_printf "Bold colored text" "green" "bold"
-    format_printf "Underlined text" "cyan" "underline"
-    format_printf "Bold and underlined" "magenta" "bold" "underline"
-    format_printf "Italic text without color" none "italic"
-    format_printf "Error message" "red" "bold" "reverse"
-    printf "\nHelper Functions:\n"
-    error_printf "This is an error message"
-    success_printf "This is a success message"
-    warning_printf "This is a warning message"
-    info_printf "This is an info message"
-}
+# Check if the script is being sourced or run directly
+# This is the zsh way to check if a script is being sourced
+if [[ "$ZSH_EVAL_CONTEXT" != *:file:* ]]; then
+    show_examples() {
+        printf "Format Library Examples:\n"
+        format_printf "Text without color or formatting"
+        format_printf "Text with brew style" none brew
+        format_printf "Text with brewl style" none brewl
+        format_printf "Regular colored text" "blue"
+        format_printf "Bold text without color" none "bold"
+        format_printf "Bold colored text" "green" "bold"
+        format_printf "Underlined text" "cyan" "underline"
+        format_printf "Bold and underlined" "magenta" "bold" "underline"
+        format_printf "Italic text without color" none "italic"
+        format_printf "Error message" "red" "bold" "reverse"
+        printf "\nHelper Functions:\n"
+        error_printf "This is an error message"
+        success_printf "This is a success message"
+        warning_printf "This is a warning message"
+        info_printf "This is an info message"
+    }
+    
+    show_examples
+fi

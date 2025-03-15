@@ -49,7 +49,7 @@ done < "$zshrcfile"
 
 # Show Expamples
 echo
-show_examples
+FLibFormatPrintf.sh
 echo
 
 format_printf "Function Library Documentation Complete..." green bold

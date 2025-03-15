@@ -1,12 +1,20 @@
 #!/usr/bin/env zsh
 
+# Source function library with error handling
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+if [[ ! -f "$FORMAT_LIBRARY" ]]; then
+    echo "Error: Required library $FORMAT_LIBRARY not found" >&2
+    exit 1
+fi
+source "$FORMAT_LIBRARY"
+
 # Check if oath-toolkit is installed
 if ! command -v oathtool &> /dev/null; then
-    error_print "Error: oathtool is required but not installed." false
-    error_print "Please install oath-toolkit package:" false
-    error_print "  - On Debian/Ubuntu: sudo apt-get install oath-toolkit" false
-    error_print "  - On macOS: brew install oath-toolkit" false
-    error_print "  - On Fedora: sudo dnf install oath-toolkit" true
+    error_printf "Error: oathtool is required but not installed." 
+    error_printf "Please install oath-toolkit package:"
+    error_printf "  - On Debian/Ubuntu: sudo apt-get install oath-toolkit"
+    error_printf "  - On macOS: brew install oath-toolkit"
+    error_printf "  - On Fedora: sudo dnf install oath-toolkit"
     exit 1
 fi
 
@@ -16,33 +24,12 @@ DECRYPTED_FILE="$(mktemp)"
 
 # Check if file exists and is readable
 if [[ ! -r "$ENCRYPTED_FILE" ]]; then
-    error_print "Error: Cannot read file '$ENCRYPTED_FILE'" true
+    error_printf "Error: Cannot read file '$ENCRYPTED_FILE'" 
     exit 1
 fi
 
 # TOTP period in seconds (typically 30)
 TOTP_PERIOD=30
-
-# Terminal colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
-
-# Function to print error messages
-error_print() {
-    local message="$1"
-    local exit_after="${2:-false}"
-    
-    printf "${RED}%s${NC}\n" "$message" >&2
-    
-    if [[ "$exit_after" == "true" ]]; then
-        exit 1
-    fi
-}
 
 # Function to retrieve password from keychain
 get_password() {
@@ -53,7 +40,7 @@ get_password() {
     # Lookup Secret in Keychain
     local secret
     if ! secret=$(security find-generic-password -w -s "$secret_type" -a "$account"); then
-        error_print "Secret Not Found, error $?" true
+        error_printf "Secret Not Found, error $?"
         return 1
     fi
 
@@ -61,7 +48,7 @@ get_password() {
     GAUTH_PASSWORD=$(echo "$secret" | base64 --decode)
     
     if [[ -z "$GAUTH_PASSWORD" ]]; then
-        error_print "Failed to decode password" true
+        error_printf "Failed to decode password"
         return 1
     fi
 
@@ -71,12 +58,12 @@ get_password() {
 # Function for decryption of otp secrets file
 decrypt_file() {
     if ! openssl enc -d -aes-256-cbc -salt -pass pass:"$GAUTH_PASSWORD" -pbkdf2 -iter 1000000 -in "$ENCRYPTED_FILE" -out "$DECRYPTED_FILE" 2>/dev/null; then
-	error_print "Error: Decryption failed." true
-	return 1
+        error_printf "Error: Decryption failed."
+        return 1
     fi
     
     if [[ ! -s "$DECRYPTED_FILE" ]]; then
-        error_print "Error: Decrypted file is empty." true
+        error_printf "Error: Decrypted file is empty."
         return 1
     fi
     
@@ -148,13 +135,13 @@ clear_and_display() {
     local current_date=$(date "+%Y-%m-%d %H:%M:%S")
     
     # Display header with time and progress bar
-    printf "${BLUE}TOTP Codes - $current_date${NC}\n"
+    format_printf "TOTP Codes - $current_date" "blue" "bold"
     printf "Time until next rotation: "
     display_progress_bar "$seconds_remaining"
     printf "\n\n"
     
-    # Display the table
-    printf "${CYAN}%-4s %-30s %-16s %-16s %s${NC}\n" "No." "Key Name" "Current TOTP" "Next TOTP" "Actions"
+    # Display the table header with proper alignment
+    printf "\e[1;33m%-4s %-30s %-16s %-16s %s\e[0m\n" "No." "Key Name" "Current TOTP" "Next TOTP" "Actions"
     printf "%-4s %-30s %-16s %-16s %s\n" "----" "$(printf '%0.s-' {1..30})" "$(printf '%0.s-' {1..16})" "$(printf '%0.s-' {1..16})" "-------"
     
     # Read each line from the file
@@ -174,22 +161,26 @@ clear_and_display() {
         current_totp=$(generate_current_totp "$secret")
         next_totp=$(generate_next_totp "$secret")
         
-        # Format the output - with color highlight for low time
+	# Format the output with proper alignment
+        # Display the row data but handle the colored TOTP separately
         if [[ $seconds_remaining -le 5 ]]; then
-            printf "${YELLOW}%-4d %-30s ${RED}%-16s${NC} %-16s" "$counter" "$name" "$current_totp" "$next_totp"
+            # For critical time (under 5 seconds), show the TOTP in red
+            printf "%-4d %-30s " "$counter" "$name"
+            printf "\033[0;31m%-16s\033[0m" "$current_totp"  # Red color
+            printf " %-16s [%d:copy]\n" "$next_totp" "$counter"
         else
-            printf "%-4d %-30s ${GREEN}%-16s${NC} %-16s" "$counter" "$name" "$current_totp" "$next_totp"
+            # Normal time, show the TOTP in green
+            printf "%-4d %-30s " "$counter" "$name"
+            printf "\033[0;32m%-16s\033[0m" "$current_totp"  # Green color
+            printf " %-16s [%d:copy]\n" "$next_totp" "$counter"
         fi
-        
-        # Add action indicators
-        printf " [${counter}:copy]"
-        printf "\n"
         
         counter=$((counter + 1))
     done < "$DECRYPTED_FILE"
     
     # Help text at bottom
-    printf "\n${PURPLE}Commands: q:quit, r:refresh, <number>:copy code${NC}\n"
+    echo ""
+    format_printf "Commands: q:quit, r:refresh, <number>:copy code" "magenta" "bold"
     
     # Return the seconds remaining so the main loop can use it
     return $seconds_remaining
@@ -215,7 +206,8 @@ cleanup_and_exit() {
     # Unset the password variable
     unset GAUTH_PASSWORD
     
-    echo -e "\n${BLUE}Exiting TOTP viewer. Goodbye!${NC}"
+    printf "\n"
+    info_printf "Exiting TOTP viewer. Goodbye!"
     exit 0
 }
 
@@ -258,11 +250,13 @@ handle_key_press() {
         
         if [[ -n "$selected_totp" ]]; then
             if copy_to_clipboard "$selected_totp"; then
-                echo -e "\n${GREEN}Copied TOTP for $selected_name to clipboard!${NC}"
+                echo ""
+                success_printf "Copied TOTP for $selected_name to clipboard!"
                 sleep 1
             else
-                error_print "\nCould not copy to clipboard - clipboard tool not available" false
-                echo -e "TOTP for $selected_name: ${GREEN}$selected_totp${NC}"
+                echo ""
+                error_printf "Could not copy to clipboard - clipboard tool not available"
+                format_printf "TOTP for $selected_name: $selected_totp" "green" "bold"
                 sleep 2
             fi
         fi
@@ -305,8 +299,8 @@ trap "cleanup_and_exit" SIGINT
 
 # Print startup message
 clear
-echo "Starting TOTP viewer..."
-echo "Press 'q' to quit anytime"
+format_printf "Starting TOTP viewer..." none "brew"
+format_printf "Press 'q' to quit anytime" none "bold"
 sleep 1
 
 # Main loop
