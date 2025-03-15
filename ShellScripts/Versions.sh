@@ -57,6 +57,11 @@ echo
 echo "Node: $(node --version)"
 echo "Npm: $(npm --version)"
 
+# Oath Toolkit
+echo
+echo "Oath Toolkit: $(oathtool --version | grep -e 'Toolkit')"
+echo
+
 # SSH
 # Had to run ssh command and pipe it to echo -n (no new line)
 # in order to get results on one line.  Just trying to echo
