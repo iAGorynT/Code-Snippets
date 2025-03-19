@@ -174,8 +174,8 @@
         <label for="month">Month:</label>
         <select id="month" tabindex="1"></select>
 
-        <label for="year">Year (YYYY):</label>
-        <input type="number" id="year" required tabindex="2">
+        <label for="year">Year:</label>
+        <select id="year" tabindex="2"></select>
 
         <label for="dayOfWeek">Day of Week:</label>
         <select id="dayOfWeek" tabindex="3"></select>
@@ -191,7 +191,7 @@
         const modeToggle = document.getElementById('modeToggle');
         const monthSelect = document.getElementById('month');
         const dayOfWeekSelect = document.getElementById('dayOfWeek');
-        const yearInput = document.getElementById('year');
+        const yearSelect = document.getElementById('year');
         const generateButton = document.getElementById('generateButton');
         const output = document.getElementById('output');
         
@@ -199,20 +199,33 @@
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         
+        // Generate years array from 2020 to 2050
+        const years = Array.from({ length: 31 }, (_, i) => 2020 + i);
+        
         /**
          * Populates a select element with options
          * @param {HTMLSelectElement} select - The select element to populate
-         * @param {string[]} options - Array of option texts
+         * @param {string[]|number[]} options - Array of option texts
+         * @param {boolean} useValueAsText - Whether to use the value as the text
          */
-        const populateSelect = (select, options) => {
-            select.innerHTML = options.map((option, index) => 
-                `<option value="${index}">${option}</option>`
-            ).join('');
+        const populateSelect = (select, options, useValueAsText = false) => {
+            select.innerHTML = options.map((option, index) => {
+                const value = useValueAsText ? option : index;
+                const text = option;
+                return `<option value="${value}">${text}</option>`;
+            }).join('');
         };
         
-        // Populate month and day of week selects
+        // Populate month, year, and day of week selects
         populateSelect(monthSelect, months);
+        populateSelect(yearSelect, years, true);
         populateSelect(dayOfWeekSelect, days);
+        
+        // Set default year to current year
+        const currentYear = new Date().getFullYear();
+        if (currentYear >= 2020 && currentYear <= 2050) {
+            yearSelect.value = currentYear;
+        }
         
         /**
          * Toggles between light and dark mode
@@ -235,7 +248,7 @@
          */
         const generateDates = () => {
             const month = parseInt(monthSelect.value) + 1;
-            const year = parseInt(yearInput.value);
+            const year = parseInt(yearSelect.value);
             const dayOfWeek = parseInt(dayOfWeekSelect.value);
         
             // Input validation
