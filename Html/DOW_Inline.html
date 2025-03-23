@@ -12,6 +12,9 @@
             --primary-color: #4a90e2;
             --secondary-color: #f0f0f0;
             --accent-color: #e74c3c;
+            --focus-color: #4a90e2;
+            --focus-outline: 2px solid var(--focus-color);
+            --focus-bg-color: rgba(74, 144, 226, 0.05);
         }
 
         /* Base styles */
@@ -54,6 +57,7 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
+            transition: color 0.2s;
         }
 
         input, select {
@@ -64,6 +68,23 @@
             border-radius: 4px;
             box-sizing: border-box;
             font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+        }
+
+        /* Focus styles for better accessibility */
+        select:focus {
+            outline: var(--focus-outline);
+            box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+            border-color: var(--focus-color);
+            background-color: var(--focus-bg-color);
+        }
+
+        /* Add label highlighting when corresponding select is focused */
+        select:focus + label, 
+        label[for="month"]:has(+ #month:focus),
+        label[for="year"]:has(+ #year:focus),
+        label[for="dayOfWeek"]:has(+ #dayOfWeek:focus) {
+            color: var(--focus-color);
         }
 
         /* Button styles */
@@ -80,6 +101,11 @@
 
         button:hover {
             background-color: #357abd;
+        }
+
+        button:focus {
+            outline: var(--focus-outline);
+            box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
         }
 
         /* Output area styles */
@@ -102,6 +128,8 @@
             --bg-color: #222222;
             --text-color: #ffffff;
             --secondary-color: #333333;
+            --focus-color: #6ab0ff;
+            --focus-bg-color: rgba(255, 255, 255, 0.30); /* Lighter background for better contrast */
         }
 
         /* Toggle Switch Styles */
@@ -140,6 +168,10 @@
         }
         input:checked + .slider {
             background-color: var(--primary-color);
+        }
+        input:focus + .slider {
+            box-shadow: 0 0 2px var(--focus-color);
+            outline: var(--focus-outline);
         }
         input:checked + .slider:before {
             transform: translateX(26px);
