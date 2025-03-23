@@ -1,4 +1,3 @@
-tap "homebrew/bundle"
 tap "teamookla/speedtest"
 brew "gauth"
 brew "gh"
