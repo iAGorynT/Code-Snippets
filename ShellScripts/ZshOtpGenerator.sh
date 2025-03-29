@@ -8,13 +8,12 @@ if [[ ! -f "$FORMAT_LIBRARY" ]]; then
 fi
 source "$FORMAT_LIBRARY"
 
-# Check if oath-toolkit is installed
-if ! command -v oathtool &> /dev/null; then
-    error_printf "Error: oathtool is required but not installed." 
-    error_printf "Please install oath-toolkit package:"
-    error_printf "  - On Debian/Ubuntu: sudo apt-get install oath-toolkit"
-    error_printf "  - On macOS: brew install oath-toolkit"
-    error_printf "  - On Fedora: sudo dnf install oath-toolkit"
+# Check if pyotp is installed
+if ! python3 -c "import pyotp" &> /dev/null; then
+    error_printf "Error: pyotp is required but not installed." 
+    error_printf "Please install pyotp package:"
+    error_printf "  - Using pip: pip install pyotp"
+    error_printf "  - Or: python3 -m pip install pyotp"
     exit 1
 fi
 
@@ -79,7 +78,7 @@ calculate_seconds_remaining() {
 # Function to generate TOTP code for current time
 generate_current_totp() {
     local secret="$1"
-    oathtool --totp --base32 "$secret" 2>/dev/null
+    python3 -c "import pyotp; print(pyotp.TOTP('$secret').now())" 2>/dev/null
 }
 
 # Function to generate TOTP code for next period
@@ -88,9 +87,8 @@ generate_next_totp() {
     local current_time=$(date +%s)
     local next_period=$((current_time + TOTP_PERIOD - (current_time % TOTP_PERIOD)))
     
-    # Use the --at option with a time string format that oathtool accepts
-    local next_time_str=$(date -u -d "@$next_period" "+%Y-%m-%dT%H:%M:%SZ" 2>/dev/null || date -u -r "$next_period" "+%Y-%m-%dT%H:%M:%SZ")
-    oathtool --totp --base32 --now="$next_time_str" "$secret" 2>/dev/null
+    # Generate the TOTP for the next time period
+    python3 -c "import pyotp, time; totp = pyotp.TOTP('$secret'); print(totp.at(time.time() + ($next_period - time.time())))" 2>/dev/null
 }
 
 # Copy to clipboard function
