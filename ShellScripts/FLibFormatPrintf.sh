@@ -153,8 +153,8 @@ info_printf() {
 }
 
 # Check if the script is being sourced or run directly
-# This is the zsh way to check if a script is being sourced
-if [[ "$ZSH_EVAL_CONTEXT" != *:file:* ]]; then
+# This is the proper zsh way to check if a script is being sourced
+if [[ "${ZSH_EVAL_CONTEXT:-}" = "toplevel" || "${ZSH_EVAL_CONTEXT:-}" = "" ]]; then
     show_examples() {
         printf "Format Library Examples:\n"
         format_printf "Text without color or formatting"
