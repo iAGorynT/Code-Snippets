@@ -111,6 +111,11 @@ unlet s:cpo_save
 
 " macVim Custom Editor Settings
 
+" Set Default Theme
+if has("gui_running")
+  colorscheme mustang_vim_colorscheme_by_hcalves_d1mxd78
+endif
+
 " Set Default font
 " set guifont=Menlo:h14 - Original Default
 " set guifont=-monospace-:h14 - System Default
