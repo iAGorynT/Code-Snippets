@@ -71,7 +71,9 @@ nnoremap <C-p> :call ToggleCopilot()<CR>
 set number
 
 " Set default colorscheme
-colorscheme mustang_vim_colorscheme_by_hcalves_d1mxd78
+" Note:  Moved to .gvimrc to avoid conflicts when running mvim or vim
+" from the command line
+" colorscheme mustang_vim_colorscheme_by_hcalves_d1mxd78
 
 " NERDtree Like Setup
 " Disable the Netrw banner
