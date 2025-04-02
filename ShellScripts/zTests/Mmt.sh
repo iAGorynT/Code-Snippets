@@ -65,49 +65,69 @@ function menu {
         option=$(echo $option | tr -d '[:space:]')
 }
 
-while [ 1 ]
-do
-	menu
-	case $option in
-	0)
-	break ;;
-
-	1)
-	zdialogbox;;
-
-	2)
-	zjqjsonconfig;;
-
-	3)
-	zjsonconfig;;
-
-	4)
-	zjqjsonutil;;
-
-	5)
-	zpassfromshortcuts;;
-
-	6)
-	zuserinput;;
-
-	7)
-	zdaysofmonth;;
-
-	8)
-	zselectoption;;
-
-# Return / Enter Key Pressed
-	"")
-	break ;;
-
-	*)
-	clear
-	echo "Sorry, wrong selection";;
-	esac
-	echo -en "\n\n\t\t\tHit any key to continue"
-	read -k 1 line
+# Main loop
+while true; do
+    menu
+    hit_any_key=false
+    # Check if input is a valid number
+    if [[ $option =~ ^[0-9]+$ ]]; then
+        case $option in
+            0)
+                break 
+                ;;
+	    1)
+		zdialogbox
+		hit_any_key=true
+		;;
+	    2)
+		zjqjsonconfig
+		hit_any_key=true
+		;;
+	    3)
+		zjsonconfig
+		hit_any_key=true
+		;;
+	    4)
+		zjqjsonutil
+		hit_any_key=true
+		;;
+	    5)
+		zpassfromshortcuts
+		hit_any_key=true
+		;;
+	    6)
+		zuserinput
+		hit_any_key=true
+		;;
+	    7)
+		zdaysofmonth
+		hit_any_key=true
+		;;
+	    8)
+		zselectoption
+		hit_any_key=true
+		;;
+            *)
+                clear
+                echo "Sorry, wrong selection"
+                hit_any_key=true
+                ;;
+        esac
+    # Handle empty input (Enter key)
+    elif [[ -z "$option" ]]; then
+        break
+    else
+        clear
+        echo "Please enter a valid number"
+        hit_any_key=true
+    fi
+    # Check if the user should be prompted to hit any key to continue
+    if [[ "$hit_any_key" == "true" ]]; then
+        echo -en "\n\n\t\t\tHit any key to continue"
+        read -k 1 line
+    fi
 done
-clear
 
+clear
 # Reset Trap Ctl-C
 trap INT
