@@ -41,6 +41,7 @@ function menu {
 
 while true; do
     menu
+    hit_any_key=false
     # Check if input is a valid number
     if [[ $option =~ ^[0-9]+$ ]]; then
         case $option in
@@ -49,19 +50,24 @@ while true; do
                 ;;
             1)
                 iperfstartserver
+		hit_any_key=true
                 ;;
             2)
                 iperfclient2server
+		hit_any_key=true
                 ;;
             3)
                 iperfserver2client
+		hit_any_key=true
                 ;;
             4)
                 ooklainternettest
+		hit_any_key=true
                 ;;
             *)
                 clear
                 echo "Sorry, wrong selection"
+		hit_any_key=true
                 ;;
         esac
     # Handle empty input (Enter key)
@@ -70,9 +76,13 @@ while true; do
     else
         clear
         echo "Please enter a valid number"
+	hit_any_key=true
     fi
-    echo -en "\n\n\t\t\tHit any key to continue"
-    read -k 1 line
+    # Check if the user should be prompted to hit any key to continue
+    if [[ "$hit_any_key" == "true" ]]; then
+        echo -en "\n\n\t\t\tHit any key to continue"
+        read -k 1 line
+    fi
 done
 
 clear
