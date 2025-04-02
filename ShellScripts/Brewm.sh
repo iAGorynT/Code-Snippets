@@ -106,6 +106,7 @@ function menu {
 # Main loop
 while true; do
     menu
+    hit_any_key=false
     # Check if input is a valid number
     if [[ $option =~ ^[0-9]+$ ]]; then
         case $option in
@@ -114,21 +115,27 @@ while true; do
                 ;;
             1)
                 brewit
+		hit_any_key=true
                 ;;
             2)
                 brewlist
+		hit_any_key=true
                 ;;
             3)
                 brewdep
+		hit_any_key=true
                 ;;
             4)
                 viewbrewfile
+		hit_any_key=true
                 ;;
             5)
                 brewapps
+		hit_any_key=true
                 ;;
             6)
                 brewtap
+		hit_any_key=true
                 ;;
             7)
                 brewdocm
@@ -138,13 +145,16 @@ while true; do
                 ;;
             9)
                 mvexplore
+		sleep 1
                 ;;
             10)
                 brewappuninstaller
+		hit_any_key=true
                 ;;
             *)
                 clear
                 echo "Sorry, wrong selection"
+		hit_any_key=true
                 ;;
         esac
     # Handle empty input (Enter key)
@@ -153,9 +163,13 @@ while true; do
     else
         clear
         echo "Please enter a valid number"
+	hit_any_key=true
     fi
-    echo -en "\n\n\t\t\tHit any key to continue"
-    read -k 1 line
+    # Check if the user should be prompted to hit any key to continue
+    if [[ "$hit_any_key" == "true" ]]; then
+        echo -en "\n\n\t\t\tHit any key to continue"
+        read -k 1 line
+    fi
 done
 
 clear
