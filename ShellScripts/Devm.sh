@@ -59,24 +59,24 @@ while true; do
                 ;;
             1)
                 devsync
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             2)
                 ghdesktop
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             3)
                 crypvault
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             4)
                 bsum
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             *)
                 clear
                 echo "Sorry, wrong selection"
-		hit_any_key=true
+                hit_any_key=true
                 ;;
         esac
     # Handle empty input (Enter key)
@@ -85,7 +85,7 @@ while true; do
     else
         clear
         echo "Please enter a valid number"
-	hit_any_key=true
+        hit_any_key=true
     fi
     # Check if the user should be prompted to hit any key to continue
     if [[ "$hit_any_key" == "true" ]]; then

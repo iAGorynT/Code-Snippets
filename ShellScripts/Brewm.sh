@@ -115,27 +115,27 @@ while true; do
                 ;;
             1)
                 brewit
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             2)
                 brewlist
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             3)
                 brewdep
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             4)
                 viewbrewfile
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             5)
                 brewapps
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             6)
                 brewtap
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             7)
                 brewdocm
@@ -149,12 +149,12 @@ while true; do
                 ;;
             10)
                 brewappuninstaller
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             *)
                 clear
                 echo "Sorry, wrong selection"
-		hit_any_key=true
+                hit_any_key=true
                 ;;
         esac
     # Handle empty input (Enter key)
@@ -163,7 +163,7 @@ while true; do
     else
         clear
         echo "Please enter a valid number"
-	hit_any_key=true
+        hit_any_key=true
     fi
     # Check if the user should be prompted to hit any key to continue
     if [[ "$hit_any_key" == "true" ]]; then
