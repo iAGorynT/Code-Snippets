@@ -9,9 +9,7 @@ function enigma {
         echo "Info:" "Standby... Enigma Running"
         shortcuts run "Enigma"
         echo "Info:" "Enigma Complete..."
-        echo -en "\n\n\t\t\tHit any key to continue"
-        read -k 1 line
-        continue
+	return 0
 }
 
 function cryptxt {
