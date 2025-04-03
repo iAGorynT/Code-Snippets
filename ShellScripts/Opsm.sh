@@ -27,13 +27,6 @@ function tmmenu {
 	Tmm.sh
 }
 
-function validate_input {
-    local input=$1
-    # Remove whitespace and check if input is numeric
-    input="${input// /}"
-    [[ "$input" =~ ^[0-9]+$ ]] && echo "$input" || echo ""
-}
-
 function menu {
     clear
     echo

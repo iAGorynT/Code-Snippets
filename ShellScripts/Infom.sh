@@ -85,30 +85,42 @@ function menu {
 
 while true; do
     menu
+    hit_any_key=false
     # Check if input is a valid number
     if [[ $option =~ ^[0-9]+$ ]]; then
         case $option in
             0)
-                break ;;
+                break 
+		;;
             1)
-                hname;;
+                hname
+		hit_any_key=true
+		;;
             2)
-                penv;;
+                penv
+		hit_any_key=true
+		;;
             3)
-                sver;;
+                sver
+		hit_any_key=true
+		;;
             4)
-                pkgu;;
+                pkgu
+		hit_any_key=true
+		;;
             5)
-                pall;;
+                pall
+		hit_any_key=true
+		;;
             6)
-                dstats;;
-            # Return / Enter Key Pressed
-            "")
-                break ;;
+                dstats
+		hit_any_key=true
+		;;
             *)
                 clear
                 echo "Sorry, wrong selection"
-                CLOSE_FINDER_WINDOWS=0;;
+                hit_any_key=true
+                ;;
         esac
     # Handle empty input (Enter key)
     elif [[ -z "$option" ]]; then
@@ -116,9 +128,13 @@ while true; do
     else
         clear
         echo "Please enter a valid number"
+        hit_any_key=true
     fi
-    echo -en "\n\n\t\t\tHit any key to continue"
-    read -k 1 line
+    # Check if the user should be prompted to hit any key to continue
+    if [[ "$hit_any_key" == "true" ]]; then
+        echo -en "\n\n\t\t\tHit any key to continue"
+        read -k 1 line
+    fi
     if [ $CLOSE_FINDER_WINDOWS -eq 1 ]; then
         close_finder_windows "Macintosh HD"
     fi
