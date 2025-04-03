@@ -6,9 +6,9 @@ trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 function enigma {
 	clear
         # Run Enigma Shortcuts App
-        echo "Info" "Standby... Enigma Running"
+        echo "Info:" "Standby... Enigma Running"
         shortcuts run "Enigma"
-        echo "Info" "Enigma Complete..."
+        echo "Info:" "Enigma Complete..."
         continue
 }
 
@@ -62,6 +62,7 @@ function menu {
 
 while true; do
     menu
+    hit_any_key=false
     # Check if input is a valid number
     if [[ $option =~ ^[0-9]+$ ]]; then
         case $option in
@@ -70,31 +71,40 @@ while true; do
 		;;
 	    1)
 	        enigma
+		hit_any_key=true
 		;;
 	    2)
 	        cryptxt
+		hit_any_key=true
 		;;
 	    3)
 	        crypvault
+		hit_any_key=true
 		;;
 	    4)
 	        gauthenticator
+		hit_any_key=true
 		;;
 	    5)
 	        gmanager
+		hit_any_key=true
 		;;
 	    6)
 	        otppy
+		hit_any_key=true
 		;;
 	    7)
 	        otpzsh
+		hit_any_key=true
 		;;
 	    8)
 	        otpzshmgr
+		hit_any_key=true
 		;;
             *)
                 clear
                 echo "Sorry, wrong selection"
+		hit_any_key=true
                 ;;
 	esac
     # Handle empty input (Enter key)
@@ -103,9 +113,13 @@ while true; do
     else
         clear
         echo "Please enter a valid number"
+	hit_any_key=true
     fi
-    echo -en "\n\n\t\t\tHit any key to continue"
-    read -k 1 line
+    # Check if the user should be prompted to hit any key to continue
+    if [[ "$hit_any_key" == "true" ]]; then
+        echo -en "\n\n\t\t\tHit any key to continue"
+        read -k 1 line
+    fi
 done
 
 clear
