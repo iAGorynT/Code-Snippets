@@ -9,7 +9,6 @@ function enigma {
         echo "Info:" "Standby... Enigma Running"
         shortcuts run "Enigma"
         echo "Info:" "Enigma Complete..."
-	return 0
 }
 
 function cryptxt {
