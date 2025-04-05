@@ -124,11 +124,7 @@ alias ghdl="GithubDownloader.sh" 	# Download Github Files
 
 #=> Dev Commands
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
-alias dsync="Devsync.sh"			# Dev to GitHUB Sync
-alias bsum="BackupSummary.sh"			# Crypvault Backup Summary
-alias otpg="Gauth.sh"                           # Generate Gauth OTP
-alias otpp="python3 ~/PythonCode/otp_generator.py"    # Generate Python OTP
-alias otpz="ZshOtpGenerator.sh"                 # Generate zsh OTP
+alias pyver="clear; echo 'Latest Python Versions...'; echo; pyenv install -l | grep -E '^ *[0-9]' | tail --lines 30" # List Latest Python Versions
 alias ai="LaunchAI.sh"				# Launch AI Chatbot
 alias fedoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
 alias fpdoc="FLibFormatPrintfDoc.sh"		# List FLibFormatPrintf.sh Documentation
