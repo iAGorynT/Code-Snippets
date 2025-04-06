@@ -75,6 +75,16 @@ echo "OpenSSL: $(openssl version)"
 echo
 info_echo "Python3:"
 python3 --version
+# Get the latest Python version from GitHub
+# This approach uses the GitHub API to check Python tags
+# Get all version tags and find the highest non-alpha/beta version
+latest_tag=$(curl -s https://api.github.com/repos/python/cpython/tags | 
+	grep -o '"name": "v[0-9]\+\.[0-9]\+\.[0-9]\+"' | 
+	sed 's/"name": "v//' | 
+	sed 's/"//' | 
+	sort -V | 
+	tail -1)
+info_echo "Latest Python version for Mac: $latest_tag"
 python3 -m pip --version | sed 's/\(.*\)from.*/\1/'
 pyenv --version
 echo
