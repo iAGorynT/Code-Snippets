@@ -124,8 +124,6 @@ alias ghdl="GithubDownloader.sh" 	# Download Github Files
 
 #=> Dev Commands
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
-alias pyver="clear; echo 'Latest Python Versions...'; echo; pyenv install -l | grep -E '^ *[0-9]' | tail --lines 30" # List Latest Python Versions
-alias ai="LaunchAI.sh"				# Launch AI Chatbot
 alias fedoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
 alias fpdoc="FLibFormatPrintfDoc.sh"		# List FLibFormatPrintf.sh Documentation
 alias ctest="Colortest.sh"			# Display Color Test
