@@ -56,10 +56,6 @@ echo
 # Node / Npm
 echo "Node: $(node --version)"
 echo "Npm: $(npm --version)"
-
-# Oath Toolkit
-echo
-echo "Oath Toolkit: $(oathtool --version | grep -e 'Toolkit')"
 echo
 
 # SSH
