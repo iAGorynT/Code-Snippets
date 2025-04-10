@@ -67,6 +67,11 @@ endfunction
 " Map Ctrl+p to toggle Copilot
 nnoremap <C-p> :call ToggleCopilot()<CR>
 
+" Map Copilot Suggestion keys for insert mode
+imap <C-n> <Plug>(copilot-next)
+imap <C-p> <Plug>(copilot-previous)
+imap <C-d> <Plug>(copilot-dismiss)
+
 " Display line numbers in files
 set number
 
