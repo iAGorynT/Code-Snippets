@@ -72,6 +72,23 @@ imap <C-n> <Plug>(copilot-next)
 imap <C-p> <Plug>(copilot-previous)
 imap <C-d> <Plug>(copilot-dismiss)
 
+" Show Copilot keymaps
+function! ShowCopilotKeymaps()
+  redir => output
+  silent! imap
+  redir END
+  new
+  setlocal buftype=nofile bufhidden=wipe noswapfile
+  let filtered_lines = []
+  for line in split(output, "\n")
+    if line =~ "copilot"
+      call add(filtered_lines, line)
+    endif
+  endfor
+  call setline(1, filtered_lines)
+endfunction
+nnoremap <leader>kc :call ShowCopilotKeymaps()<CR>
+
 " Display line numbers in files
 set number
 
