@@ -45,8 +45,8 @@ endif
 
 " Netrw Key Mapping Function
 function! NetrwMapping()
-" Map L1 to open Lexplore mode - Non-Recursive Mapping
-    nnoremap L1 :Lexplore<CR>:vertical resize 39<CR>
+" Map <leader>l to open Lexplore mode - Non-Recursive Mapping
+    nnoremap  <leader>l :Lexplore<CR>:vertical resize 39<CR>
 endfunction
 
 " Toggle Copilot on and off
