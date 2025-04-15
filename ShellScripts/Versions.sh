@@ -81,8 +81,11 @@ latest_tag=$(curl -s https://api.github.com/repos/python/cpython/tags |
 	sort -V | 
 	tail -1)
 info_echo "Latest Python version for Mac: $latest_tag"
-python3 -m pip --version | sed 's/\(.*\)from.*/\1/'
 pyenv --version
+python3 -m pip --version | sed 's/\(.*\)from.*/\1/'
+echo
+info_echo "Pip Installed Packages"
+pip list --format=columns
 echo
 
 # Rosetta2
