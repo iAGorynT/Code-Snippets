@@ -18,7 +18,7 @@ echo "Bash: $(bash --version)" | grep -e 'version '
 
 # GitHub
 echo
-info_echo "GitHub"
+info_echo "GitHub:"
 # Git
 echo "Git: $(git --version)"
 # Github CLI
@@ -84,7 +84,7 @@ info_echo "Latest Python version for Mac: $latest_tag"
 pyenv --version
 python3 -m pip --version | sed 's/\(.*\)from.*/\1/'
 echo
-info_echo "Pip Installed Packages"
+info_echo "Pip Installed Packages:"
 pip list --format=columns
 echo
 
