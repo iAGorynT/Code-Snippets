@@ -46,8 +46,8 @@ function brewapps {
     clear
     format_echo "Brew App Listing..." "yellow" "bold"
     echo
-    # Formatted Listing
-    brew desc --eval-all $(brew list) | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | more
+    # Formatted Listing and redirect stderr to /dev/null to suppress errors
+    brew desc --eval-all $(brew list) 2>/dev/null | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | more
     # For Unformatted Listing
     # brew desc --eval-all $(brew list)
 }

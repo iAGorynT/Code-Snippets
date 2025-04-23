@@ -29,8 +29,8 @@ contains_app() {
 
 # Temporary file to store brew command results
     temp_file=$(mktemp)
-# Run the command and store output in a temporary file
-    brew desc --eval-all $(brew list) | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t > $temp_file
+# Run the command and store output in a temporary file and redirect stderr to /dev/null to suppress errors
+    brew desc --eval-all $(brew list) 2>/dev/null | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t > $temp_file
 
 # Read file line by line and check for app names
 while IFS= read -r line; do
