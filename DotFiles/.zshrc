@@ -124,6 +124,7 @@ alias ghdl="GithubDownloader.sh" 	# Download Github Files
 
 #=> Dev Commands
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
+alias pipup="PipUpdate.sh"			# Update Python Packages
 alias fedoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
 alias fpdoc="FLibFormatPrintfDoc.sh"		# List FLibFormatPrintf.sh Documentation
 alias ctest="Colortest.sh"			# Display Color Test
