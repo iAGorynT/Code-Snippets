@@ -1,47 +1,17 @@
 #!/bin/zsh
 # Trap Ctl-C and Require a Menu Selection to Exit Script
-trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
+trap 'echo -e "\nCtrl-C will not terminate $0."' INT
 
-function brewm {
+function pipup {
     clear
-    brewm.sh
-}
-
-function opsm {
-    clear
-    opsm.sh
-}
-
-function devm {
-    clear
-    devm.sh
-}
-
-function ipm {
-    clear
-    ipm.sh
-}
-
-function util {
-    clear
-    utilm.sh
-}
-
-function testm {
-    clear
-    $HOME/ShellScripts/zTests/mmt.sh
+    PipUpdate.sh
 }
 
 function menu {
     clear
     echo
-    echo -e "\t\t\t\033[33;1mMain Menu\033[0m\n"
-    echo -e "\t1. Homebrew Menu"
-    echo -e "\t2. Ops Menu"
-    echo -e "\t3. Dev Menu"
-    echo -e "\t4. Iperf3 Menu"
-    echo -e "\t5. Utility Menu"
-    echo -e "\t6. Test Menu"
+    echo -e "\t\t\t\033[33;1mUtility Menu\033[0m\n"
+    echo -e "\t1. Pip Package Update"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     # Read entire input instead of just one character
@@ -50,33 +20,17 @@ function menu {
     option=$(echo $option | tr -d '[:space:]')
 }
 
-# Main loop
 while true; do
     menu
     hit_any_key=false
-    # Check if input is a valid number
     if [[ $option =~ ^[0-9]+$ ]]; then
         case $option in
             0)
                 break 
                 ;;
             1)
-                brewm
-                ;;
-            2)
-                opsm
-                ;;
-            3)
-                devm
-                ;;
-            4)
-                ipm
-                ;;
-            5)
-                util
-                ;;
-            6)
-                testm
+                pipup
+                hit_any_key=true
                 ;;
             *)
                 clear
