@@ -7,11 +7,17 @@ function pipup {
     PipUpdate.sh
 }
 
+function cleanup {
+    clear
+    Cleanup.sh
+}
+
 function menu {
     clear
     echo
     echo -e "\t\t\t\033[33;1mUtility Menu\033[0m\n"
     echo -e "\t1. Pip Package Update"
+    echo -e "\t2. Disk Cleanup"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     # Read entire input instead of just one character
@@ -30,6 +36,10 @@ while true; do
                 ;;
             1)
                 pipup
+                hit_any_key=true
+                ;;
+            2)
+                cleanup
                 hit_any_key=true
                 ;;
             *)

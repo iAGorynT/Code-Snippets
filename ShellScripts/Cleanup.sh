@@ -1,0 +1,60 @@
+#!/bin/zsh
+
+# Source function library with error handling
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+if [[ ! -f "$FORMAT_LIBRARY" ]]; then
+    printf "Error: Required library %s not found\n" "$FORMAT_LIBRARY" >&2
+    exit 1
+fi
+source "$FORMAT_LIBRARY"
+
+# Function to display script header
+display_header() {
+    clear
+    format_printf "Disk Cleanup..." yellow bold
+    printf "\n"
+}
+
+# Function to delete a file or directory
+delete_item() {
+  local target="$1"
+  if [ -f "$target" ] || [ -d "$target" ]; then
+    info_printf "Deleting: $target"
+    rm -rv "$target"
+  else
+    info_printf "Nothing to delete: '$target' does not exist or is not a file/directory."
+  fi
+}
+
+# Function to get yes/no input
+get_yes_no() {
+    local prompt="$1"
+    local response
+    
+    while true; do
+        read "response?$prompt (y/n): "
+        case ${response:l} in
+            y|yes) return 0 ;;
+            n|no)  return 1 ;;
+	    *) format_printf "Please answer yes (Y) or no (N)." ;;
+        esac
+    done
+}
+
+# Main script execution
+main() {
+    # Display header
+    display_header
+
+    # Ask if user wants to run disk cleanup
+    if get_yes_no "🚀 Do you want to run Disk Cleanup?"; then
+        printf "\n"
+        # Delete Pip Update Log
+        delete_item $HOME/pip_update.log
+    else
+        format_printf "❌ Pip Package Update cancelled by user."
+    fi
+}
+
+# Run the script
+main
