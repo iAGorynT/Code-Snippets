@@ -47,7 +47,7 @@ main() {
     display_header
 
     # Ask if user wants to run disk cleanup
-    if get_yes_no "🚀 Do you want to run Disk Cleanup?"; then
+    if get_yes_no "$(format_printf "Do you want to run Disk Cleanup?" none "rocket")"; then
         printf "\n"
         # Delete Pip Update Log
         delete_item $HOME/pip_update.log
