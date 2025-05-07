@@ -52,7 +52,7 @@ main() {
         # Delete Pip Update Log
         delete_item $HOME/pip_update.log
     else
-        format_printf "❌ Pip Package Update cancelled by user."
+        error_printf "Disk Cleanup cancelled by user."
     fi
 }
 
