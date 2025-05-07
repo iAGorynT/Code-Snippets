@@ -18,7 +18,7 @@ echo " "
 # Start
 liststart="# Function:"
 # End
-listend="# Echotype:"
+listend="# Icon:"
 
 # Initialize Variables
 zshrcfile="$HOME/ShellScripts/FLibFormatPrintf.sh"
