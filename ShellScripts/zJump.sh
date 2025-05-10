@@ -5,6 +5,7 @@
 typeset -A ZJUMP_DIRS=(
     [hom]="$HOME"
     [doc]="$HOME/Documents"
+    [log]="$HOME/.logs"
     [dt]="$HOME/Desktop"
     [dl]="$HOME/Downloads"
     [ss]="$HOME/ShellScripts"
