@@ -7,6 +7,11 @@ function pipup {
     PipUpdate.sh
 }
 
+function vimup {
+    clear
+    VimUpdate.sh
+}
+
 function cleanup {
     clear
     Cleanup.sh
@@ -17,7 +22,8 @@ function menu {
     echo
     echo -e "\t\t\t\033[33;1mUtility Menu\033[0m\n"
     echo -e "\t1. Pip Package Update"
-    echo -e "\t2. Disk Cleanup"
+    echo -e "\t2. Vim Plugin Update"
+    echo -e "\t3. Disk Cleanup"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     # Read entire input instead of just one character
@@ -39,6 +45,10 @@ while true; do
                 hit_any_key=true
                 ;;
             2)
+                vimup
+                hit_any_key=true
+                ;;
+            3)
                 cleanup
                 hit_any_key=true
                 ;;

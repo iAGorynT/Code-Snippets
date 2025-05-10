@@ -15,7 +15,7 @@ display_header() {
 
 # Function to update pip packages
 update_pip_packages() {
-    local LOG_FILE="$HOME/pip_update.log"
+    local LOG_FILE="$HOME/.logs/pip_update.log"
     echo | tee -a "$LOG_FILE"
     package_printf "Starting pip package update..." | tee -a "$LOG_FILE"
     time_printf "Timestamp: $(date)" | tee -a "$LOG_FILE"
@@ -135,7 +135,7 @@ get_yes_no() {
 
 # Main script execution
 main() {
-    local LOG_FILE="$HOME/pip_update.log"
+    local LOG_FILE="$HOME/.logs/pip_update.log"
     display_header
     
     # Ask if user wants to run pip package update

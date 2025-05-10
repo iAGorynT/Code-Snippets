@@ -50,7 +50,9 @@ main() {
     if get_yes_no "$(format_printf "Do you want to run Disk Cleanup?" none "rocket")"; then
         printf "\n"
         # Delete Pip Update Log
-        delete_item $HOME/pip_update.log
+        delete_item $HOME/.logs/pip_update.log
+	# Delete Vim Plugin Update Log
+	delete_item $HOME/.logs/vim_plugin_update.log
     else
         error_printf "Disk Cleanup cancelled by user."
     fi
