@@ -2,6 +2,11 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e "\nCtrl-C will not terminate $0."' INT
 
+function pyup {
+    clear
+    PyUpdate.sh
+}
+
 function pipup {
     clear
     PipUpdate.sh
@@ -21,9 +26,10 @@ function menu {
     clear
     echo
     echo -e "\t\t\t\033[33;1mUtility Menu\033[0m\n"
-    echo -e "\t1. Pip Package Update"
-    echo -e "\t2. Vim Plugin Update"
-    echo -e "\t3. Disk Cleanup"
+    echo -e "\t1. Python Update"
+    echo -e "\t2. Pip Package Update"
+    echo -e "\t3. Vim Plugin Update"
+    echo -e "\t4. Disk Cleanup"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     # Read entire input instead of just one character
@@ -41,14 +47,18 @@ while true; do
                 break 
                 ;;
             1)
-                pipup
+                pyup
                 hit_any_key=true
                 ;;
             2)
-                vimup
+                pipup
                 hit_any_key=true
                 ;;
             3)
+                vimup
+                hit_any_key=true
+                ;;
+            4)
                 cleanup
                 hit_any_key=true
                 ;;
