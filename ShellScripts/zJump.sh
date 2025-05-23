@@ -43,7 +43,7 @@ zjump() {
 
     # Change directory and show confirmation
     if [[ -n "$target_dir" ]]; then
-        cd "$target_dir" && print -P "%F{green}Changed to:%f $target_dir"
+        cd "$target_dir" && clear && print -P "%F{green}Changed to:%f $target_dir" && echo && ls -a
     fi
 }
 
