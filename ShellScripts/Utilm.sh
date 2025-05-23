@@ -22,6 +22,11 @@ function cleanup {
     Cleanup.sh
 }
 
+function cleanupclaude {
+    clear
+    CleanupClaude.sh
+}
+
 function menu {
     clear
     echo
@@ -30,6 +35,7 @@ function menu {
     echo -e "\t2. Pip Package Update"
     echo -e "\t3. Vim Plugin Update"
     echo -e "\t4. Disk Cleanup"
+    echo -e "\t5. Cleanup Claude Workspace"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     # Read entire input instead of just one character
@@ -60,6 +66,10 @@ while true; do
                 ;;
             4)
                 cleanup
+                hit_any_key=true
+                ;;
+            5)
+                cleanupclaude
                 hit_any_key=true
                 ;;
             *)
