@@ -6,7 +6,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 #=> General Commands
-alias ca="clear; cat ~/.zshrc | more"	# Display .zshrc Contents
+alias ba="clear; bat ~/.zshrc"		# Display .zshrc Contents
 alias da="Aliasdoc.sh"			# Display .zshrc Contents Using Doc Script
 alias clr="clear"			# Clear Screen
 alias dsleep="pmset displaysleepnow"	# Put Mac Display To Sleep
@@ -174,9 +174,6 @@ eval "$(gh copilot alias -- zsh)"
 # zJump - Jump to Frequent Directories
 # Note: zJump is a Shell Function
 source ~/bin/zJump.sh
-
-# Activate Zsh Syntax Highlighting
-source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Pyenv - Python Version Manager
 export PYENV_ROOT="$HOME/.pyenv"
