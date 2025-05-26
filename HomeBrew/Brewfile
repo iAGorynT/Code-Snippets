@@ -1,5 +1,7 @@
 tap "teamookla/speedtest"
 brew "bat"
+brew "fd"
+brew "fzf"
 brew "gauth"
 brew "gh"
 brew "git"
