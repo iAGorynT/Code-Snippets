@@ -186,6 +186,9 @@ export FZF_ALT_C_COMMAND="fd . --type d --hidden --no-ignore --exclude .git --ex
 # Disable priview and clean up layout for ALT+C
 export FZF_ALT_C_OPTS="--no-preview --layout=reverse --height=40%"
 
+# Disable preview and clean up layout for CTRL-R
+export FZF_CTRL_R_OPTS="--no-preview --layout=reverse --height=40% --tiebreak=index"
+
 # Source fzf
 source <(fzf --zsh)
 
