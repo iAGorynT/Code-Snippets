@@ -183,7 +183,7 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 # ALT+C stays for directory search
 export FZF_ALT_C_COMMAND="fd . --type d --hidden --no-ignore --exclude .git --exclude node_modules $HOME/bin $HOME/bin/zTests $HOME/PythonCode $HOME/.logs $HOME/Downloads $HOME/Documents"
 
-# Disable priview and clean up layout for ALT+C
+# Disable preview and clean up layout for ALT+C
 export FZF_ALT_C_OPTS="--no-preview --layout=reverse --height=40%"
 
 # Disable preview and clean up layout for CTRL-R
