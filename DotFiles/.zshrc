@@ -168,25 +168,25 @@ then
   compinit
 fi
 
-# Enable fzf, fd, bat integration, key bindings and fuzzy completion
-# Make fzf look nicer
+# Enable fzf, fd, bat Integration, Key Bindings and Fuzzy Completion
+# Make fzf Look Nicer
 export FZF_DEFAULT_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}' --preview-window=right:60%"
 
-# Custom fd-based commands for fzf
-# Optimized fd + fzf with bat preview
+# Custom fd-based Commands for fzf
+# Optimized fd + fzf with bat Preview
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --no-ignore --exclude .git --exclude node_modules --exclude __pycache__ . $HOME/bin $HOME/zTests $HOME/PythonCode $HOME/.logs $HOME/Downloads $HOME/Documents"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# Preview with bat in CTRL-T and general fzf
+# Preview with bat in CTRL-T and General fzf
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :200 {} || cat {}' --preview-window=right:60%"
 
-# ALT+C stays for directory search
+# ALT+C stays for Directory Search
 export FZF_ALT_C_COMMAND="fd . --type d --hidden --no-ignore --exclude .git --exclude node_modules $HOME/bin $HOME/bin/zTests $HOME/PythonCode $HOME/.logs $HOME/Downloads $HOME/Documents"
 
-# Disable preview and clean up layout for ALT+C
+# Disable Preview and Clean Up Layout for ALT+C
 export FZF_ALT_C_OPTS="--no-preview --layout=reverse --height=40%"
 
-# Disable preview and clean up layout for CTRL-R
+# Disable Preview and Clean Up Layout for CTRL-R
 export FZF_CTRL_R_OPTS="--no-preview --layout=reverse --height=40% --tiebreak=index"
 
 # Source fzf
