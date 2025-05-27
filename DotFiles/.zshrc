@@ -156,7 +156,7 @@ export CLICOLOR=1
 # Activate Zsh Command Prompt Theme / Layout
 source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# To Customize Prompt, Run `p10k configure` or Edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Enable Homebrew Shell Completions
@@ -180,7 +180,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Preview with bat in CTRL-T and General fzf
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :200 {} || cat {}' --preview-window=right:60%"
 
-# ALT+C stays for Directory Search
+# ALT+C Stays for Directory Search
 export FZF_ALT_C_COMMAND="fd . --type d --hidden --no-ignore --exclude .git --exclude node_modules $HOME/bin $HOME/bin/zTests $HOME/PythonCode $HOME/.logs $HOME/Downloads $HOME/Documents"
 
 # Disable Preview and Clean Up Layout for ALT+C
