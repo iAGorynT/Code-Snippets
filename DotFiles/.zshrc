@@ -156,7 +156,7 @@ export CLICOLOR=1
 # Activate Zsh Command Prompt Theme / Layout
 source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# To Customize Prompt, Run `p10k configure` or Edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Enable Homebrew Shell Completions
