@@ -7,12 +7,13 @@ source "$FORMAT_LIBRARY"
 
 # Function to display script header
 display_header() {
-    clear
-    format_printf "Java Update..." "yellow" "bold"
+    local header="Java Update..."
+    [[ "$1" == "--no-clear" ]] || clear
+    format_printf "$header" "yellow" "bold"
 }
 
 # --- Main script execution ---
-display_header
+display_header "$1"
 printf "\n"
 
 # Get current installed Java version (Zulu style)
@@ -43,7 +44,7 @@ if [[ $? -ne 0 || -z "$file_list" ]]; then
 fi
 
 # Extract macOS .dmg filenames with Zulu and Java 11+
-dmg_links=(${(@f)$(echo "$file_list" | grep -Eo 'zulu([0-9]+\.[0-9]+\.[0-9]+)-ca-jdk(1[1-9]|2[0-9])[0-9\.\-]*-macosx_[^"]+\.dmg')})
+dmg_links=(${(@f)$(grep -Eo 'zulu([0-9]+\.[0-9]+\.[0-9]+)-ca-jdk(1[1-9]|2[0-9])[0-9\.\-]*-macosx_[^"]+\.dmg' <<< "$file_list")})
 
 # Remove duplicate links and sort (reverse natural sort)
 unique_dmg_links=(${(u)dmg_links[@]})
@@ -52,9 +53,8 @@ sorted=(${(On)unique_dmg_links[@]})
 # Extract latest Zulu version
 latest_zulu_version=""
 for link in "${sorted[@]}"; do
-    version=$(echo "$link" | sed -E 's/zulu([0-9]+\.[0-9]+\.[0-9]+)-ca.*/\1/')
-    if [[ -n "$version" ]]; then
-        latest_zulu_version="$version"
+    if [[ "$link" =~ zulu([0-9]+\.[0-9]+\.[0-9]+)-ca ]]; then
+        latest_zulu_version="${match[1]}"
         break
     fi
 done
@@ -68,9 +68,11 @@ printf "\n"
 success_printf "Latest Zulu version: $latest_zulu_version"
 package_printf "macOS .dmg links for this version:"
 for link in "${sorted[@]}"; do
-    version=$(echo "$link" | sed -E 's/zulu([0-9]+\.[0-9]+\.[0-9]+)-ca.*/\1/')
-    if [[ "$version" == "$latest_zulu_version" ]]; then
-        printf "  https://cdn.azul.com/zulu/bin/%s\n" "$link"
+    if [[ "$link" =~ zulu([0-9]+\.[0-9]+\.[0-9]+)-ca ]]; then
+        version="${match[1]}"
+        if [[ "$version" == "$latest_zulu_version" ]]; then
+            printf "  https://cdn.azul.com/zulu/bin/%s\n" "$link"
+        fi
     fi
 done
 printf "\n"
@@ -78,9 +80,7 @@ printf "\n"
 # Function to compare semver-style Zulu versions
 ver_gt() {
     autoload -Uz is-at-least
-    # is-at-least returns 0 if $2 >= $1, so we need to reverse the logic
-    is-at-least "$1" "$2"
-    return $((!$?))
+    ! is-at-least "$1" "$2"
 }
 
 # Compare and output result only if we have a current version
