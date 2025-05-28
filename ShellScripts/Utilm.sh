@@ -17,6 +17,11 @@ function vimup {
     VimUpdate.sh
 }
 
+function javaup {
+    clear
+    JavaUpdate.sh
+}
+
 function cleanup {
     clear
     Cleanup.sh
@@ -34,8 +39,9 @@ function menu {
     echo -e "\t1. Python Update"
     echo -e "\t2. Pip Package Update"
     echo -e "\t3. Vim Plugin Update"
-    echo -e "\t4. Disk Cleanup"
-    echo -e "\t5. Cleanup Claude Workspace"
+    echo -e "\t4. Java Update"
+    echo -e "\t5. Disk Cleanup"
+    echo -e "\t6. Cleanup Claude Workspace"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     # Read entire input instead of just one character
@@ -65,10 +71,14 @@ while true; do
                 hit_any_key=true
                 ;;
             4)
-                cleanup
+                javaup
                 hit_any_key=true
                 ;;
             5)
+                cleanup
+                hit_any_key=true
+                ;;
+            6)
                 cleanupclaude
                 hit_any_key=true
                 ;;
