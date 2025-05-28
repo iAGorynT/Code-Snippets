@@ -33,14 +33,14 @@ declare -A formats=(
 
 # Common icons for messaging
 declare -A icons=(
-    [info]="ℹ️"
+    [info]="ℹ️ "
     [success]="✅"
     [warning]="⚠️"
     [error]="❌"
     [update]="🔄"
     [package]="📦"
     [time]="🕒"
-    [upgrade]="⬆️"
+    [upgrade]="⬆️ "
     [rocket]="🚀"
     [log]="📄"
     [clean]="🧹"
