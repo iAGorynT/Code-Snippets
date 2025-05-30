@@ -47,7 +47,7 @@ fi
 if [[ -z "$current_zulu_version" ]]; then
     warning_echo "Current installed Zulu version: Not found (or not Zulu JDK)"
 else
-    echo "Zulu version: $current_zulu_version"
+    echo "Zulu $current_zulu_version"
 fi
 # Fetch list of all Zulu .dmg files from CDN
 file_list=$(curl -s https://cdn.azul.com/zulu/bin/)
