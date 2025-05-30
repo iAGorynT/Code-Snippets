@@ -34,7 +34,45 @@ echo "Homebrew: $(brew --version)"
 # Java
 echo
 info_echo "Java:"
-java --version
+# Get current installed Java version (Zulu style)
+# Handle both formats: Zulu24.30.11 and Zulu24.30+11-CA
+java_version_output=$(java -version 2>&1)
+if echo "$java_version_output" | grep -q "Zulu"; then
+    # Extract the Zulu version pattern and clean it up
+    current_zulu_version=$(echo "$java_version_output" | grep -oE 'Zulu[0-9]+\.[0-9]+[+\.][0-9]+' | head -1 | sed -E 's/Zulu([0-9]+\.[0-9]+)[+\.]([0-9]+).*/\1.\2/')
+else
+    current_zulu_version=""
+fi
+# Check if we found a Zulu version
+if [[ -z "$current_zulu_version" ]]; then
+    warning_echo "Current installed Zulu version: Not found (or not Zulu JDK)"
+else
+    echo "Zulu version: $current_zulu_version"
+fi
+# Fetch list of all Zulu .dmg files from CDN
+file_list=$(curl -s https://cdn.azul.com/zulu/bin/)
+# Check if curl was successful
+if [[ $? -ne 0 || -z "$file_list" ]]; then
+    error_echo "Failed to fetch version information from Azul CDN" true
+fi
+# Extract macOS .dmg filenames with Zulu and Java 11+
+dmg_links=(${(@f)$(grep -Eo 'zulu([0-9]+\.[0-9]+\.[0-9]+)-ca-jdk(1[1-9]|2[0-9])[0-9\.\-]*-macosx_[^"]+\.dmg' <<< "$file_list")})
+# Remove duplicate links and sort (reverse natural sort)
+unique_dmg_links=(${(u)dmg_links[@]})
+sorted=(${(On)unique_dmg_links[@]})
+# Extract latest Zulu version
+latest_zulu_version=""
+for link in "${sorted[@]}"; do
+    if [[ "$link" =~ zulu([0-9]+\.[0-9]+\.[0-9]+)-ca ]]; then
+        latest_zulu_version="${match[1]}"
+        break
+    fi
+done
+if [[ -z "$latest_zulu_version" ]]; then
+    error_echo "Could not determine latest Zulu version" true
+fi
+# Now list all links that match this latest version
+info_echo "Latest Zulu version for Mac: $latest_zulu_version"
 echo
 
 # jq
