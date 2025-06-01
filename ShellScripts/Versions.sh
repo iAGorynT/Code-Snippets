@@ -1,39 +1,36 @@
 #!/bin/zsh
-
 # Source function library with error handling
-FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatEcho.sh"
-if [[ ! -f "$FORMAT_LIBRARY" ]]; then
-    echo "Error: Required library $FORMAT_LIBRARY not found" >&2
-    exit 1
-fi
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+
+[[ -f "$FORMAT_LIBRARY" ]] || { echo "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
 # Display Software Versions
 clear
-format_echo "Software Versions..." yellow bold
-echo
+format_printf "Software Versions..." yellow bold
+printf "\n"
 
 # Bash
-echo "Bash: $(bash --version)" | grep -e 'version '
+printf "Bash: %s\n" "$(bash --version)" | grep -e 'version '
 
 # GitHub
-echo
-info_echo "GitHub:"
+printf "\n"
+info_printf "GitHub:"
 # Git
-echo "Git: $(git --version)"
+printf "Git: %s\n" "$(git --version)"
 # Github CLI
-echo "GitHub CLI: $(gh --version)" | grep -e 'version '
-echo
+printf "GitHub CLI: %s\n" "$(gh --version)" | grep -e 'version '
+printf "\n"
 
 # Homebrew
-echo "Homebrew: $(brew --version)"
+printf "Homebrew: %s\n" "$(brew --version)"
 
 # Homebrew Autoupdate
 # echo "Homebrew Autoupdate: $(brew autoupdate version | grep -e 'Version')" # Exclude Change Log
 
 # Java
-echo
-info_echo "Java:"
+printf "\n"
+info_printf "Java:"
 # Get current installed Java version (Zulu style)
 # Handle both formats: Zulu24.30.11 and Zulu24.30+11-CA
 java_version_output=$(java -version 2>&1)
@@ -45,15 +42,15 @@ else
 fi
 # Check if we found a Zulu version
 if [[ -z "$current_zulu_version" ]]; then
-    warning_echo "Current installed Zulu version: Not found (or not Zulu JDK)"
+    warning_printf "Current installed Zulu version: Not found (or not Zulu JDK)"
 else
-    echo "Zulu $current_zulu_version"
+    printf "Zulu %s\n" "$current_zulu_version"
 fi
 # Fetch list of all Zulu .dmg files from CDN
 file_list=$(curl -s https://cdn.azul.com/zulu/bin/)
 # Check if curl was successful
 if [[ $? -ne 0 || -z "$file_list" ]]; then
-    error_echo "Failed to fetch version information from Azul CDN" true
+    error_printf "Failed to fetch version information from Azul CDN" true
 fi
 # Extract macOS .dmg filenames with Zulu and Java 11+
 dmg_links=(${(@f)$(grep -Eo 'zulu([0-9]+\.[0-9]+\.[0-9]+)-ca-jdk(1[1-9]|2[0-9])[0-9\.\-]*-macosx_[^"]+\.dmg' <<< "$file_list")})
@@ -69,45 +66,45 @@ for link in "${sorted[@]}"; do
     fi
 done
 if [[ -z "$latest_zulu_version" ]]; then
-    error_echo "Could not determine latest Zulu version" true
+    error_printf "Could not determine latest Zulu version" true
 fi
 # Now list all links that match this latest version
-info_echo "Latest Zulu version for Mac: $latest_zulu_version"
-echo
+info_printf "Latest Zulu version for Mac: $latest_zulu_version"
+printf "\n"
 
 # jq
-echo "jq JSON processor: $(jq -V)"
+printf "jq JSON processor: %s\n" "$(jq -V)"
 
 # MacVim
-echo
-info_echo "MacVim:"
+printf "\n"
+info_printf "MacVim:"
 mver=$(mvim --version | grep -e 'VIM - Vi IMproved' -e 'Included patches')
-echo "Version: $mver"
-format_echo "Autoload" "white" "underline"
+printf "Version: %s\n" "$mver"
+format_printf "Autoload" "white" "underline"
 ls -1 ~/.vim/autoload
-format_echo "Plugins" "white" "underline"
+format_printf "Plugins" "white" "underline"
 ls --color=never -1 ~/.vim/plugged
-format_echo "Colors" "white" "underline"
+format_printf "Colors" "white" "underline"
 ls -1 ~/.vim/colors
-echo
+printf "\n"
 
 # Node / Npm
-echo "Node: $(node --version)"
-echo "Npm: $(npm --version)"
-echo
+printf "Node: %s\n" "$(node --version)"
+printf "Npm: %s\n" "$(npm --version)"
+printf "\n"
 
 # SSH
-# Had to run ssh command and pipe it to echo -n (no new line)
-# in order to get results on one line.  Just trying to echo
+# Had to run ssh command and pipe it to printf (no new line)
+# in order to get results on one line.  Just trying to printf
 # produced 2 line output.
-ssh -V | echo -n "OpenSSH: "
+ssh -V 2>&1 | { read line; printf "OpenSSH: %s\n" "$line"; }
 
 # OpenSSL
-echo "OpenSSL: $(openssl version)"
+printf "OpenSSL: %s\n" "$(openssl version)"
 
 # Python
-echo
-info_echo "Python3:"
+printf "\n"
+info_printf "Python3:"
 python3 --version
 # Get the latest Python version from GitHub
 # This approach uses the GitHub API to check Python tags
@@ -118,30 +115,28 @@ latest_tag=$(curl -s https://api.github.com/repos/python/cpython/tags |
 	sed 's/"//' | 
 	sort -V | 
 	tail -1)
-info_echo "Latest Python version for Mac: $latest_tag"
+info_printf "Latest Python version for Mac: $latest_tag"
 pyenv --version
 python3 -m pip --version | sed 's/\(.*\)from.*/\1/'
-echo
-info_echo "Pip Installed Packages:"
+printf "\n"
+info_printf "Pip Installed Packages:"
 pip list --format=columns
-echo
+printf "\n"
 
 # Rosetta2
 # Check for the presence of the Rosetta 2 installation receipt
 if command -v lsbom >/dev/null && lsbom -f /Library/Apple/System/Library/Receipts/com.apple.pkg.RosettaUpdateAuto.bom >/dev/null 2>&1; then
-    info_echo "Rosetta2: Installed"
+    info_printf "Rosetta2: Installed"
 else
-    error_echo "Rosetta2: NOT installed"
+    error_printf "Rosetta2: NOT installed"
 fi
 
 # XCode Command Line Tools
-echo
-info_echo "Xcode Command Line Tools:"
+printf "\n"
+info_printf "Xcode Command Line Tools:"
 pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
-echo
+printf "\n"
 
 # Zsh
-echo "Zsh: $(zsh --version)"
-
-# echo
+printf "Zsh: %s\n" "$(zsh --version)"
 
