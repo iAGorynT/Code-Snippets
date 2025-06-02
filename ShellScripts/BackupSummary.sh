@@ -4,28 +4,25 @@ setopt ERR_EXIT
 setopt PIPE_FAIL
 
 # Source function library with error handling
-FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatEcho.sh"
-if [[ ! -f "$FORMAT_LIBRARY" ]]; then
-    echo "Error: Required library $FORMAT_LIBRARY not found" >&2
-    exit 1
-fi
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library %s not found\n" "$FORMAT_LIBRARY" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
 # Function to check if directory exists
 function check_directory {
     local dir=$1
     if [[ ! -d "$dir" ]]; then
-        error_echo "Error: Directory '$dir' not found" true >&2
+        error_printf "Error: Directory '$dir' not found" true >&2
     fi
 }
 
 # Function to print section header
 function print_header {
     local text=$1
-    echo
-    info_echo "$text" 
-    echo "Filename | Modified Date | Size"
-    echo "-------------------------------------"
+    printf "\n"
+    info_printf "$text"
+    printf "Filename | Modified Date | Size\n"
+    printf "-------------------------------------\n"
 }
 
 # Function to search files
@@ -48,7 +45,7 @@ function search_files {
             "$(basename "$file")" \
             "$(date -r "$file" "+%Y-%m-%d %H:%M:%S")" \
             "$size"
-    done | sort -t'|' -k1,1 | sed 's/|/ | /g' || error_echo "Error searching in $dir" >&2
+    done | sort -t'|' -k1,1 | sed 's/|/ | /g' || error_printf "Error searching in $dir" >&2
 }
 
 # Function to eject thumb drive
@@ -60,7 +57,7 @@ function eject_drive {
     
     # Only display output if it's not empty
     if [[ -n "$eject_output" ]]; then
-        info_echo "$eject_output"
+        info_printf "$eject_output"
     fi
 }
 
@@ -79,7 +76,7 @@ function main {
     
     # Print Title
     clear
-    format_echo "Backup Summary..." yellow bold
+    format_printf "Backup Summary..." yellow bold
     
     # Search for encrypted files
     print_header "Encrypted Files (.enc) in ~/Downloads/zVault Backup"
@@ -101,13 +98,13 @@ function main {
 
     # Ask to Eject Brukasa Thumb Drive
     if [[ "$brukasa_disk" == "true" ]]; then
-        echo
+        printf "\n"
         while true; do
             read yn\?"Eject Private Thumb Drive (Y/N): "
             case $yn in
                 [Yy]* ) eject_drive "$private_path"; break;;
                 [Nn]* ) break;;
-                * ) echo "Please answer yes (Y) or no (N).";;
+                * ) printf "Please answer yes (Y) or no (N).\n";;
             esac
         done
     fi
