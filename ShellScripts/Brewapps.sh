@@ -1,17 +1,14 @@
 #!/bin/zsh
 
 # Source function library with error handling
-FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatEcho.sh"
-if [[ ! -f "$FORMAT_LIBRARY" ]]; then
-    echo "Error: Required library $FORMAT_LIBRARY not found" >&2
-    exit 1
-fi
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library %s not found\n" "$FORMAT_LIBRARY" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
 # List Selected Application Descriptions
 clear
-format_echo "App Descriptions..." "yellow" "bold"
-echo " "
+format_printf "App Descriptions..." "yellow" "bold"
+printf "\n"
 
 # Array of app names
 apps=("pyenv:" "iperf3:" "jq:" "qlmarkdown:" "macdown:" "speedtest:" "github:" "macvim:" "syntax-highlight:")
