@@ -102,15 +102,19 @@ format_printf() {
     # Process remaining arguments
     local format_args=()
     while [[ $# -gt 0 ]]; do
-        if [[ $1 == "brew" ]]; then
+        if [[ -z "${1:-}" ]]; then
+            # Skip empty arguments
+            shift
+            continue
+        elif [[ $1 == "brew" ]]; then
             # Brew style
             echotype="brew"
         elif [[ $1 == "brewl" ]]; then
             # Brew Launchd style
             echotype="brewl"
-        elif [[ -n ${icons[$1]} || ${#1} -le 2 ]]; then
+        elif [[ -n ${icons[$1]:-} || ${#1} -le 2 ]]; then
             # It's an icon name from our predefined list or a direct emoji/character
-            if [[ -n ${icons[$1]} ]]; then
+            if [[ -n ${icons[$1]:-} ]]; then
                 icon="${icons[$1]} "  # Use predefined icon with space
             elif [[ $1 != "none" ]]; then
                 icon="$1 "  # Use custom icon with space
@@ -242,7 +246,7 @@ tee_printf() {
     
     # Print to log file without formatting if log file is specified
     if [[ -n "$log_file" ]]; then
-        if [[ -n "${icons[$icon]}" ]]; then
+        if [[ -n "${icons[$icon]:-}" ]]; then
             echo "${icons[$icon]} $message" >> "$log_file"
         else
             echo "$message" >> "$log_file"

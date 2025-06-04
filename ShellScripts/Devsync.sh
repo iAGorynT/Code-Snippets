@@ -17,29 +17,26 @@ readonly BREWFILES=(
 )
 
 # Source function library with error handling
-FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatEcho.sh"
-if [[ ! -f "$FORMAT_LIBRARY" ]]; then
-    echo "Error: Required library $FORMAT_LIBRARY not found" >&2
-    exit 1
-fi
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { echo "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
 function sync_shellscripts() {
-    info_echo "Syncing ShellScripts..."
+    info_printf "Syncing ShellScripts..."
     rsync -avhl --delete --exclude '.DS_Store' \
         "$SHELL_DIR/" \
         "$TARGET_BASE_DIR/ShellScripts"
 }
 
 function sync_pythoncode () {
-    info_echo "Syncing PythonCode..."
+    info_printf "Syncing PythonCode..."
     rsync -avhl --delete --exclude '.DS_Store' \
         "$PYCODE_DIR/" \
         "$TARGET_BASE_DIR/PythonCode"
 }
 
 function sync_dotfiles() {
-    info_echo "Syncing DotFiles..."
+    info_printf "Syncing DotFiles..."
     for dotfile in "${DOTFILES[@]}"; do
         rsync -avhl --delete \
             "$HOME/$dotfile" \
@@ -48,7 +45,7 @@ function sync_dotfiles() {
 }
 
 function sync_brewfiles() {
-    info_echo "Syncing BrewFiles..."
+    info_printf "Syncing BrewFiles..."
     for brewfile in "${BREWFILES[@]}"; do
         rsync -avhl --delete \
             "$HOME/$brewfile" \
@@ -58,13 +55,13 @@ function sync_brewfiles() {
 
 function check_macvim() {
     if pgrep -i "MacVim" >/dev/null; then
-        error_echo "MacVim is Running! Quit and Rerun Devsync..." true
+        error_printf "MacVim is Running! Quit and Rerun Devsync..." true
     fi
 }
 
 function main() {
     clear
-    format_echo "Dev to GitHub Sync Starting..." "yellow" "bold"
+    format_printf "Dev to GitHub Sync Starting..." "yellow" "bold"
     echo
 
     check_macvim
@@ -77,7 +74,7 @@ function main() {
     sync_brewfiles
     echo
 
-    success_echo "Sync Completed!"
+    success_printf "Sync Completed!"
 }
 
 # Execute main function if script is being run directly (not sourced)
