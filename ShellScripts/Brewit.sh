@@ -3,66 +3,63 @@
 # Update BrewitLaunchd.sh with changes when necessary.
 
 # Source function library with error handling
-FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatEcho.sh"
-if [[ ! -f "$FORMAT_LIBRARY" ]]; then
-    echo "Error: Required library $FORMAT_LIBRARY not found" >&2
-    exit 1
-fi
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library %s not found\n" "$FORMAT_LIBRARY" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
 clear
-format_echo "Brew Update, Upgrade, and Cleanup..." "yellow" "bold"
-echo " "
+format_printf "Brew Update, Upgrade, and Cleanup..." "yellow" "bold"
+printf "\n"
 
 # HomeBrew Update
-format_echo "HomeBrew Update..." "none" "brew"
-echo " "
+format_printf "HomeBrew Update..." "none" "brew"
+printf "\n"
 brew update
 brew upgrade
 
 # Cask Upgrade
-format_echo "Cask Upgrade..." "none" "brew"
-echo " "
+format_printf "Cask Upgrade..." "none" "brew"
+printf "\n"
 brew upgrade --cask --greedy
 
 # Create temporary Brewfile
-format_echo "Creating temporary Brewfile..." "none" "brew"
-echo " "
+format_printf "Creating temporary Brewfile..." "none" "brew"
+printf "\n"
 cd
 brew bundle dump --file=Brewfile.new
 
 # Check if previous Brewfile exists
 if [[ -f Brewfile ]]; then
-    format_echo "Comparing with existing Brewfile..." "none" "brew"
+    format_printf "Comparing with existing Brewfile..." "none" "brew"
     
     # Compare files, ignoring whitespace
     if diff -w Brewfile Brewfile.new > /dev/null; then
-        format_echo "No changes detected. Keeping existing Brewfile." "none" "brew"
+        format_printf "No changes detected. Keeping existing Brewfile." "none" "brew"
         rm Brewfile.new
     else
-        format_echo "Changes detected. Updating Brewfile..." "none" "brew"
+        format_printf "Changes detected. Updating Brewfile..." "none" "brew"
         mv Brewfile Brewfile.backup
         mv Brewfile.new Brewfile
         chmod 644 Brewfile
-        echo "Backup of previous Brewfile created as: Brewfile.backup"
+        printf "Backup of previous Brewfile created as: Brewfile.backup\n"
     fi
 else
-    format_echo "No existing Brewfile found. Creating new one..." "none" "brew"
+    format_printf "No existing Brewfile found. Creating new one..." "none" "brew"
     mv Brewfile.new Brewfile
     chmod 644 Brewfile
 fi
 
-echo "Current Brewfile location: $(pwd)"
+printf "Current Brewfile location: %s\n" "$(pwd)"
 ls -al Brewfile
-echo " "
+printf "\n"
 
 # HomeBrew Cleanup
-format_echo "HomeBrew Cleanup..." "none" "brew"
-echo " "
+format_printf "HomeBrew Cleanup..." "none" "brew"
+printf "\n"
 brew autoremove
 brew cleanup
 brew list
 
-echo " "
-success_echo "Brew Update, Upgrade, and Cleanup Completed!"
-echo " "
+printf "\n"
+success_printf "Brew Update, Upgrade, and Cleanup Completed!"
+printf "\n"
