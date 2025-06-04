@@ -4,41 +4,38 @@
 trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
 # Source function library with error handling
-FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatEcho.sh"
-if [[ ! -f "$FORMAT_LIBRARY" ]]; then
-    echo "Error: Required library $FORMAT_LIBRARY not found" >&2
-    exit 1
-fi
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { echo "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
 function brewdocs1 {
 	clear
-	format_echo "HomeBrew Update 1/3..." "none" "brew"
+	format_printf "HomeBrew Update 1/3..." "none" "brew"
 	echo " "
 	brew update
 	echo " "
-	info_echo "Fix any errors and continue with Step 2"
-	info_echo "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting"
+	info_printf "Fix any errors and continue with Step 2"
+	info_printf "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting"
 }
 
 function brewdocs2 {
 	clear
-	format_echo "HomeBrew Update 2/3..." "none" "brew"
+	format_printf "HomeBrew Update 2/3..." "none" "brew"
 	echo " "
 	brew update
 	echo " "
-	info_echo "Fix any errors and continue with Step 3"
-	info_echo "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting"
+	info_printf "Fix any errors and continue with Step 3"
+	info_printf "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting"
 }
 
 function brewdocs3 {
 	clear
-	format_echo "Brew Doctor 3/3..." "none" "brew"
+	format_printf "Brew Doctor 3/3..." "none" "brew"
 	echo " "
 	brew doctor
 	echo " "
-	info_echo "Fix any errors to complete Brew Doctor Recovery"
-	info_echo "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting"
+	info_printf "Fix any errors to complete Brew Doctor Recovery"
+	info_printf "cmd-doubleclick for troubleshooting info: https://docs.brew.sh/Troubleshooting"
 }
 
 function menu {
