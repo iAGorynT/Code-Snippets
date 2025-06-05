@@ -72,7 +72,7 @@ fi
 
 # Download bin files
 cd "$BIN_FOLDER" || exit 1
-for file in Brewautom2.sh BrewitLaunchd.sh FLibFormatEcho.sh; do
+for file in Brewautom2.sh BrewitLaunchd.sh FLibFormatPrintf.sh; do
     download_github_file "bin/$file" "$BIN_FOLDER"
     display_message $?
     printf "\n"

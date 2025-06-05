@@ -1,13 +1,10 @@
 #!/bin/zsh
 # Trap Ctl-C and Require a Menu Selection to Exit Script
-trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
+trap 'printf "\nCtrl-C will not terminate %s.\n" "$0"'  INT
 
 # Source function library with error handling
-FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatEcho.sh"
-if [[ ! -f "$FORMAT_LIBRARY" ]]; then
-    echo "Error: Required library $FORMAT_LIBRARY not found" >&2
-    exit 1
-fi
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library %s not found\n" "$FORMAT_LIBRARY" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
 function brewit {
@@ -17,25 +14,25 @@ function brewit {
 
 function brewlist {
     clear
-    format_echo "Brew List..." "yellow" "bold"
-    echo
+    format_printf "Brew List..." "yellow" "bold"
+    printf "\n"
     brew list
 }
 
 function brewdep {
     clear
-    format_echo "Brew Dependencies..." "yellow" "bold"
-    echo
+    format_printf "Brew Dependencies..." "yellow" "bold"
+    printf "\n"
     brew deps --formula --installed | more
 }
 
 function viewbrewfile {
     # Display Brew File Contents
     clear
-    format_echo "Brew File..." "yellow" "bold"
-    echo
+    format_printf "Brew File..." "yellow" "bold"
+    printf "\n"
     cat ~/Brewfile
-    echo -en "\n\n\t\t\tHit any key to view App Descriptions"
+    printf "\n\n\t\t\tHit any key to view App Descriptions"
     read -k 1 line
     # Display Selected Brew File App Descriptions
     clear
@@ -44,8 +41,8 @@ function viewbrewfile {
 
 function brewapps {
     clear
-    format_echo "Brew App Listing..." "yellow" "bold"
-    echo
+    format_printf "Brew App Listing..." "yellow" "bold"
+    printf "\n"
     # Formatted Listing and redirect stderr to /dev/null to suppress errors
     brew desc --eval-all $(brew list) 2>/dev/null | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | more
     # For Unformatted Listing
@@ -54,10 +51,10 @@ function brewapps {
 
 function brewtap {
     clear
-    format_echo "Brew Taps..." "yellow" "bold"
-    info_echo "Directories (usually Git Repositories) of formulae (CLI based Apps),"
-    info_echo "Casks (GUI based Apps), and/or external commands."
-    echo
+    format_printf "Brew Taps..." "yellow" "bold"
+    info_printf "Directories (usually Git Repositories) of formulae (CLI based Apps),"
+    info_printf "Casks (GUI based Apps), and/or external commands."
+    printf "\n"
     brew tap
 }
 
@@ -83,24 +80,24 @@ function brewappuninstaller {
 
 function menu {
     clear
-    echo
-    echo -e "\t\t\t\033[33;1mHomeBrew Menu\033[0m\n"
-    echo -e "\t1. Brewit"
-    echo -e "\t2. Brew List"
-    echo -e "\t3. Brew Dependencies"
-    echo -e "\t4. View Brewfile"
-    echo -e "\t5. Brew App Listing"
-    echo -e "\t6. Brew Taps"
-    echo -e "\t7. Brew Doctor"
-    echo -e "\t8. Brew Autoupdate"
-    echo -e "\t9. MacVim Explore"
-    echo -e "\t10. Brew App Uninstaller"
-    echo -e "\t0. Exit Menu\n\n"
-    echo -en "\t\tEnter an Option: "
+    printf "\n"
+    printf "\t\t\t\033[33;1mHomeBrew Menu\033[0m\n\n"
+    printf "\t1. Brewit\n"
+    printf "\t2. Brew List\n"
+    printf "\t3. Brew Dependencies\n"
+    printf "\t4. View Brewfile\n"
+    printf "\t5. Brew App Listing\n"
+    printf "\t6. Brew Taps\n"
+    printf "\t7. Brew Doctor\n"
+    printf "\t8. Brew Autoupdate\n"
+    printf "\t9. MacVim Explore\n"
+    printf "\t10. Brew App Uninstaller\n"
+    printf "\t0. Exit Menu\n\n\n"
+    printf "\t\tEnter an Option: "
     # Read entire input instead of just one character
     read option
     # Remove any whitespace
-    option=$(echo $option | tr -d '[:space:]')
+    option=$(printf %s "$option" | tr -d '[:space:]')
 }
 
 # Main loop
@@ -153,7 +150,7 @@ while true; do
                 ;;
             *)
                 clear
-                echo "Sorry, wrong selection"
+                printf "Sorry, wrong selection\n"
                 hit_any_key=true
                 ;;
         esac
@@ -162,12 +159,12 @@ while true; do
         break
     else
         clear
-        echo "Please enter a valid number"
+        printf "Please enter a valid number\n"
         hit_any_key=true
     fi
     # Check if the user should be prompted to hit any key to continue
     if [[ "$hit_any_key" == "true" ]]; then
-        echo -en "\n\n\t\t\tHit any key to continue"
+        printf "\n\n\t\t\tHit any key to continue"
         read -k 1 line
     fi
 done
