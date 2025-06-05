@@ -75,6 +75,14 @@ else
         
         pyenv global "$latest_python" | tee -a "$LOG_FILE"
         printf "\n" | tee -a "$LOG_FILE"
+        package_printf "Installing Python packages from requirements.txt..." | tee -a "$LOG_FILE"
+        if [[ -f "$HOME/PythonCode/requirements.txt" ]]; then
+            pip install -r "$HOME/PythonCode/requirements.txt" | tee -a "$LOG_FILE" || 
+                { error_printf "Requirements installation failed. Check the logs." | tee -a "$LOG_FILE"; }
+        else
+            error_printf "Requirements file not found at $HOME/PythonCode/requirements.txt" | tee -a "$LOG_FILE"
+        fi
+        printf "\n" | tee -a "$LOG_FILE"
         success_printf "Python updated to version: $latest_python" | tee -a "$LOG_FILE"
         printf "\n"
         
