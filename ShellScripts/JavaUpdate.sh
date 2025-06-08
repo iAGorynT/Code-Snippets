@@ -320,8 +320,7 @@ if get_yes_no "$(format_printf "Do you want to run Java Update?" none "rocket")"
         printf "\n"
         if get_yes_no "Would you like to download the latest Zulu JDK installer anyway?"; then
             arch_info=$(detect_architecture) || {
-                error_printf "Could not detect system architecture"
-                exit 1
+                error_printf "Could not detect system architecture" true
             }
             IFS='|' read -r arch_str arch_human <<< "$arch_info"
             
