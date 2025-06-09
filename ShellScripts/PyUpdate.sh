@@ -66,6 +66,18 @@ if [[ "$current_python" == "$latest_python" ]]; then
 else
     info_printf "Python is not up to date"
     printf "\n"
+    
+    # Check if pyenv is up-to-date with the latest Python version
+    major_version=$(echo "$latest_python" | sed 's/^\([0-9]\+\)\..*/\1/')
+    pyenv_latest=$(pyenv latest "$major_version" 2>/dev/null || echo "")
+    
+    if [[ -z "$pyenv_latest" ]] || [[ "$pyenv_latest" != "$latest_python" ]]; then
+        error_printf "pyenv must be updated before Python update can be done. Latest available in pyenv: ${pyenv_latest:-'unknown'}, Required: $latest_python" true
+    fi
+    
+    success_printf "pyenv is up-to-date with Python $latest_python"
+    printf "\n"
+    
     if get_yes_no "$(format_printf "Do you want to update Python?" none "rocket")"; then
         package_printf "Starting Python update..." | tee -a "$LOG_FILE"
         time_printf "Timestamp: $(date)" | tee -a "$LOG_FILE"
