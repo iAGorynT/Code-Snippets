@@ -64,11 +64,11 @@ printf "\n"
 if [[ "$current_python" == "$latest_python" ]]; then
     success_printf "Python is up to date"
 else
-    info_printf "Python is not up to date"
+    warning_printf "Python is not up to date"
     printf "\n"
     
     # Check if pyenv is up-to-date with the latest Python version
-    major_version=$(echo "$latest_python" | sed 's/^\([0-9]\+\)\..*/\1/')
+    major_version=$(echo "$latest_python" | cut -d'.' -f1)
     pyenv_latest=$(pyenv latest "$major_version" 2>/dev/null || echo "")
     
     if [[ -z "$pyenv_latest" ]] || [[ "$pyenv_latest" != "$latest_python" ]]; then
