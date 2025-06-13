@@ -69,7 +69,7 @@ else
     
     # Check if pyenv is up-to-date with the latest Python version
     major_version=$(echo "$latest_python" | cut -d'.' -f1)
-    pyenv_latest=$(pyenv latest "$major_version" 2>/dev/null || echo "")
+    pyenv_latest=$(pyenv latest -k "$major_version" 2>/dev/null || echo "")
     
     if [[ -z "$pyenv_latest" ]] || [[ "$pyenv_latest" != "$latest_python" ]]; then
         error_printf "pyenv must be updated before Python update can be done. Latest available in pyenv: ${pyenv_latest:-'unknown'}, Required: $latest_python" true
