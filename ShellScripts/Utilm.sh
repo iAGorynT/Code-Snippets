@@ -32,6 +32,16 @@ function cleanupclaude {
     CleanupClaude.sh
 }
 
+function updateallpack {
+    clear
+    UtilAllPack.sh
+}
+
+function cleanupalldisk {
+    clear
+    UtilAllDisk.sh
+}
+
 function menu {
     clear
     echo
@@ -42,6 +52,11 @@ function menu {
     echo -e "\t4. Java Update"
     echo -e "\t5. Disk Cleanup"
     echo -e "\t6. Cleanup Claude Workspace"
+    echo
+    echo -e "\t\033[4;36mBundle Updates\033[0m"
+    echo -e "\t7. Update All Packages"
+    echo -e "\t8. Cleanup All Disks"
+    echo
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     # Read entire input instead of just one character
@@ -80,6 +95,14 @@ while true; do
                 ;;
             6)
                 cleanupclaude
+                hit_any_key=true
+                ;;
+            7)
+                updateallpack
+                hit_any_key=true
+                ;;
+            8)
+                cleanupalldisk
                 hit_any_key=true
                 ;;
             *)
