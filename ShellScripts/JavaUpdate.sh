@@ -20,7 +20,7 @@ get_yes_no() {
         case ${response:l} in
             y|yes) return 0 ;;
             n|no)  return 1 ;;
-            *) echo "Please answer yes (Y) or no (N)." ;;
+            *) format_printf "Please answer yes (Y) or no (N).\n" ;;
         esac
     done
 }
