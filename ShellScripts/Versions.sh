@@ -20,6 +20,8 @@ info_printf "GitHub:"
 printf "Git: %s\n" "$(git --version)"
 # Github CLI
 printf "GitHub CLI: %s\n" "$(gh --version)" | grep -e 'version '
+# Github CLI Copilot Extension
+printf "GitHub CLI Copilot: %s\n" "$(gh copilot --version)"
 printf "\n"
 
 # Homebrew

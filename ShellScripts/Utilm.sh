@@ -22,6 +22,11 @@ function javaup {
     JavaUpdate.sh
 }
 
+function copiup {
+    clear
+    CopiUpdate.sh
+}
+
 function cleanup {
     clear
     Cleanup.sh
@@ -50,12 +55,13 @@ function menu {
     echo -e "\t2. Pip Package Update"
     echo -e "\t3. Vim Plugin Update"
     echo -e "\t4. Java Update"
-    echo -e "\t5. Disk Cleanup"
-    echo -e "\t6. Cleanup Claude Workspace"
+    echo -e "\t5. Copilot Extension Update"
+    echo -e "\t6. Disk Cleanup"
+    echo -e "\t7. Cleanup Claude Workspace"
     echo
     echo -e "\t\033[4;36mBundle Updates\033[0m"
-    echo -e "\t7. Update All Packages"
-    echo -e "\t8. Cleanup All Disks"
+    echo -e "\t8. Update All Packages"
+    echo -e "\t9. Cleanup All Disks"
     echo
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
@@ -90,18 +96,22 @@ while true; do
                 hit_any_key=true
                 ;;
             5)
-                cleanup
+                copiup
                 hit_any_key=true
                 ;;
             6)
-                cleanupclaude
+                cleanup
                 hit_any_key=true
                 ;;
             7)
-                updateallpack
+                cleanupclaude
                 hit_any_key=true
                 ;;
             8)
+                updateallpack
+                hit_any_key=true
+                ;;
+            9)
                 cleanupalldisk
                 hit_any_key=true
                 ;;
