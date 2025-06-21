@@ -2,10 +2,7 @@
 
 # Source function library with error handling
 FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
-if [[ ! -f "$FORMAT_LIBRARY" ]]; then
-    printf "Error: Required library %s not found\n" "$FORMAT_LIBRARY" >&2
-    exit 1
-fi
+[[ -f "$FORMAT_LIBRARY" ]] || { echo "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
 # Function to display script header
@@ -55,6 +52,8 @@ main() {
         delete_item $HOME/.logs/pip_update.log
 	# Delete Vim Plugin Update Log
 	delete_item $HOME/.logs/vim_plugin_update.log
+	# Delete Copilot Extension Update Log
+	delete_item $HOME/.logs/copi_update.log
     else
         error_printf "Disk Cleanup cancelled by user."
     fi
