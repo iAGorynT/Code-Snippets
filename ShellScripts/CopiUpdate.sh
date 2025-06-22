@@ -1,19 +1,19 @@
 #!/bin/zsh
 # Source function library with error handling
 FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
-LOG_FILE="$HOME/.logs/copi_update.log"
+LOGS_DIR="$HOME/.logs"
+LOG_FILE="$LOGS_DIR/copi_update.log"
 
 [[ -f "$FORMAT_LIBRARY" ]] || { echo "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
 # Function to ensure logs directory exists
 ensure_logs_directory() {
-    local logs_dir="$HOME/.logs"
-    [[ -d "$logs_dir" ]] || {
-        if mkdir -p "$logs_dir"; then
-            success_printf "Created logs directory: $logs_dir"
+    [[ -d "$LOGS_DIR" ]] || {
+        if mkdir -p "$LOGS_DIR"; then
+            success_printf "Created logs directory: $LOGS_DIR"
         else
-            error_printf "Failed to create logs directory: $logs_dir" true
+            error_printf "Failed to create logs directory: $LOGS_DIR" true
         fi
     }
 }
