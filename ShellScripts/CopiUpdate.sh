@@ -6,19 +6,31 @@ LOG_FILE="$HOME/.logs/copi_update.log"
 [[ -f "$FORMAT_LIBRARY" ]] || { echo "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
+# Function to ensure logs directory exists
+ensure_logs_directory() {
+    local logs_dir="$HOME/.logs"
+    [[ -d "$logs_dir" ]] || {
+        if mkdir -p "$logs_dir"; then
+            success_printf "Created logs directory: $logs_dir"
+        else
+            error_printf "Failed to create logs directory: $logs_dir" true
+        fi
+    }
+}
+
 # Function to display script header
 display_header() {
     clear
     format_printf "Copilot Extension Update..." "yellow" "bold"
 }
 
-# Function to update pip packages
+# Function to update GitHub Copilot extension
 update_copilot_extension() {
     echo | tee -a "$LOG_FILE"
     package_printf "Starting copilot extension update..." | tee -a "$LOG_FILE"
     time_printf "Timestamp: $(date)" | tee -a "$LOG_FILE"
     
-    # Check for pip
+    # Check for GitHub CLI
     command -v gh >/dev/null || { error_printf "github cli is not installed or not in PATH." | tee -a "$LOG_FILE"; return 1; }
     
     # Upgrade Copilot extension
@@ -62,9 +74,12 @@ get_yes_no() {
 }
 
 # --- Main script execution ---
+# Ensure logs directory exists before any operations
+ensure_logs_directory
+
 display_header
 
-# Ask if user wants to run pip package update
+# Ask if user wants to run copilot extension update
 if get_yes_no "$(format_printf "Do you want to run Copilot Extension Update?" none "rocket")"; then
     update_copilot_extension
     
