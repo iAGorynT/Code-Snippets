@@ -1,16 +1,27 @@
 #!/bin/zsh
 # Source function library with error handling
 FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+LOGS_DIR="$HOME/.logs"
+LOG_FILE="$LOGS_DIR/python_update.log"
+
 [[ -f "$FORMAT_LIBRARY" ]] || { echo "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
-
-# Log file location
-LOG_FILE="$HOME/.logs/python_update.log"
 
 # Check required tools
 for tool in curl python3 pyenv; do
     command -v "$tool" >/dev/null 2>&1 || { error_printf "Required tool '$tool' not found. Please install it first."; exit 1; }
 done
+
+# Function to ensure logs directory exists
+ensure_logs_directory() {
+    [[ -d "$LOGS_DIR" ]] || {
+        if mkdir -p "$LOGS_DIR"; then
+            success_printf "Created logs directory: $LOGS_DIR"
+        else
+            error_printf "Failed to create logs directory: $LOGS_DIR" true
+        fi
+    }
+}
 
 # Get yes/no input
 get_yes_no() {
@@ -44,7 +55,10 @@ empty_log() {
     success_printf "$logline"
 }
 
-# Main script
+# --- Main script execution ---
+# Ensure logs directory exists before any operations
+ensure_logs_directory
+
 clear
 format_printf "Python Update..." "yellow" "bold"
 printf "\n"
