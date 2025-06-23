@@ -1,10 +1,22 @@
 #!/bin/zsh
 # Source function library with error handling
 FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
-LOG_FILE="$HOME/.logs/pip_update.log"
+LOGS_DIR="$HOME/.logs"
+LOG_FILE="$LOGS_DIR/pip_update.log"
 
 [[ -f "$FORMAT_LIBRARY" ]] || { echo "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
+
+# Function to ensure logs directory exists
+ensure_logs_directory() {
+    [[ -d "$LOGS_DIR" ]] || {
+        if mkdir -p "$LOGS_DIR"; then
+            success_printf "Created logs directory: $LOGS_DIR"
+        else
+            error_printf "Failed to create logs directory: $LOGS_DIR" true
+        fi
+    }
+}
 
 # Function to display script header
 display_header() {
@@ -105,6 +117,9 @@ get_yes_no() {
 }
 
 # --- Main script execution ---
+# Ensure logs directory exists before any operations
+ensure_logs_directory
+
 display_header
 
 # Ask if user wants to run pip package update
