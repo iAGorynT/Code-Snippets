@@ -23,6 +23,12 @@ ensure_logs_directory() {
     }
 }
 
+# Function to display script header
+display_header() {
+    clear
+    format_printf "Copilot Extension Update..." "yellow" "bold"
+}
+
 # Get yes/no input
 get_yes_no() {
     local prompt="$1"
@@ -59,9 +65,7 @@ empty_log() {
 # Ensure logs directory exists before any operations
 ensure_logs_directory
 
-clear
-format_printf "Python Update..." "yellow" "bold"
-printf "\n"
+display_header
 
 # Get current and latest Python versions
 current_python=$(python3 --version | awk '{print $2}')
