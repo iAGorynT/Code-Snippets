@@ -10,40 +10,17 @@ source "$FORMAT_LIBRARY"
 #vaultpassed=$1
 vaultpassed=${1:-}
 
-# Improved logging and error handling function using FLibFormatPrintf
-log_message() {
-    local type="$1"
-    local message="$2"
-    local stop_execution="${3:-false}"
-
-    # Use FLibFormatPrintf functions based on message type
-    case "$type" in
-        "Info")
-            info_printf "$message"
-            ;;
-        "Warning")
-            warning_printf "$message"
-            ;;
-        "Error")
-            error_printf "$message" "$stop_execution"
-            ;;
-        *)
-            format_printf "$message"
-            ;;
-    esac
-}
-
 # Function to clear screen and display header
 display_header() {
     clear
-    log_message "Info" "OpenSSL Vault Encrypt / Decrypt"
+    info_printf "OpenSSL Vault Encrypt / Decrypt"
 }
 
 # Function to get filename from JSON config with improved error handling and flexibility
 get_filename_from_config() {
     # Check if correct number of arguments is provided
     if [[ $# -ne 2 ]]; then
-        log_message "Error" "Usage: get_filename_from_config <config_file> <key>" true
+        error_printf "Usage: get_filename_from_config <config_file> <key>" true
     fi
 
     local config_file="$1"
@@ -51,7 +28,7 @@ get_filename_from_config() {
 
     # Check if config file exists
     if [[ ! -f "$config_file" ]]; then
-        log_message "Error" "Config file '$config_file' not found" true
+        error_printf "Config file '$config_file' not found" true
     fi
 
     # Prefer jq if available (faster and more robust)
@@ -62,7 +39,7 @@ get_filename_from_config() {
         
         # Check if jq extraction was successful
         if [[ -z "$filename" ]]; then
-            log_message "Error" "Unable to find key '$key' in config file" true
+            error_printf "Unable to find key '$key' in config file" true
         fi
         
         # Using printf to return filename without newline
@@ -75,7 +52,7 @@ get_filename_from_config() {
     filename=$(grep -o "\"$key\": *\"[^\"]*\"" "$config_file" | sed -n "s/.*: *\"\(.*\)\"/\1/p")
     
     if [[ -z "$filename" ]]; then
-        log_message "Error" "Unable to find key '$key' in config file using fallback method" true
+        error_printf "Unable to find key '$key' in config file using fallback method" true
     fi
 
     printf "%s" "$filename"
@@ -99,8 +76,8 @@ while true; do
     # Add remaining common actions
     common_actions+=("Backup" "Config" "Reset" "Quit")
 
-    log_message "Info" "Select Action..." 
     printf "\n"
+    info_printf "Select Action..." 
     select action in "${common_actions[@]}"; do
         case $action in
             Encrypt)  action="enc"; break;;
@@ -122,17 +99,17 @@ while true; do
             if [[ $action == "quit" ]]; then
                 # Stop Terminal App Launcher
                 if osascript -e 'application "Terminal" is running' >/dev/null 2>&1; then
-                    log_message "Info" "Stopping Terminal App Launcher"
+                    info_printf "Stopping Terminal App Launcher"
                     osascript -e 'tell application "Terminal" to quit without saving' >/dev/null 2>&1
                 fi
-                log_message "Info" "OpenSSL Vault Enc/Dec Completed"
+                info_printf "OpenSSL Vault Enc/Dec Completed"
                 exit 0
             fi
             ;;
         rset)
             # Reset settings to All Vaults
             vaultpassed=''
-            log_message "Info" "Settings reset to All Vaults..."
+            info_printf "Settings reset to All Vaults..."
             read -k 1
             continue
             ;;
@@ -145,16 +122,16 @@ while true; do
             ;;
         conf)
             # Run ConfigFILES Shortcuts App
-            log_message "Info" "Standby... ConfigFILES Running"
+            info_printf "Standby... ConfigFILES Running"
             shortcuts run "ConfigFILES"
-            log_message "Info" "ConfigFILES Complete..."
+            info_printf "ConfigFILES Complete..."
             continue
             ;;
     esac
 
     # Select Vault Type
     if [ -z "$vaultpassed" ]; then
-        log_message "Info" "Select Vault Type..." 
+        info_printf "Select Vault Type..." 
         # Define common vaults
         if [[ $action != "sync" ]]; then
             common_vaults=("VaultMGR" "GitMGR")
@@ -186,7 +163,7 @@ while true; do
     else
         encrypt_type="PFE"
     fi
-    log_message "Info" "Vault Encryption Used: $encrypt_type"
+    info_printf "Vault Encryption Used: $encrypt_type"
 
     # Set Vault Variables
     if [[ $vault_name == "vmgr" ]]; then
@@ -205,7 +182,7 @@ while true; do
 
     # Lookup Secret in Keychain
     if ! secret=$(security find-generic-password -w -s "$secret_type" -a "$account"); then
-        log_message "Error" "Secret Not Found, error $?" true
+        error_printf "Secret Not Found, error $?" true
     fi
 
     # Set File Hash
@@ -224,11 +201,11 @@ while true; do
 
     # Check For Vault Directory or Encrypted File On Desktop
     if [[ $action == "enc" || $action == "sync" ]] && [[ ! -d $vault_dir ]]; then
-        log_message "Error" "Vault Directory missing on Desktop: $vault_dir"
+        error_printf "Vault Directory missing on Desktop: $vault_dir"
         read -k 1
         continue
     elif [[ $action == "dec" || $action == "view" ]] && [[ ! -f $vault_enc ]]; then
-        log_message "Error" "Encrypted Vault missing on Desktop: $vault_enc"
+        error_printf "Encrypted Vault missing on Desktop: $vault_enc"
         read -k 1
         continue
     fi
@@ -249,8 +226,8 @@ while true; do
             mv -f "$vault_enc" "$icloud_dir"
             rm -rf ~/.trash/"$vault_dir"
             mv -f "$vault_dir" ~/.trash
-            log_message "Info" "Vault Encrypted: $vault_dir"
-            log_message "Info" "Note: Encrypted Vault Moved To iCloud, Encrypted Directory Moved To Trash"
+            info_printf "Vault Encrypted: $vault_dir"
+            info_printf "Note: Encrypted Vault Moved To iCloud, Encrypted Directory Moved To Trash"
             ;;
         dec|view)
             if [[ $encrypt_type == "SSL" ]]; then
@@ -264,38 +241,38 @@ while true; do
             fi
             rm -rf ~/.trash/"$vault_enc"
             mv -f "$vault_enc" ~/.trash
-            log_message "Info" "Vault Decrypted: $vault_dir"
-            log_message "Info" "Note: Encrypted Vault Moved To Trash"
+            info_printf "Vault Decrypted: $vault_dir"
+            info_printf "Note: Encrypted Vault Moved To Trash"
             if [[ $action == "view" ]]; then
-                log_message "Warning" "When Done Viewing, Move $vault_dir Vault To Trash!"
+                warning_printf "When Done Viewing, Move $vault_dir Vault To Trash!"
                 open "$HOME/Desktop/$vault_dir"
             fi
             ;;
         sync)
             clear
-            log_message "Info" "GitHUB Sync Starting"
+            info_printf "GitHUB Sync Starting"
             current_date=$(date)
             time_printf "$current_date"
             rsync -avh "$HOME/Documents/GitHub/Code-Snippets/" "$HOME/Desktop/GciSttH6UsbSj7I/GitHub/Code-Snippets" --delete --exclude '.DS_Store'
-            log_message "Info" "GitHUB Sync Completed"
+            info_printf "GitHUB Sync Completed"
             ;;
         back)
             clear
-            log_message "Info" "Backing up $vault_dir" 
+            info_printf "Backing up $vault_dir" 
             if diskutil list external | grep -q 'Private'; then
-                log_message "Info" "Backing up to Private..."
+                info_printf "Backing up to Private..."
                 cp "$icloud_enc" "/Volumes/Private"
                 cp "$config_file" "/Volumes/Private/Shortcuts Config Files"
             fi
-            log_message "Info" "Backing up to Downloads..."
+            info_printf "Backing up to Downloads..."
             cp "$icloud_enc" "$HOME/Downloads/zVault Backup"
             cp "$config_file" "$HOME/Downloads/zVault Backup/Shortcuts Config Files"
-            log_message "Info" "Vault Backup Completed"
+            info_printf "Vault Backup Completed"
             ;;
     esac
 
     # Pause before next iteration
     printf "\n"
-    log_message "Info" "Press any key to continue..."
+    printf "Press any key to continue..."
     read -k 1
 done
