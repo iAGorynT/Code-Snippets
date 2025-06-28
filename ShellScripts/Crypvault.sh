@@ -1,41 +1,34 @@
 #!/bin/zsh
 
+# Source function library with error handling
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { echo "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
+source "$FORMAT_LIBRARY"
+
 # Save passed Vault Type if supplied
 # Note: Parameter value should be "vmgr", "gmgr", or left blank
 #vaultpassed=$1
 vaultpassed=${1:-}
 
-# Improved logging and error handling function
+# Improved logging and error handling function using FLibFormatPrintf
 log_message() {
     local type="$1"
     local message="$2"
     local stop_execution="${3:-false}"
 
-    # Color codes
-    local GREEN='\033[0;32m'
-    local YELLOW='\033[1;33m'
-    local RED='\033[0;31m'
-    local NC='\033[0m' # No Color
-
-    # Determine color and prefix based on message type
+    # Use FLibFormatPrintf functions based on message type
     case "$type" in
         "Info")
-            echo -e "${GREEN}[INFO]${NC} $message"
+            info_printf "$message"
             ;;
         "Warning")
-            echo -e "${YELLOW}[WARNING]${NC} $message" >&2
+            warning_printf "$message"
             ;;
         "Error")
-            echo -e "${RED}[ERROR]${NC} $message" >&2
-            
-            # Option to stop script execution
-            if [[ "$stop_execution" == "true" ]]; then
-                echo -e "${RED}Stopping script execution.${NC}" >&2
-                exit 1
-            fi
+            error_printf "$message" "$stop_execution"
             ;;
         *)
-            echo "$message"
+            format_printf "$message"
             ;;
     esac
 }
@@ -72,8 +65,7 @@ get_filename_from_config() {
             log_message "Error" "Unable to find key '$key' in config file" true
         fi
         
-        # Changed from echo to printf to suppress displaying filename
-        # echo "$filename"
+        # Using printf to return filename without newline
         printf "%s" "$filename"
         return 0
     fi
@@ -86,7 +78,7 @@ get_filename_from_config() {
         log_message "Error" "Unable to find key '$key' in config file using fallback method" true
     fi
 
-    echo "$filename"
+    printf "%s" "$filename"
 }
 
 # Main loop
@@ -107,8 +99,8 @@ while true; do
     # Add remaining common actions
     common_actions+=("Backup" "Config" "Reset" "Quit")
 
-    log_message "Info" "Select Action..."
-    echo 
+    log_message "Info" "Select Action..." 
+    printf "\n"
     select action in "${common_actions[@]}"; do
         case $action in
             Encrypt)  action="enc"; break;;
@@ -121,6 +113,7 @@ while true; do
             Quit)     action="quit"; break;;
         esac
     done
+    printf "\n"
 
     # Perform the selected action
     case $action in
@@ -161,8 +154,7 @@ while true; do
 
     # Select Vault Type
     if [ -z "$vaultpassed" ]; then
-        log_message "Info" "Select Vault Type..."
-        echo 
+        log_message "Info" "Select Vault Type..." 
         # Define common vaults
         if [[ $action != "sync" ]]; then
             common_vaults=("VaultMGR" "GitMGR")
@@ -175,10 +167,10 @@ while true; do
                 GitMGR)   vault_name="gmgr"; break;;
             esac
         done
+	printf "\n"
     else
         vault_name=$vaultpassed
-    fi
-    echo 
+    fi 
 
     # Set Vault Configuration File Location
     config_dir="$HOME/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files"
@@ -283,14 +275,13 @@ while true; do
             clear
             log_message "Info" "GitHUB Sync Starting"
             current_date=$(date)
-            log_message "Info" "$current_date"
+            time_printf "$current_date"
             rsync -avh "$HOME/Documents/GitHub/Code-Snippets/" "$HOME/Desktop/GciSttH6UsbSj7I/GitHub/Code-Snippets" --delete --exclude '.DS_Store'
             log_message "Info" "GitHUB Sync Completed"
             ;;
         back)
             clear
-            log_message "Info" "Backing up $vault_dir"
-            echo 
+            log_message "Info" "Backing up $vault_dir" 
             if diskutil list external | grep -q 'Private'; then
                 log_message "Info" "Backing up to Private..."
                 cp "$icloud_enc" "/Volumes/Private"
@@ -304,7 +295,7 @@ while true; do
     esac
 
     # Pause before next iteration
-    echo 
+    printf "\n"
     log_message "Info" "Press any key to continue..."
     read -k 1
 done
