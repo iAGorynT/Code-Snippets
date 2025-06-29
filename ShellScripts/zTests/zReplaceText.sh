@@ -26,7 +26,7 @@ if [[ ! -f "changes.log" ]]; then
     exit 1
 fi
 
-# Create origfiles directory if it doesn't exist
+# Create $HOME/bin directory if it doesn't exist
 # mkdir -p $HOME/bin
 
 # Copy updated files
