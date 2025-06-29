@@ -273,6 +273,6 @@ while true; do
 
     # Pause before next iteration
     printf "\n"
-    printf "Press any key to continue..."
+    printf "Hit any key to continue"
     read -k 1
 done

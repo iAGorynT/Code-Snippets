@@ -92,7 +92,7 @@ while true; do
     fi
 
     printf "\n"
-    read "continue?Press Enter to continue or type 'exit' to quit: "
+    read "continue?Hit any key to continue or type 'exit' to quit: "
     if [[ $continue == "exit" ]]; then
         printf "Exiting. Brew App Uninstaller completed.\n"
         exit 0

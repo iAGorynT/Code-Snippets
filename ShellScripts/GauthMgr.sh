@@ -132,7 +132,7 @@ process_operation() {
             printf "\n\n"
             cat "$DECRYPTED_FILE"
             printf "\n"
-            read -r "?Press Enter to continue..."
+            read -r "?Hit any key to continue"
             ;;
         *)
             error_printf "Unknown operation: $operation" true
