@@ -46,7 +46,10 @@ function menu {
     echo -e "\t2. GitHub Desktop (Local Repo to GitHub)"
     echo -e "\t3. Crypvault (Local Repo to iCloud)"
     echo -e "\t4. Backup Summary"
+    echo
+    echo -e "\t\033[4;36mCoding Updates\033[0m"
     echo -e "\t5. Replace Shellscript Text"
+    echo
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     # Read entire input instead of just one character
