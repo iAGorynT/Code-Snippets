@@ -93,7 +93,7 @@ function autoupdate_status() {
             minutes=$(printf "%02d" "$minutes")
             echo "Runs Daily: ${hour}:${minutes}"
         fi 
-        echo -en "\n\n\t\t\tHit any key to view the Autoupdate Log"
+        echo -en "\n\n\t\t\tPress any key to view the Autoupdate Log"
         read -k 1
         clear
         print_status "${COLOR_BLUE}" "Brew Autoupdate Log Listing..."
@@ -264,7 +264,7 @@ while true; do
         clear
         print_status "${COLOR_RED}" "\n\tPlease enter a valid number"
     fi
-    echo -en "\n\tHit any key to continue"
+    echo -en "\n\tPress any key to continue"
     read -k 1
 done
 

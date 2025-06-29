@@ -19,7 +19,7 @@ function autoupdatestatus {
 	fi
 # Check if the Autoupdate Log file exists
 	if [ -f "$autolog" ]; then
-	    echo -en "\n\n\t\t\tHit any key to view Autoupdate Log Listing"
+	    echo -en "\n\n\t\t\tPress any key to view Autoupdate Log Listing"
 	    read -k 1 line
 	    clear
 	    echo "Brew Autoupdate Log Listing..."
@@ -142,7 +142,7 @@ do
 	clear
 	echo "Sorry, wrong selection";;
 	esac
-	echo -en "\n\n\t\t\tHit any key to continue"
+	echo -en "\n\n\t\t\tPress any key to continue"
 	read -k 1 line
 done
 clear

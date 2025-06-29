@@ -11,7 +11,7 @@ for file in $HOME/.ssh/*; do
         echo "$file Contents..." 
 	echo
 	cat $file
-	echo -en "\n\n\t\t\tHit any key to continue"
+	echo -en "\n\n\t\t\tPress any key to continue"
 	read -k 1 line
 	clear
     fi 
@@ -23,7 +23,7 @@ for file in $HOME/zVlt/*; do
         echo "$file Contents..." 
 	echo
 	cat $file
-	echo -en "\n\n\t\t\tHit any key to continue"
+	echo -en "\n\n\t\t\tPress any key to continue"
 	read -k 1 line
 	clear
     fi 
