@@ -89,7 +89,7 @@ while true; do
     fi
     # Check if the user should be prompted to hit any key to continue
     if [[ "$hit_any_key" == "true" ]]; then
-        echo -en "\n\n\t\t\tHit any key to continue"
+        echo -en "\n\n\t\t\tPress any key to continue"
         read -k 1 line
     fi
 done

@@ -82,7 +82,7 @@ while true; do
         clear
         echo "Please enter a valid number"
     fi
-    echo -en "\n\n\t\t\tHit any key to continue"
+    echo -en "\n\n\t\t\tPress any key to continue"
     read -k 1 line
 done
 

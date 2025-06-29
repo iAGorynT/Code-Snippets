@@ -77,12 +77,12 @@ while true; do
                 fi
             fi
         done < "$zshrcfile"
-        echo -en "\n\n\t\t\tHit any key to continue"
+        echo -en "\n\n\t\t\tPress any key to continue"
         read -k 1 line
     else
 # Handle Invalid Input
         echo -e '\n\t\t\t\e[1mInvalid choice\e[0m'
-        echo -en "\n\t\t\tHit any key to continue"
+        echo -en "\n\t\t\tPress any key to continue"
         read -k 1 line
     fi
 # Display Main Menu

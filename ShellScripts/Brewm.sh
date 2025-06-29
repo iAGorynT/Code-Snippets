@@ -32,7 +32,7 @@ function viewbrewfile {
     format_printf "Brew File..." "yellow" "bold"
     printf "\n"
     cat ~/Brewfile
-    printf "\n\n\t\t\tHit any key to view App Descriptions"
+    printf "\n\n\t\t\tPress any key to view App Descriptions"
     read -k 1 line
     # Display Selected Brew File App Descriptions
     clear
@@ -164,7 +164,7 @@ while true; do
     fi
     # Check if the user should be prompted to hit any key to continue
     if [[ "$hit_any_key" == "true" ]]; then
-        printf "\n\n\t\t\tHit any key to continue"
+        printf "\n\n\t\t\tPress any key to continue"
         read -k 1 line
     fi
 done

@@ -22,7 +22,7 @@ get_yes_no() {
 # Optional key prompt
 hit_any_key_prompt() {
     if [[ "${hit_any_key:-false}" == "true" ]]; then
-        echo -en "\n\n\t\t\tHit any key to continue"
+        echo -en "\n\n\t\t\tPress any key to continue"
         read -k 1 _
     fi
 }
