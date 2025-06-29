@@ -33,6 +33,11 @@ function bsum {
     BackupSummary.sh
 }
 
+function reptext {
+    clear
+    ReplaceShellText.sh
+}
+
 function menu {
     clear
     echo
@@ -41,6 +46,7 @@ function menu {
     echo -e "\t2. GitHub Desktop (Local Repo to GitHub)"
     echo -e "\t3. Crypvault (Local Repo to iCloud)"
     echo -e "\t4. Backup Summary"
+    echo -e "\t5. Replace Shellscript Text"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     # Read entire input instead of just one character
@@ -71,6 +77,10 @@ while true; do
                 ;;
             4)
                 bsum
+                hit_any_key=true
+                ;;
+            5)
+                reptext
                 hit_any_key=true
                 ;;
             *)

@@ -45,11 +45,6 @@ function zselectoption {
 	~/bin/zTests/zSelectOption.sh
 }
 
-function zreplacetext {
-	clear
-	bat ~/bin/zTests/zReplaceText.sh
-}
-
 function menu {
 	clear
 	echo
@@ -62,7 +57,6 @@ function menu {
 	echo -e "\t6. zUserinput"
 	echo -e "\t7. zDaysOfMonth"
 	echo -e "\t8. zSelectOption"
-	echo -e "\t9. View zReplaceText"
 	echo -e "\t0. Exit Menu\n\n"
 	echo -en "\t\tEnter an Option: "
         # Read entire input instead of just one character
@@ -111,10 +105,6 @@ while true; do
 		;;
 	    8)
 		zselectoption
-		hit_any_key=true
-		;;
-	    9)
-		zreplacetext
 		hit_any_key=true
 		;;
             *)
