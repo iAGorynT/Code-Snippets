@@ -1,5 +1,10 @@
 #!/bin/zsh
 # Alias Documentation Listing for Selected Category
+# Source function library with error handling
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { printf "Required library $FORMAT_LIBRARY not found\n" >&2; exit 1; }
+source "$FORMAT_LIBRARY"
+
 # Define categories Array
 categories=(
     "General"
@@ -22,70 +27,86 @@ categories=(
     "Main Menu"
     "Quit"
 )
+
+# Function to display script header
+display_header() {
+    clear
+    format_printf "Alias Documentation..." "yellow" "bold"
+}
+
 # Main Menu Loop
 while true; do
     clear
-    echo "Alias Documentation..."
-    echo
+    display_header
+    printf "\n" 
     # Select Command Category
-    echo "Alias Categories:"
+    info_printf "Alias Categories:"
     for ((i=1; i<=${#categories[@]}; i++)); do
-        echo " $i. ${categories[i]}"
+        printf " %d. %s\n" "$i" "${categories[i]}"
     done
-    echo
-    echo -n "Select Category: "
+    printf "\n"
+    printf "Select Category: "
     read choice
-# Handle Enter Key Pressed (empty input)
+
+    # Handle Enter Key Pressed (empty input)
     if [[ -z "$choice" ]]; then
         choice=${#categories[@]}
     fi
-# Test if input is numeric and within range
+
+    # Test if input is numeric and within range
     if [[ "$choice" =~ ^[0-9]+$ ]] && (( choice >= 1 && choice <= ${#categories[@]} )); then
         category="${categories[choice]}"
-# Exit Script If "Quit" Is Choice
+
+        # Exit Script If "Quit" Is Choice
         if [[ "$choice" == $((${#categories[@]})) ]]; then
             clear
-            echo "Alias Documentation Complete..."
-            echo
+            success_printf "Alias Documentation Complete..."
+            printf "\n"
             exit 0
-	fi
-# Build Category Search Strings
-# Start
-        catstart="\e[32m#=> ${category}\e[0m"  # Green color
-# End
-        catend="\e[31m#=> End ${category}\e[0m"  # Red color
-# Initialize Variables
+        fi
+
+        # Build Category Search Strings
+        # Start
+        catstart="#=> ${category}"  # Plain text for matching
+        catend="#=> End ${category}"  # Plain text for matching
+        
+        # Initialize Variables
         zshrcfile="$HOME/.zshrc"
         start=false
         clear
-        echo -e "\e[34mSearching for:\e[0m $catstart in $zshrcfile"  # Blue color for "Searching for:"
-        echo
+        
+        # Display search information
+        info_printf "Searching for: ${catstart} in ${zshrcfile}"
+        printf "\n"
+        
         while IFS= read -r line; do
-# Check if line begins with Category Start
+            # Check if line begins with Category Start
             if [[ $line == *"#=> ${category}"* ]]; then
-		start=true
-                echo -e "$catstart"
+                start=true
+                format_printf "${catstart}" "green" "bold"
                 continue
             fi
-# If start is true, display the line
+            
+            # If start is true, display the line
             if [ "$start" = true ]; then
                 if [[ $line == *"#=> End ${category}"* ]]; then
-                    echo -e "$catend"
+                    format_printf "${catend}" "red" "bold"
                     break
                 else
-                    echo "$line"
+                    printf "%s\n" "$line"
                 fi
             fi
         done < "$zshrcfile"
-        echo -en "\n\n\t\t\tPress any key to continue"
+        
+        printf "\n\n\t\t\tPress any key to continue"
         read -k 1 line
     else
-# Handle Invalid Input
-        echo -e '\n\t\t\t\e[1mInvalid choice\e[0m'
-        echo -en "\n\t\t\tPress any key to continue"
+        # Handle Invalid Input
+        error_printf "Invalid choice"
+        printf "\n\t\t\tPress any key to continue"
         read -k 1 line
     fi
-# Display Main Menu
+    # Display Main Menu
     clear
 # End Main Menu Loop
 done
