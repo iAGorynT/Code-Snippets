@@ -4,7 +4,7 @@ FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 LOGS_DIR="$HOME/.logs"
 LOG_FILE="$LOGS_DIR/vim_plugin_update.log"
 
-[[ -f "$FORMAT_LIBRARY" ]] || { echo "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
+[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
 # Function to ensure logs directory exists
