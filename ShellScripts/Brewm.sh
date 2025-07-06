@@ -52,6 +52,7 @@ function brewapps {
 function brewtap {
     clear
     format_printf "Brew Taps..." "yellow" "bold"
+    printf "\n"
     info_printf "Directories (usually Git Repositories) of formulae (CLI based Apps),"
     info_printf "Casks (GUI based Apps), and/or external commands."
     printf "\n"
