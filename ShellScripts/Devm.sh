@@ -38,6 +38,11 @@ function reptext {
     ReplaceShellText.sh
 }
 
+function mbat {
+    clear
+    MBat.sh
+}
+
 function menu {
     clear
     echo
@@ -49,6 +54,7 @@ function menu {
     echo
     echo -e "\t\033[4;36mCoding Updates\033[0m"
     echo -e "\t5. Replace Shellscript Text"
+    echo -e "\t6. Bat Menu Viewer"
     echo
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
@@ -84,6 +90,10 @@ while true; do
                 ;;
             5)
                 reptext
+                hit_any_key=true
+                ;;
+            6)
+                mbat
                 hit_any_key=true
                 ;;
             *)
