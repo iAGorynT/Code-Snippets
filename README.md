@@ -1,12 +1,10 @@
 # Code Snippets
 
-MacOS code snippits that can be used and shared by all.
-Included Scripts: Shortcuts Scripts, Terminal Scripts, etc.
+> ⚠️ **Note:** This repo is for sample code only. PRs from outside contributors are not accepted. Security reports welcome!
 
-_Other GitHub Repositories:_
-<a rel="me" href="https://github.com/iAGorynT/Brew-Autoupdate">Brew-Autoupdate</a>
+Included are MacOS code snippits and other code that can be used for educational purposes.  These are intended as sample code only. Use at your own risk.
 
 More on 
 <a rel="me" href="https://mastodon.social/@iAGorynT">Mastodon</a>
 
-Modified: 11/14/2023 08:01
+Modified: 07/07/2025 21:41
