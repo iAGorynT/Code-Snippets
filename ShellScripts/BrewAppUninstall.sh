@@ -8,6 +8,13 @@ FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 [[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library %s not found\n" "$FORMAT_LIBRARY" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
+# Function to display script header
+display_header() {
+    clear
+    format_printf "Brew App Uninstaller..." "yellow" "bold"
+    printf "\n"
+}
+
 # Function to display menu
 function show_menu() {
     local i=1
@@ -30,9 +37,9 @@ function fetch_packages() {
 
 # Function to display package counts
 function show_package_counts() {
-    printf "Number of formulae: %d\n" "${#formulae[@]}"
-    printf "Number of casks: %d\n" "${#casks[@]}"
-    printf "Total number of packages: %d\n" "${#all_packages[@]}"
+    stats_printf "Number of formulae: ${#formulae[@]}"
+    stats_printf "Number of casks: ${#casks[@]}"
+    stats_printf "Total number of packages: ${#all_packages[@]}"
     printf "\n"
 }
 
@@ -45,23 +52,22 @@ function uninstall_package() {
         brew uninstall "$package"
     fi
     brew autoremove
-    printf "%s has been uninstalled.\n" "$package"
+    success_printf "$package has been uninstalled."
     all_packages=("${(@)all_packages:#$package}")
 }
 
 # Main script
-clear
-format_printf "Brew App Uninstaller..." "yellow" "bold"
-printf "\n"
-
 # Initialize package lists
 fetch_packages
-show_package_counts
 
 # Main loop
 while true; do
+
+    display_header
+    show_package_counts
+
     if [ ${#all_packages[@]} -eq 0 ]; then
-        printf "No Homebrew packages found. Exiting.\n"
+        warning_printf "No Homebrew packages found. Exiting."
         exit 0
     fi
 
@@ -82,19 +88,19 @@ while true; do
             if [[ $confirm =~ ^[Yy]$ ]]; then
                 uninstall_package "$selected_package"
             else
-                printf "Uninstallation cancelled.\n"
+                info_printf "Uninstallation cancelled."
             fi
         else
-            printf "Invalid selection. Please enter a number between 0 and %d.\n" "${#all_packages[@]}"
+            warning_printf "Invalid selection. Please enter a number between 0 and ${#all_packages[@]}."
         fi
     else
-        printf "Invalid input. Please enter a number.\n"
+        warning_printf "Invalid input. Please enter a number."
     fi
 
     printf "\n"
     read "continue?Press any key to continue or type 'exit' to quit: "
     if [[ $continue == "exit" ]]; then
-        printf "Exiting. Brew App Uninstaller completed.\n"
+        info_printf "Exiting. Brew App Uninstaller completed."
         exit 0
     else
         clear
