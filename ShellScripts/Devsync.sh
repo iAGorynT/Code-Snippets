@@ -62,17 +62,17 @@ function check_macvim() {
 function main() {
     clear
     format_printf "Dev to GitHub Sync Starting..." "yellow" "bold"
-    echo
+    printf "\n"
 
     check_macvim
     sync_shellscripts
-    echo
+    printf "\n"
     sync_pythoncode
-    echo
+    printf "\n"
     sync_dotfiles
-    echo
+    printf "\n"
     sync_brewfiles
-    echo
+    printf "\n"
 
     success_printf "Sync Completed!"
 }
