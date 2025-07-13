@@ -19,4 +19,6 @@ ln -s /usr/local/bin $HOME/ShellScripts
 ln -s $HOME/bin $HOME/ShellScripts
 ```
 
-Modified: 11/6/2023 07:57  
+**Tip**: Mm.sh is the "Main Menu" script that is linked to many of the shell scripts contained in this folder.
+
+_Modified: 07/13/2025 18:31_ 
