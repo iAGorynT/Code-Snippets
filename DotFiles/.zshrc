@@ -128,6 +128,7 @@ alias pipup="PipUpdate.sh"			# Update Python Packages
 alias vimup="VimUpdate.sh"			# Update Vim Plugins
 alias fedoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
 alias fpdoc="FLibFormatPrintfDoc.sh"		# List FLibFormatPrintf.sh Documentation
+alias np="echo 'PID    CPU  MEM  COMMAND'; ps aux | grep node | grep -v grep | awk '{print \$2, \$3, \$4, \$11}' | column -t" # List Node Processes with Header
 alias ctest="Colortest.sh"			# Display Color Test
 alias webapps="clear; echo 'Web Apps...'; echo; ls --color=never -1 ~/Applications; echo" # List Safari Web Apps
 #=> End Dev Commands

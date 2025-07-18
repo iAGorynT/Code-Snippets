@@ -13,6 +13,7 @@ typeset -A ZJUMP_DIRS=(
     [py]="$HOME/PythonCode"
     [gha]="$HOME/Documents/GitHub/Brew-Autoupdate"
     [ghs]="$HOME/Documents/GitHub/Code-Snippets"
+    [mcp]="$HOME/mcp-servers"
 )
 
 zjump() {
