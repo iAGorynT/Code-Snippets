@@ -6,6 +6,7 @@ set -uo pipefail
 # Script configuration
 readonly SHELL_DIR="$HOME/ShellScripts"
 readonly PYCODE_DIR="$HOME/PythonCode"
+readonly MCPSERVER_DIR="$HOME/mcp-servers"
 readonly LAUNCHD_DIR="$HOME/Launchd"
 readonly GHS_BASE_DIR="$HOME/Documents/GitHub/Code-Snippets"
 readonly GHA_BASE_DIR="$HOME/Documents/GitHub/Brew-Autoupdate"
@@ -82,6 +83,16 @@ function sync_pythoncode() {
     fi
     
     safe_rsync "$PYCODE_DIR/" "$GHS_BASE_DIR/PythonCode" -avhl --delete --exclude '.DS_Store'
+}
+
+function sync_mcpservers() {
+    info_printf "Syncing MCPServers..."
+    
+    if ! check_directory "$MCPSERVER_DIR" "MCPServers"; then
+        return 1
+    fi
+    
+    safe_rsync "$MCPSERVER_DIR/" "$GHS_BASE_DIR/mcp-servers" -avhl --delete --exclude '.DS_Store' --exclude 'node_modules'
 }
 
 function sync_dotfiles() {
@@ -202,6 +213,8 @@ function main() {
     sync_ghs_shellscripts
     printf "\n"
     sync_pythoncode
+    printf "\n"
+    sync_mcpservers
     printf "\n"
     sync_dotfiles
     printf "\n"
