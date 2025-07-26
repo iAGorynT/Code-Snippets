@@ -1,6 +1,6 @@
 # Date Generator MCP Server
 
-This MCP server provides tools for generating dates based on month, year, and day of week criteria. It's converted from your original HTML/CSS/JavaScript date generator web application.
+This MCP server provides tools for generating dates based on month, year, and day of week criteria. It's converted from the original HTML/CSS/JavaScript date generator web application.
 
 ## Features
 
