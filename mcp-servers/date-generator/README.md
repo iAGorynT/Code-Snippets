@@ -5,6 +5,7 @@ This MCP server provides tools for generating dates based on month, year, and da
 ## Features
 
 - Generate all dates in a specific month/year that fall on a chosen day of the week
+- Find the nth occurrence of a specific day of the week in a month (e.g., 2nd Tuesday, last Friday)
 - Get available options for months, years, and days of week
 - Includes metadata like days from today, weeks from today, and past/future indicators
 - Input validation and error handling
@@ -79,7 +80,71 @@ Generates all dates in a given month/year that fall on a specific day of the wee
 }
 ```
 
-#### 2. `get_options`
+#### 2. `nth_occurrence_finder`
+Find the nth occurrence of a specific day of the week in a month (e.g., 2nd Tuesday, last Friday).
+
+**Parameters:**
+- `month` (number): Month number (1-12)
+- `year` (number): Year (e.g., 2024)
+- `dayOfWeek` (number): Day of week (0=Sunday, 1=Monday, ..., 6=Saturday)
+- `occurrence` (number): Which occurrence (1=first, 2=second, 3=third, etc. OR -1=last, -2=second to last, etc.)
+
+**Example - Find 2nd Tuesday of March 2024:**
+```json
+{
+  "month": 3,
+  "year": 2024,
+  "dayOfWeek": 2,
+  "occurrence": 2
+}
+```
+
+**Example - Find last Friday of December 2024:**
+```json
+{
+  "month": 12,
+  "year": 2024,
+  "dayOfWeek": 5,
+  "occurrence": -1
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "query": {
+    "month": "March",
+    "year": 2024,
+    "dayOfWeek": "Tuesday",
+    "requestedOccurrence": 2,
+    "occurrenceDescription": "2nd occurrence"
+  },
+  "totalOccurrences": 4,
+  "foundOccurrence": 2,
+  "date": {
+    "date": "2024-03-12",
+    "formatted": "Tuesday, March 12, 2024",
+    "daysFromToday": -503,
+    "weeksFromToday": -71.86,
+    "isPast": true,
+    "isToday": false,
+    "isFuture": false
+  }
+}
+```
+
+**Error Response Example:**
+```json
+{
+  "success": false,
+  "message": "Only 4 Sundays exist in February 2025. Cannot find occurrence 5.",
+  "totalOccurrences": 4,
+  "date": null
+}
+```
+
+#### 3. `get_options`
 Gets available months, years, and days of week for selection.
 
 **Parameters:** None
