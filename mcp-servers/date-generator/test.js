@@ -195,6 +195,127 @@ function findNthOccurrence(month, year, dayOfWeek, occurrence) {
   };
 }
 
+function validateMonthRange(startMonth, endMonth) {
+  if (startMonth < 1 || startMonth > 12) {
+    throw new Error('Start month must be between 1 and 12');
+  }
+  if (endMonth < 1 || endMonth > 12) {
+    throw new Error('End month must be between 1 and 12');
+  }
+  if (startMonth > endMonth) {
+    throw new Error('Start month cannot be greater than end month');
+  }
+}
+
+function findNthOccurrenceRange(startMonth, endMonth, year, dayOfWeek, occurrence) {
+  // Input validation
+  validateMonthRange(startMonth, endMonth);
+  if (year < 1900 || year > 2100) {
+    throw new Error('Year must be between 1900 and 2100');
+  }
+  if (dayOfWeek < 0 || dayOfWeek > 6) {
+    throw new Error('Day of week must be between 0 (Sunday) and 6 (Saturday)');
+  }
+  if (occurrence === 0) {
+    throw new Error('Occurrence cannot be 0. Use positive numbers for first, second, etc., or negative for last, second-to-last, etc.');
+  }
+  if (Math.abs(occurrence) > 5) {
+    throw new Error('Occurrence must be between -5 and 5 (excluding 0)');
+  }
+
+  const results = [];
+  let successCount = 0;
+  
+  for (let month = startMonth; month <= endMonth; month++) {
+    const monthResult = findNthOccurrence(month, year, dayOfWeek, occurrence);
+    results.push({
+      month: months[month - 1],
+      monthNumber: month,
+      ...monthResult
+    });
+    
+    if (monthResult.success) {
+      successCount++;
+    }
+  }
+
+  const ordinalSuffix = (num) => {
+    const suffixes = ['th', 'st', 'nd', 'rd'];
+    const value = num % 100;
+    return num + (suffixes[(value - 20) % 10] || suffixes[value] || suffixes[0]);
+  };
+
+  return {
+    success: successCount > 0,
+    query: {
+      startMonth: months[startMonth - 1],
+      endMonth: months[endMonth - 1],
+      year: year,
+      dayOfWeek: days[dayOfWeek],
+      requestedOccurrence: occurrence,
+      occurrenceDescription: occurrence > 0 ? 
+        `${ordinalSuffix(occurrence)} occurrence` : 
+        `${Math.abs(occurrence) === 1 ? 'last' : ordinalSuffix(Math.abs(occurrence)) + ' to last'} occurrence`
+    },
+    totalMonths: endMonth - startMonth + 1,
+    successfulMonths: successCount,
+    results: results
+  };
+}
+
+function findNthOccurrenceYear(year, dayOfWeek, occurrence) {
+  // Input validation
+  if (year < 1900 || year > 2100) {
+    throw new Error('Year must be between 1900 and 2100');
+  }
+  if (dayOfWeek < 0 || dayOfWeek > 6) {
+    throw new Error('Day of week must be between 0 (Sunday) and 6 (Saturday)');
+  }
+  if (occurrence === 0) {
+    throw new Error('Occurrence cannot be 0. Use positive numbers for first, second, etc., or negative for last, second-to-last, etc.');
+  }
+  if (Math.abs(occurrence) > 5) {
+    throw new Error('Occurrence must be between -5 and 5 (excluding 0)');
+  }
+
+  const results = [];
+  let successCount = 0;
+  
+  for (let month = 1; month <= 12; month++) {
+    const monthResult = findNthOccurrence(month, year, dayOfWeek, occurrence);
+    results.push({
+      month: months[month - 1],
+      monthNumber: month,
+      ...monthResult
+    });
+    
+    if (monthResult.success) {
+      successCount++;
+    }
+  }
+
+  const ordinalSuffix = (num) => {
+    const suffixes = ['th', 'st', 'nd', 'rd'];
+    const value = num % 100;
+    return num + (suffixes[(value - 20) % 10] || suffixes[value] || suffixes[0]);
+  };
+
+  return {
+    success: successCount > 0,
+    query: {
+      year: year,
+      dayOfWeek: days[dayOfWeek],
+      requestedOccurrence: occurrence,
+      occurrenceDescription: occurrence > 0 ? 
+        `${ordinalSuffix(occurrence)} occurrence` : 
+        `${Math.abs(occurrence) === 1 ? 'last' : ordinalSuffix(Math.abs(occurrence)) + ' to last'} occurrence`
+    },
+    totalMonths: 12,
+    successfulMonths: successCount,
+    results: results
+  };
+}
+
 // Test cases
 console.log('🧪 Testing Date Generator MCP Server Logic\n');
 
@@ -322,9 +443,114 @@ try {
   console.error('Expected error:', error.message);
 }
 
+console.log('\n' + '='.repeat(50) + '\n');
+
+// Test 12: findNthOccurrenceRange - 2nd Wednesday from January to March 2025
+console.log('Test 12: Find 2nd Wednesday from January to March 2025');
+try {
+  const result12 = findNthOccurrenceRange(1, 3, 2025, 3, 2);
+  console.log(JSON.stringify(result12, null, 2));
+} catch (error) {
+  console.error('Error:', error.message);
+}
+
+console.log('\n' + '='.repeat(50) + '\n');
+
+// Test 13: findNthOccurrenceRange - Last Friday from June to August 2024
+console.log('Test 13: Find last Friday from June to August 2024');
+try {
+  const result13 = findNthOccurrenceRange(6, 8, 2024, 5, -1);
+  console.log(JSON.stringify(result13, null, 2));
+} catch (error) {
+  console.error('Error:', error.message);
+}
+
+console.log('\n' + '='.repeat(50) + '\n');
+
+// Test 14: findNthOccurrenceRange - Error handling: invalid month range
+console.log('Test 14: Error handling - invalid month range (start > end)');
+try {
+  const result14 = findNthOccurrenceRange(6, 3, 2024, 1, 1);
+  console.log(JSON.stringify(result14, null, 2));
+} catch (error) {
+  console.error('Expected error:', error.message);
+}
+
+console.log('\n' + '='.repeat(50) + '\n');
+
+// Test 15: findNthOccurrenceRange - 5th Monday from February to April 2024 (some will fail)
+console.log('Test 15: Find 5th Monday from February to April 2024 (expect some failures)');
+try {
+  const result15 = findNthOccurrenceRange(2, 4, 2024, 1, 5);
+  console.log(JSON.stringify(result15, null, 2));
+} catch (error) {
+  console.error('Error:', error.message);
+}
+
+console.log('\n' + '='.repeat(50) + '\n');
+
+// Test 16: findNthOccurrenceYear - 1st Tuesday of every month in 2025
+console.log('Test 16: Find 1st Tuesday of every month in 2025');
+try {
+  const result16 = findNthOccurrenceYear(2025, 2, 1);
+  console.log(JSON.stringify(result16, null, 2));
+} catch (error) {
+  console.error('Error:', error.message);
+}
+
+console.log('\n' + '='.repeat(50) + '\n');
+
+// Test 17: findNthOccurrenceYear - Last Sunday of every month in 2024
+console.log('Test 17: Find last Sunday of every month in 2024');
+try {
+  const result17 = findNthOccurrenceYear(2024, 0, -1);
+  console.log(JSON.stringify(result17, null, 2));
+} catch (error) {
+  console.error('Error:', error.message);
+}
+
+console.log('\n' + '='.repeat(50) + '\n');
+
+// Test 18: findNthOccurrenceYear - 3rd Thursday of every month in 2024
+console.log('Test 18: Find 3rd Thursday of every month in 2024');
+try {
+  const result18 = findNthOccurrenceYear(2024, 4, 3);
+  console.log(JSON.stringify(result18, null, 2));
+} catch (error) {
+  console.error('Error:', error.message);
+}
+
+console.log('\n' + '='.repeat(50) + '\n');
+
+// Test 19: findNthOccurrenceYear - 5th Saturday of every month in 2025 (many will fail)
+console.log('Test 19: Find 5th Saturday of every month in 2025 (expect many failures)');
+try {
+  const result19 = findNthOccurrenceYear(2025, 6, 5);
+  console.log(JSON.stringify(result19, null, 2));
+} catch (error) {
+  console.error('Error:', error.message);
+}
+
+console.log('\n' + '='.repeat(50) + '\n');
+
+// Test 20: findNthOccurrenceYear - Error handling: invalid year
+console.log('Test 20: Error handling - invalid year (too low)');
+try {
+  const result20 = findNthOccurrenceYear(1800, 1, 1);
+  console.log(JSON.stringify(result20, null, 2));
+} catch (error) {
+  console.error('Expected error:', error.message);
+}
+
 console.log('\n✅ All tests completed!');
 console.log('\n📊 Test Summary:');
 console.log('• generateDatesForDayOfWeek: 4 tests (including error handling)');
 console.log('• findNthOccurrence: 7 tests (including error handling)');
-console.log('• Total: 11 comprehensive test cases');
+console.log('• findNthOccurrenceRange: 4 tests (including error handling)');
+console.log('• findNthOccurrenceYear: 5 tests (including error handling)');
+console.log('• Total: 20 comprehensive test cases');
 console.log('\nIf no errors appeared above, all functions are working correctly! 🎉');
+console.log('\n🆕 New Enhanced Features:');
+console.log('• nth_occurrence_range: Find nth occurrence across consecutive months');
+console.log('• nth_occurrence_year: Find nth occurrence for all 12 months in a year');
+console.log('• Both new tools provide month-by-month breakdown with success indicators');

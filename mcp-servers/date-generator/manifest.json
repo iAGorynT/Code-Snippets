@@ -1,7 +1,7 @@
 {
   "dxt_version": "0.1",
   "name": "date-generator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "MCP server for generating dates by month, year, and day of week",
   "author": {
     "name": "Bruce Guthrie"
@@ -26,6 +26,14 @@
         {
             "name": "nth_occurrence_finder",
             "description": "Finds the nth occurrence of a specific day in a month."
+        },
+        {
+            "name": "findNthOccurrenceRange",
+            "description": "Find nth occurrence across a range of consecutive months."
+        },
+        {
+            "name": "findNthOccurrenceYear",
+            "description": "Find nth occurrence for all 12 months in a year."
         },
     {
       "name": "get_options",
