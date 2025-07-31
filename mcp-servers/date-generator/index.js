@@ -208,6 +208,148 @@ function findNthOccurrence(month, year, dayOfWeek, occurrence) {
 }
 
 /**
+ * Validate month range
+ * @param {number} startMonth - Start month (1-12)
+ * @param {number} endMonth - End month (1-12)
+ */
+function validateMonthRange(startMonth, endMonth) {
+  if (startMonth < 1 || startMonth > 12) {
+    throw new Error('Start month must be between 1 and 12');
+  }
+  if (endMonth < 1 || endMonth > 12) {
+    throw new Error('End month must be between 1 and 12');
+  }
+  if (startMonth > endMonth) {
+    throw new Error('Start month cannot be greater than end month');
+  }
+}
+
+/**
+ * Find nth occurrence across a range of consecutive months
+ * @param {number} startMonth - Start month (1-12)
+ * @param {number} endMonth - End month (1-12)
+ * @param {number} year - Year (e.g., 2024)
+ * @param {number} dayOfWeek - Day of week (0=Sunday, 1=Monday, etc.)
+ * @param {number} occurrence - Which occurrence (1=first, 2=second, -1=last, -2=second to last)
+ * @returns {Object} Object containing results for each month
+ */
+function findNthOccurrenceRange(startMonth, endMonth, year, dayOfWeek, occurrence) {
+  // Input validation
+  validateMonthRange(startMonth, endMonth);
+  if (year < 1900 || year > 2100) {
+    throw new Error('Year must be between 1900 and 2100');
+  }
+  if (dayOfWeek < 0 || dayOfWeek > 6) {
+    throw new Error('Day of week must be between 0 (Sunday) and 6 (Saturday)');
+  }
+  if (occurrence === 0) {
+    throw new Error('Occurrence cannot be 0. Use positive numbers for first, second, etc., or negative for last, second-to-last, etc.');
+  }
+  if (Math.abs(occurrence) > 5) {
+    throw new Error('Occurrence must be between -5 and 5 (excluding 0)');
+  }
+
+  const results = [];
+  let successCount = 0;
+  
+  for (let month = startMonth; month <= endMonth; month++) {
+    const monthResult = findNthOccurrence(month, year, dayOfWeek, occurrence);
+    results.push({
+      month: months[month - 1],
+      monthNumber: month,
+      ...monthResult
+    });
+    
+    if (monthResult.success) {
+      successCount++;
+    }
+  }
+
+  const ordinalSuffix = (num) => {
+    const suffixes = ['th', 'st', 'nd', 'rd'];
+    const value = num % 100;
+    return num + (suffixes[(value - 20) % 10] || suffixes[value] || suffixes[0]);
+  };
+
+  return {
+    success: successCount > 0,
+    query: {
+      startMonth: months[startMonth - 1],
+      endMonth: months[endMonth - 1],
+      year: year,
+      dayOfWeek: days[dayOfWeek],
+      requestedOccurrence: occurrence,
+      occurrenceDescription: occurrence > 0 ? 
+        `${ordinalSuffix(occurrence)} occurrence` : 
+        `${Math.abs(occurrence) === 1 ? 'last' : ordinalSuffix(Math.abs(occurrence)) + ' to last'} occurrence`
+    },
+    totalMonths: endMonth - startMonth + 1,
+    successfulMonths: successCount,
+    results: results
+  };
+}
+
+/**
+ * Find nth occurrence for all 12 months in a year
+ * @param {number} year - Year (e.g., 2024)
+ * @param {number} dayOfWeek - Day of week (0=Sunday, 1=Monday, etc.)
+ * @param {number} occurrence - Which occurrence (1=first, 2=second, -1=last, -2=second to last)
+ * @returns {Object} Object containing results for all 12 months
+ */
+function findNthOccurrenceYear(year, dayOfWeek, occurrence) {
+  // Input validation
+  if (year < 1900 || year > 2100) {
+    throw new Error('Year must be between 1900 and 2100');
+  }
+  if (dayOfWeek < 0 || dayOfWeek > 6) {
+    throw new Error('Day of week must be between 0 (Sunday) and 6 (Saturday)');
+  }
+  if (occurrence === 0) {
+    throw new Error('Occurrence cannot be 0. Use positive numbers for first, second, etc., or negative for last, second-to-last, etc.');
+  }
+  if (Math.abs(occurrence) > 5) {
+    throw new Error('Occurrence must be between -5 and 5 (excluding 0)');
+  }
+
+  const results = [];
+  let successCount = 0;
+  
+  for (let month = 1; month <= 12; month++) {
+    const monthResult = findNthOccurrence(month, year, dayOfWeek, occurrence);
+    results.push({
+      month: months[month - 1],
+      monthNumber: month,
+      ...monthResult
+    });
+    
+    if (monthResult.success) {
+      successCount++;
+    }
+  }
+
+  const ordinalSuffix = (num) => {
+    const suffixes = ['th', 'st', 'nd', 'rd'];
+    const value = num % 100;
+    return num + (suffixes[(value - 20) % 10] || suffixes[value] || suffixes[0]);
+  };
+
+  return {
+    success: successCount > 0,
+    query: {
+      year: year,
+      dayOfWeek: days[dayOfWeek],
+      requestedOccurrence: occurrence,
+      occurrenceDescription: occurrence > 0 ? 
+        `${ordinalSuffix(occurrence)} occurrence` : 
+        `${Math.abs(occurrence) === 1 ? 'last' : ordinalSuffix(Math.abs(occurrence)) + ' to last'} occurrence`
+    },
+    totalMonths: 12,
+    successfulMonths: successCount,
+    results: results
+  };
+}
+
+/**
  * Get available months, years, and days of week
  * @returns {Object} Available options
  */
@@ -311,6 +453,74 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           type: 'object',
           properties: {}
         }
+      },
+      {
+        name: 'nth_occurrence_range',
+        description: 'Find the nth occurrence of a specific day of the week across consecutive months (e.g., "2nd Wednesday Jan-Mar 2025")',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            startMonth: {
+              type: 'number',
+              description: 'Start month number (1-12)',
+              minimum: 1,
+              maximum: 12
+            },
+            endMonth: {
+              type: 'number',
+              description: 'End month number (1-12)',
+              minimum: 1,
+              maximum: 12
+            },
+            year: {
+              type: 'number',
+              description: 'Year (e.g., 2024)',
+              minimum: 1900,
+              maximum: 2100
+            },
+            dayOfWeek: {
+              type: 'number',
+              description: 'Day of week (0=Sunday, 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday)',
+              minimum: 0,
+              maximum: 6
+            },
+            occurrence: {
+              type: 'number',
+              description: 'Which occurrence (1=first, 2=second, 3=third, etc. OR -1=last, -2=second to last, etc.)',
+              minimum: -5,
+              maximum: 5
+            }
+          },
+          required: ['startMonth', 'endMonth', 'year', 'dayOfWeek', 'occurrence']
+        }
+      },
+      {
+        name: 'nth_occurrence_year',
+        description: 'Find the nth occurrence of a specific day of the week for all 12 months in a year (e.g., "2nd Wednesday every month in 2025")',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            year: {
+              type: 'number',
+              description: 'Year (e.g., 2024)',
+              minimum: 1900,
+              maximum: 2100
+            },
+            dayOfWeek: {
+              type: 'number',
+              description: 'Day of week (0=Sunday, 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday)',
+              minimum: 0,
+              maximum: 6
+            },
+            occurrence: {
+              type: 'number',
+              description: 'Which occurrence (1=first, 2=second, 3=third, etc. OR -1=last, -2=second to last, etc.)',
+              minimum: -5,
+              maximum: 5
+            }
+          },
+          required: ['year', 'dayOfWeek', 'occurrence']
+        }
       }
     ]
   };
@@ -356,6 +566,32 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             {
               type: 'text',
               text: JSON.stringify(options, null, 2)
+            }
+          ]
+        };
+
+      case 'nth_occurrence_range':
+        const { startMonth, endMonth, year: rangeYear, dayOfWeek: rangeDayOfWeek, occurrence: rangeOccurrence } = args;
+        const rangeResult = findNthOccurrenceRange(startMonth, endMonth, rangeYear, rangeDayOfWeek, rangeOccurrence);
+        
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(rangeResult, null, 2)
+            }
+          ]
+        };
+
+      case 'nth_occurrence_year':
+        const { year: yearYear, dayOfWeek: yearDayOfWeek, occurrence: yearOccurrence } = args;
+        const yearResult = findNthOccurrenceYear(yearYear, yearDayOfWeek, yearOccurrence);
+        
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(yearResult, null, 2)
             }
           ]
         };
