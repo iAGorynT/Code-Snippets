@@ -28,11 +28,11 @@
             "description": "Finds the nth occurrence of a specific day in a month."
         },
         {
-            "name": "findNthOccurrenceRange",
+            "name": "nth_occurrence_range",
             "description": "Find nth occurrence across a range of consecutive months."
         },
         {
-            "name": "findNthOccurrenceYear",
+            "name": "nth_occurrence_year",
             "description": "Find nth occurrence for all 12 months in a year."
         },
     {
