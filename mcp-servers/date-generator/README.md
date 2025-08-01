@@ -167,6 +167,154 @@ Gets available months, years, and days of week for selection.
 }
 ```
 
+#### 4. `nth_occurrence_range`
+Find the nth occurrence of a specific day of the week across consecutive months (e.g., "2nd Wednesday Jan-Mar 2025").
+
+**Parameters:**
+- `startMonth` (number): Start month number (1-12)
+- `endMonth` (number): End month number (1-12)
+- `year` (number): Year (e.g., 2024)
+- `dayOfWeek` (number): Day of week (0=Sunday, 1=Monday, ..., 6=Saturday)
+- `occurrence` (number): Which occurrence (1=first, 2=second, 3=third, etc. OR -1=last, -2=second to last, etc.)
+
+**Example - Find 2nd Wednesday from January to March 2025:**
+```json
+{
+  "startMonth": 1,
+  "endMonth": 3,
+  "year": 2025,
+  "dayOfWeek": 3,
+  "occurrence": 2
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "query": {
+    "startMonth": "January",
+    "endMonth": "March",
+    "year": 2025,
+    "dayOfWeek": "Wednesday",
+    "requestedOccurrence": 2,
+    "occurrenceDescription": "2nd occurrence"
+  },
+  "totalMonths": 3,
+  "successfulMonths": 3,
+  "results": [
+    {
+      "month": "January",
+      "monthNumber": 1,
+      "success": true,
+      "query": {
+        "month": "January",
+        "year": 2025,
+        "dayOfWeek": "Wednesday",
+        "requestedOccurrence": 2,
+        "occurrenceDescription": "2nd occurrence"
+      },
+      "totalOccurrences": 5,
+      "foundOccurrence": 2,
+      "date": {
+        "date": "2025-01-08",
+        "formatted": "Wednesday, January 8, 2025",
+        "daysFromToday": -205,
+        "weeksFromToday": -29.29,
+        "isPast": true,
+        "isToday": false,
+        "isFuture": false
+      }
+    }
+    // ... results for February and March
+  ]
+}
+```
+
+#### 5. `nth_occurrence_year`
+Find the nth occurrence of a specific day of the week for all 12 months in a year (e.g., "2nd Wednesday every month in 2025").
+
+**Parameters:**
+- `year` (number): Year (e.g., 2024)
+- `dayOfWeek` (number): Day of week (0=Sunday, 1=Monday, ..., 6=Saturday)
+- `occurrence` (number): Which occurrence (1=first, 2=second, 3=third, etc. OR -1=last, -2=second to last, etc.)
+
+**Example - Find 1st Tuesday of every month in 2025:**
+```json
+{
+  "year": 2025,
+  "dayOfWeek": 2,
+  "occurrence": 1
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "query": {
+    "year": 2025,
+    "dayOfWeek": "Tuesday",
+    "requestedOccurrence": 1,
+    "occurrenceDescription": "1st occurrence"
+  },
+  "totalMonths": 12,
+  "successfulMonths": 12,
+  "results": [
+    {
+      "month": "January",
+      "monthNumber": 1,
+      "success": true,
+      "query": {
+        "month": "January",
+        "year": 2025,
+        "dayOfWeek": "Tuesday",
+        "requestedOccurrence": 1,
+        "occurrenceDescription": "1st occurrence"
+      },
+      "totalOccurrences": 5,
+      "foundOccurrence": 1,
+      "date": {
+        "date": "2025-01-07",
+        "formatted": "Tuesday, January 7, 2025",
+        "daysFromToday": -206,
+        "weeksFromToday": -29.43,
+        "isPast": true,
+        "isToday": false,
+        "isFuture": false
+      }
+    }
+    // ... results for all 12 months
+  ]
+}
+```
+
+**Error Response Example:**
+```json
+{
+  "success": false,
+  "query": {
+    "year": 2025,
+    "dayOfWeek": "Saturday",
+    "requestedOccurrence": 5,
+    "occurrenceDescription": "5th occurrence"
+  },
+  "totalMonths": 12,
+  "successfulMonths": 4,
+  "results": [
+    {
+      "month": "January",
+      "monthNumber": 1,
+      "success": false,
+      "message": "Only 4 Saturdays exist in January 2025. Cannot find occurrence 5.",
+      "totalOccurrences": 4,
+      "date": null
+    }
+    // ... mixed success/failure results for all 12 months
+  ]
+}
+```
+
 ## Key Differences from Original Web App
 
 1. **Server-side**: Runs as a Node.js server instead of in the browser
