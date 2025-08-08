@@ -26,7 +26,8 @@ ensure_logs_directory() {
 # Function to display script header
 display_header() {
     clear
-    format_printf "Copilot Extension Update..." "yellow" "bold"
+    format_printf "Python Update..." "yellow" "bold"
+    printf "\n"
 }
 
 # Get yes/no input
