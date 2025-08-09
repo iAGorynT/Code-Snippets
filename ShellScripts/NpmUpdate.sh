@@ -90,6 +90,7 @@ show_package_info() {
     if command -v npm &> /dev/null; then
         info_printf "Current package status:"
         local outdated_output
+        # Use || true to ignore the exit code
         outdated_output=$(npm outdated 2>/dev/null || true)
         if [[ -n "$outdated_output" ]]; then
             printf "%s\n" "$outdated_output"
@@ -155,6 +156,7 @@ select_mcp_server() {
 run_standard_update() {
     update_printf "Starting standard npm update (minor/patch versions)..."
     info_printf "Checking for available updates..."
+    # Use || true to ignore the exit code
     local outdated_output=$(npm outdated 2>/dev/null || true)
     if [[ -z "$outdated_output" ]]; then
         success_printf "All packages are already up to date!"
