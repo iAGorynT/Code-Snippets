@@ -1,10 +1,10 @@
 #!/bin/zsh
 # Enhanced npm package update script with simplified menu
-FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+FORMAT_LIBRARY="$(dirname "$0")/FLibFormatPrintf.sh"
 [[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
-cd $HOME/mcp-servers/date-generator
+cd "$(dirname "$0")/../mcp-servers/date-generator" 2>/dev/null || true
 
 SCRIPT_DIR=""
 HAS_PACKAGE_JSON=false
@@ -58,7 +58,7 @@ get_yes_no() {
     local prompt="$1"
     local response
     while true; do
-        read "response?$prompt (y/n): "
+        read -p "$prompt (y/n): " response
         case ${response:l} in
             y|yes|1) return 0 ;;
             n|no|0)  return 1 ;;
@@ -101,10 +101,11 @@ show_package_info() {
 }
 
 select_mcp_server() {
-    info_printf "Scanning for MCP servers in $HOME/mcp-servers..."
+    local mcp_servers_dir="$(dirname "$0")/../mcp-servers"
+    info_printf "Scanning for MCP servers in $mcp_servers_dir..."
     
-    if [[ ! -d "$HOME/mcp-servers" ]]; then
-        error_printf "Directory $HOME/mcp-servers not found"
+    if [[ ! -d "$mcp_servers_dir" ]]; then
+        error_printf "Directory $mcp_servers_dir not found"
         return 1
     fi
     
@@ -112,7 +113,7 @@ select_mcp_server() {
     local server_names=()
     
     # Find directories containing package.json
-    for dir in "$HOME/mcp-servers"/*/; do
+    for dir in "$mcp_servers_dir"/*/; do
         if [[ -f "$dir/package.json" ]]; then
             local dir_name=$(basename "$dir")
             servers+=("$dir")
@@ -133,17 +134,17 @@ select_mcp_server() {
     fi
     
     printf "\n"; info_printf "Select a MCP Server:"
-    for i in {1..${#servers[@]}}; do
-        printf "%d) %s\n" "$i" "${server_names[$i]}"
+    for (( i=0; i<${#servers[@]}; i++ )); do
+        printf "%d) %s\n" "$((i+1))" "${server_names[$i]}"
     done
     printf "\n"
     
     local choice
     while true; do
-        read "choice?Enter your choice (1-${#servers[@]}): "
+        read -p "Enter your choice (1-${#servers[@]}): " choice
         if [[ "$choice" =~ ^[0-9]+$ ]] && [[ "$choice" -ge 1 ]] && [[ "$choice" -le ${#servers[@]} ]]; then
-            local selected_dir="${servers[$choice]}"
-            success_printf "Selected: ${server_names[$choice]}"
+            local selected_dir="${servers[$((choice-1))]}"
+            success_printf "Selected: ${server_names[$((choice-1))]}"
             success_printf "Changing to directory: $selected_dir"
             cd "$selected_dir"
             return 0
@@ -213,6 +214,105 @@ run_major_update() {
     fi
 }
 
+update_version_number() {
+    upgrade_printf "Starting version number update..."
+    
+    # Show current version
+    if command -v jq &> /dev/null; then
+        local current_version=$(jq -r '.version // "unknown"' package.json 2>/dev/null)
+        info_printf "Current version: $current_version"
+    fi
+    printf "\n"
+    
+    info_printf "Select version update type:"
+    printf "1) Patch version (bug fixes) - e.g., 1.0.0 → 1.0.1\n"
+    printf "2) Minor version (new features) - e.g., 1.0.0 → 1.1.0\n"
+    printf "3) Major version (breaking changes) - e.g., 1.0.0 → 2.0.0\n"
+    printf "4) Set specific version\n"
+    printf "0) Cancel\n"
+    printf "\n"
+    
+    local choice
+    read -p "Enter your choice (0-4): " choice
+    
+    case $choice in
+        1)
+            info_printf "Updating patch version..."
+            if get_yes_no "Proceed with patch version update?"; then
+                if npm version patch; then
+                    success_printf "Patch version updated successfully!"
+                    return 0
+                else
+                    error_printf "Failed to update patch version"
+                    return 1
+                fi
+            else
+                warning_printf "Patch update cancelled"
+                return 1
+            fi
+            ;;
+        2)
+            info_printf "Updating minor version..."
+            if get_yes_no "Proceed with minor version update?"; then
+                if npm version minor; then
+                    success_printf "Minor version updated successfully!"
+                    return 0
+                else
+                    error_printf "Failed to update minor version"
+                    return 1
+                fi
+            else
+                warning_printf "Minor update cancelled"
+                return 1
+            fi
+            ;;
+        3)
+            warning_printf "⚠️  Major version updates indicate breaking changes!"
+            if get_yes_no "Proceed with major version update?"; then
+                if npm version major; then
+                    success_printf "Major version updated successfully!"
+                    return 0
+                else
+                    error_printf "Failed to update major version"
+                    return 1
+                fi
+            else
+                warning_printf "Major update cancelled"
+                return 1
+            fi
+            ;;
+        4)
+            local custom_version
+            read -p "Enter the specific version (e.g., 2.1.3): " custom_version
+            if [[ -z "$custom_version" ]]; then
+                warning_printf "No version specified. Cancelled."
+                return 1
+            fi
+            info_printf "Setting version to: $custom_version"
+            if get_yes_no "Proceed with setting custom version?"; then
+                if npm version "$custom_version"; then
+                    success_printf "Version updated to $custom_version successfully!"
+                    return 0
+                else
+                    error_printf "Failed to update to version $custom_version"
+                    return 1
+                fi
+            else
+                warning_printf "Custom version update cancelled"
+                return 1
+            fi
+            ;;
+        0)
+            warning_printf "Version update cancelled"
+            return 1
+            ;;
+        *)
+            warning_printf "Invalid choice. Please enter 0, 1, 2, 3, or 4."
+            return 1
+            ;;
+    esac
+}
+
 main() {
 
     display_header
@@ -229,9 +329,10 @@ main() {
         printf "1) Standard npm update\n"
         printf "2) Major version update\n"
         printf "3) Set MCP Server\n"
+        printf "4) Update Version Number\n"
         printf "0) Exit\n"
 	printf "\n"
-        read "choice?Enter your choice (0-3): "
+        read -p "Enter your choice (0-4): " choice
 
 	# Default to exit if no input
         if [[ -z "$choice" ]]; then
@@ -242,8 +343,9 @@ main() {
             1) run_standard_update ;;
             2) run_major_update ;;
             3) select_mcp_server ;;
+            4) update_version_number ;;
             0) warning_printf "Exiting without making any updates"; break ;;
-            *) warning_printf "Invalid choice. Please enter 1, 2, 3, or 0." ;;
+            *) warning_printf "Invalid choice. Please enter 0, 1, 2, 3, or 4." ;;
         esac
         printf "\n"
         if ! get_yes_no "Would you like to perform another operation?"; then break; fi

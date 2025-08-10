@@ -1,7 +1,7 @@
 {
   "dxt_version": "0.1",
   "name": "date-generator",
-  "version": "1.0.4",
+  "version": "3.0.0",
   "description": "MCP server for generating dates by month, year, and day of week",
   "author": {
     "name": "Bruce Guthrie"
@@ -17,24 +17,24 @@
       "env": {}
     }
   },
-    "icon": "icon.png",
+  "icon": "icon.png",
   "tools": [
     {
       "name": "generate_dates",
       "description": "Generates all dates in a given month/year that fall on a specific day of the week."
     },
-        {
-            "name": "nth_occurrence_finder",
-            "description": "Finds the nth occurrence of a specific day in a month."
-        },
-        {
-            "name": "nth_occurrence_range",
-            "description": "Find nth occurrence across a range of consecutive months."
-        },
-        {
-            "name": "nth_occurrence_year",
-            "description": "Find nth occurrence for all 12 months in a year."
-        },
+    {
+      "name": "nth_occurrence_finder",
+      "description": "Finds the nth occurrence of a specific day in a month."
+    },
+    {
+      "name": "nth_occurrence_range",
+      "description": "Find nth occurrence across a range of consecutive months."
+    },
+    {
+      "name": "nth_occurrence_year",
+      "description": "Find nth occurrence for all 12 months in a year."
+    },
     {
       "name": "get_options",
       "description": "Returns available months, years, and days of week for selection."
