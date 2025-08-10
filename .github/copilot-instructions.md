@@ -32,7 +32,7 @@ This repository contains standalone utilities and scripts rather than a traditio
 
 #### Shell Scripts (ShellScripts/)
 - **PLATFORM REQUIREMENT**: Most scripts are macOS/zsh-specific
-- Test cross-platform script: `bash Colortest.sh` -- runs immediately, displays terminal color test
+- Test cross-platform script: `zsh Colortest.sh` -- runs immediately, displays terminal color test
 - Main menu script: `Mm.sh` -- interactive menu system for other utilities
 - **NOTE**: Scripts expect to be in `/usr/local/bin` or `$HOME/bin` for full functionality
 
@@ -61,7 +61,7 @@ Always run these validation steps after making changes to ensure functionality:
    - `pkill -f "python3 -m http.server"`
 
 3. **Shell Script Testing**:
-   - `cd ShellScripts && bash Colortest.sh`
+   - `cd ShellScripts && zsh Colortest.sh`
    - Verify color output appears (ANSI escape sequences) - should show ~75 lines of color patterns
 
 4. **HTML Application Full Workflow**:
@@ -189,7 +189,7 @@ cat mcp-servers/date-generator/package.json
 #### Adding New Components:
 - Python scripts: Add to `PythonCode/`, update `requirements.txt` if needed
 - Node.js projects: Add to `mcp-servers/` with proper `package.json`
-- Shell scripts: Add to `ShellScripts/` with appropriate permissions (`chmod +x`)
+- Shell scripts: Add to `ShellScripts/` with zsh shebang (`#!/bin/zsh`) and appropriate permissions (`chmod +x`)
 - Web apps: Add to `Html/` directory with supporting CSS/JS files
 
 #### Testing Changes:
