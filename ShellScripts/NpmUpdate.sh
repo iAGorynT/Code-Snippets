@@ -307,6 +307,51 @@ update_version_number() {
     esac
 }
 
+create_dxt_file() {
+    rocket_printf "Creating Claude Extension File (DXT)..."
+    printf "\n"
+    
+    # Check if npx is available
+    if ! command -v npx &> /dev/null; then
+        error_printf "npx is not installed or not in PATH"
+        error_printf "npx is required to run @anthropic-ai/dxt"
+        return 1
+    fi
+    
+    # Get current directory info
+    local current_dir=$(pwd)
+    local dir_name=$(basename "$current_dir")
+    
+    info_printf "Current directory: $current_dir"
+    info_printf "This will create a DXT file from the current directory contents"
+    printf "\n"
+    
+    if ! get_yes_no "Do you want to create a DXT file from the current directory?"; then
+        warning_printf "DXT creation cancelled by user"
+        return 0
+    fi
+    
+    update_printf "Running: npx @anthropic-ai/dxt pack"
+    printf "\n"
+    
+    # Run the dxt pack command
+    if npx @anthropic-ai/dxt pack; then
+        success_printf "DXT file created successfully!"
+        
+        # Look for the generated DXT file
+        local dxt_files=(*.dxt)
+        if [[ -f "${dxt_files[1]}" ]]; then
+            success_printf "Generated DXT file: ${dxt_files[1]}"
+        fi
+        
+        return 0
+    else
+        local exit_code=$?
+        error_printf "DXT creation failed with exit code: $exit_code"
+        return $exit_code
+    fi
+}
+
 main() {
 
     display_header
@@ -323,10 +368,11 @@ main() {
         printf "1) Standard npm update\n"
         printf "2) Major version update\n"
         printf "3) Update Package Version Number\n"
-        printf "4) Set MCP Server\n"
+        printf "4) Create Claude Extension File (DXT)\n"
+        printf "5) Set MCP Server\n"
         printf "0) Exit\n"
 	printf "\n"
-        read "choice?Enter your choice (0-4): "
+        read "choice?Enter your choice (0-5): "
 
 	# Default to exit if no input
         if [[ -z "$choice" ]]; then
@@ -337,9 +383,10 @@ main() {
             1) run_standard_update ;;
             2) run_major_update ;;
             3) update_version_number || true ;;
-            4) select_mcp_server ;;
+            4) create_dxt_file ;;
+            5) select_mcp_server ;;
             0) warning_printf "Exiting without making any updates"; break ;;
-            *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, or 0." ;;
+            *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, 5, or 0." ;;
         esac
         printf "\n"
         if ! get_yes_no "Would you like to perform another operation?"; then break; fi
