@@ -213,6 +213,100 @@ run_major_update() {
     fi
 }
 
+update_version_number() {
+    upgrade_printf "Version Number Update..."
+    
+    # Show current version
+    if command -v jq &> /dev/null && [[ -f "package.json" ]]; then
+        local current_version=$(jq -r '.version // "unknown"' package.json 2>/dev/null)
+        info_printf "Current version: $current_version"
+    fi
+    
+    printf "\n"; info_printf "Select version update type:"
+    printf "1) Patch version (bug fixes) - Example: 1.0.0 → 1.0.1\n"
+    printf "2) Minor version (new features) - Example: 1.0.0 → 1.1.0\n"
+    printf "3) Major version (breaking changes) - Example: 1.0.0 → 2.0.0\n"
+    printf "4) Set specific version\n"
+    printf "0) Cancel\n"
+    printf "\n"
+    
+    local choice
+    read "choice?Enter your choice (0-4): "
+    
+    if [[ -z "$choice" ]]; then
+        choice=0
+    fi
+    
+    printf "\n"
+    
+    case $choice in
+        1)
+            info_printf "Updating patch version..."
+            if npm version patch --silent; then
+                success_printf "Patch version updated successfully!"
+                return 0
+            else
+                error_printf "Failed to update patch version"
+                return 1
+            fi
+            ;;
+        2)
+            info_printf "Updating minor version..."
+            if npm version minor --silent; then
+                success_printf "Minor version updated successfully!"
+                return 0
+            else
+                error_printf "Failed to update minor version"
+                return 1
+            fi
+            ;;
+        3)
+            warning_printf "⚠️  Major version updates indicate breaking changes!"
+            if ! get_yes_no "Are you sure you want to update the major version?"; then
+                warning_printf "Major version update cancelled"
+                return 1
+            fi
+            info_printf "Updating major version..."
+            if npm version major --silent; then
+                success_printf "Major version updated successfully!"
+                return 0
+            else
+                error_printf "Failed to update major version"
+                return 1
+            fi
+            ;;
+        4)
+            local new_version
+            read "new_version?Enter specific version (format: X.Y.Z): "
+            if [[ -z "$new_version" ]]; then
+                warning_printf "No version specified. Operation cancelled."
+                return 1
+            fi
+            # Basic validation for version format
+            if [[ ! "$new_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                error_printf "Invalid version format. Please use X.Y.Z format (e.g., 2.1.3)"
+                return 1
+            fi
+            info_printf "Setting version to $new_version..."
+            if npm version "$new_version" --silent; then
+                success_printf "Version set to $new_version successfully!"
+                return 0
+            else
+                error_printf "Failed to set version to $new_version"
+                return 1
+            fi
+            ;;
+        0)
+            warning_printf "Version update cancelled"
+            return 0
+            ;;
+        *)
+            warning_printf "Invalid choice. Please enter 0, 1, 2, 3, or 4."
+            return 0
+            ;;
+    esac
+}
+
 main() {
 
     display_header
@@ -228,10 +322,11 @@ main() {
         printf "\n"; info_printf "Choose an option:"
         printf "1) Standard npm update\n"
         printf "2) Major version update\n"
-        printf "3) Set MCP Server\n"
+        printf "3) Update Package Version Number\n"
+        printf "4) Set MCP Server\n"
         printf "0) Exit\n"
 	printf "\n"
-        read "choice?Enter your choice (0-3): "
+        read "choice?Enter your choice (0-4): "
 
 	# Default to exit if no input
         if [[ -z "$choice" ]]; then
@@ -241,9 +336,10 @@ main() {
         case $choice in
             1) run_standard_update ;;
             2) run_major_update ;;
-            3) select_mcp_server ;;
+            3) update_version_number || true ;;
+            4) select_mcp_server ;;
             0) warning_printf "Exiting without making any updates"; break ;;
-            *) warning_printf "Invalid choice. Please enter 1, 2, 3, or 0." ;;
+            *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, or 0." ;;
         esac
         printf "\n"
         if ! get_yes_no "Would you like to perform another operation?"; then break; fi
