@@ -352,6 +352,94 @@ create_dxt_file() {
     fi
 }
 
+mcp_server_test() {
+    rocket_printf "MCP Server Test..."
+    printf "\n"
+    
+    # Get current directory info
+    local current_dir=$(pwd)
+    info_printf "Current directory: $current_dir"
+    
+    # Check if required utilities exist
+    if ! command -v npm &> /dev/null; then
+        error_printf "npm is not installed or not in PATH"
+        error_printf "npm is required for MCP Server Test"
+        return 1
+    fi
+    
+    if ! command -v node &> /dev/null; then
+        error_printf "node is not installed or not in PATH"
+        error_printf "node is required for MCP Server Test"
+        return 1
+    fi
+    
+    # Check if required files exist
+    if [[ ! -f "package.json" ]]; then
+        error_printf "No package.json found in current directory: $current_dir"
+        error_printf "MCP Server Test requires a valid Node.js project"
+        return 1
+    fi
+    
+    if [[ ! -f "test.js" ]]; then
+        error_printf "No test.js found in current directory: $current_dir"
+        error_printf "MCP Server Test requires a test.js file"
+        return 1
+    fi
+    
+    if [[ ! -f "index.js" ]]; then
+        warning_printf "No index.js found in current directory: $current_dir"
+        warning_printf "npm start may not work properly without a main entry point"
+    fi
+    
+    info_printf "MCP Server Test will perform the following steps:"
+    printf "  1) Run npm install\n"
+    printf "  2) Run node test.js\n"
+    printf "  3) Run npm start (press Ctrl-C to stop)\n"
+    printf "\n"
+    
+    if ! get_yes_no "Do you want to run MCP Server Test?"; then
+        warning_printf "MCP Server Test cancelled by user"
+        return 0
+    fi
+    
+    # Step 1: npm install
+    update_printf "Step 1: Running npm install..."
+    if npm install; then
+        success_printf "npm install completed successfully!"
+    else
+        local exit_code=$?
+        error_printf "npm install failed with exit code: $exit_code"
+        return $exit_code
+    fi
+    printf "\n"
+    
+    # Step 2: node test.js
+    update_printf "Step 2: Running node test.js..."
+    if node test.js; then
+        success_printf "node test.js completed successfully!"
+    else
+        local exit_code=$?
+        error_printf "node test.js failed with exit code: $exit_code"
+        warning_printf "Continuing to npm start despite test failure..."
+    fi
+    printf "\n"
+    
+    # Step 3: npm start
+    warning_printf "Step 3: Starting npm start..."
+    warning_printf "Press Ctrl-C to stop test execution"
+    printf "\n"
+    
+    # Give user a moment to read the warning
+    sleep 2
+    
+    update_printf "Running npm start..."
+    npm start
+    
+    # If we get here, npm start has been stopped
+    success_printf "MCP Server Test completed!"
+    return 0
+}
+
 main() {
 
     display_header
@@ -369,10 +457,11 @@ main() {
         printf "2) Major version update\n"
         printf "3) Update Package Version Number\n"
         printf "4) Create Claude Extension File (DXT)\n"
-        printf "5) Set MCP Server\n"
+        printf "5) MCP Server Test\n"
+        printf "6) Set MCP Server\n"
         printf "0) Exit\n"
 	printf "\n"
-        read "choice?Enter your choice (0-5): "
+        read "choice?Enter your choice (0-6): "
 
 	# Default to exit if no input
         if [[ -z "$choice" ]]; then
@@ -384,9 +473,10 @@ main() {
             2) run_major_update ;;
             3) update_version_number || true ;;
             4) create_dxt_file ;;
-            5) select_mcp_server ;;
+            5) mcp_server_test ;;
+            6) select_mcp_server ;;
             0) warning_printf "Exiting without making any updates"; break ;;
-            *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, 5, or 0." ;;
+            *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, 5, 6, or 0." ;;
         esac
         printf "\n"
         if ! get_yes_no "Would you like to perform another operation?"; then break; fi
