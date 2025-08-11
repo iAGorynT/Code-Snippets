@@ -425,17 +425,35 @@ mcp_server_test() {
     printf "\n"
     
     # Step 3: npm start
-    warning_printf "Step 3: Starting npm start..."
-    warning_printf "Press Ctrl-C to stop test execution"
+    update_printf "Step 3: Starting npm start for 3-4 seconds..."
     printf "\n"
     
-    # Give user a moment to read the warning
-    sleep 2
-    
     update_printf "Running npm start..."
-    npm start
+    # Start npm in background and capture its PID
+    npm start &
+    local npm_pid=$!
     
-    # If we get here, npm start has been stopped
+    # Let it run for 3-4 seconds
+    sleep 4
+    
+    # Kill the npm process and its children
+    info_printf "Stopping npm start process (PID: $npm_pid)..."
+    
+    # Kill the process group to ensure all child processes are terminated
+    if kill -TERM -$npm_pid 2>/dev/null; then
+        success_printf "npm start process stopped successfully"
+    else
+        # If TERM doesn't work, try KILL
+        if kill -KILL -$npm_pid 2>/dev/null; then
+            warning_printf "npm start process force-killed"
+        else
+            warning_printf "npm start process may have already terminated"
+        fi
+    fi
+    
+    # Wait a moment for cleanup
+    sleep 1
+    
     success_printf "MCP Server Test completed!"
     return 0
 }
@@ -456,8 +474,8 @@ main() {
         printf "1) Standard npm update\n"
         printf "2) Major version update\n"
         printf "3) Update Package Version Number\n"
-        printf "4) Create Claude Extension File (DXT)\n"
-        printf "5) MCP Server Test\n"
+        printf "4) MCP Server Test\n"
+        printf "5) Create Claude Extension File (DXT)\n"
         printf "6) Set MCP Server\n"
         printf "0) Exit\n"
 	printf "\n"
@@ -472,8 +490,8 @@ main() {
             1) run_standard_update ;;
             2) run_major_update ;;
             3) update_version_number || true ;;
-            4) create_dxt_file ;;
-            5) mcp_server_test ;;
+            4) mcp_server_test ;;
+            5) create_dxt_file ;;
             6) select_mcp_server ;;
             0) warning_printf "Exiting without making any updates"; break ;;
             *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, 5, 6, or 0." ;;
