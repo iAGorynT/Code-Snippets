@@ -191,7 +191,7 @@ run_major_update() {
         return 1
     fi
     printf "\n"
-    warning_printf "⚠️  Major updates can break your project!"
+    warning_printf "Major updates can break your project!"
     if [[ $HAS_LOCKFILE == true ]]; then
         warning_printf "This will modify your package.json and $LOCKFILE_TYPE lock file"
     fi
@@ -261,7 +261,7 @@ update_version_number() {
             fi
             ;;
         3)
-            warning_printf "⚠️  Major version updates indicate breaking changes!"
+            warning_printf "Major version updates indicate breaking changes!"
             if ! get_yes_no "Are you sure you want to update the major version?"; then
                 warning_printf "Major version update cancelled"
                 return 1
