@@ -21,9 +21,6 @@ fi
 ENCRYPTED_FILE="$HOME/.otp_secrets_zsh.enc"
 DECRYPTED_FILE="$(mktemp)"
 
-# Set secure permissions on temporary file
-chmod 600 "$DECRYPTED_FILE"
-
 if [[ ! -r "$ENCRYPTED_FILE" ]]; then
     error_printf "Error: Cannot read file '$ENCRYPTED_FILE'" 
     exit 1
@@ -53,6 +50,8 @@ decrypt_file() {
         return 1
     fi
     [[ ! -s "$DECRYPTED_FILE" ]] && { error_printf "Error: Decrypted file is empty."; return 1; }
+# Set secure permissions on temporary file
+    chmod 600 "$DECRYPTED_FILE"
     return 0
 }
 
