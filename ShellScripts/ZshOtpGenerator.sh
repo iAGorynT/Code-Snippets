@@ -50,7 +50,7 @@ decrypt_file() {
         return 1
     fi
     [[ ! -s "$DECRYPTED_FILE" ]] && { error_printf "Error: Decrypted file is empty."; return 1; }
-# Set secure permissions on temporary file
+    # Set secure permissions on temporary file
     chmod 600 "$DECRYPTED_FILE"
     return 0
 }
