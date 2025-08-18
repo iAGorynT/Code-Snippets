@@ -61,6 +61,9 @@ decrypt_file() {
         return 1
     fi
     
+    # Set secure permissions on decrypted file
+    chmod 600 "$DECRYPTED_FILE"
+    
     return 0
 }
 
@@ -77,13 +80,13 @@ encrypt_file() {
 
 # Function to cleanup and exit
 cleanup_and_exit() {
+    # Clean up password variable first
+    unset GAUTH_PASSWORD
+    
     # Securely remove the decrypted file
     if [[ -f "$DECRYPTED_FILE" ]]; then
         rm -P "$DECRYPTED_FILE" 2>/dev/null || rm "$DECRYPTED_FILE"
     fi
-    
-    # Unset the password variable
-    unset GAUTH_PASSWORD
     
     # Only print goodbye message if not already exiting due to error
     if [[ $? -eq 0 ]]; then
@@ -93,6 +96,41 @@ cleanup_and_exit() {
     # Remove the trap before exiting to prevent recursive calls
     trap - INT TERM EXIT
     exit $?
+}
+
+# Function to wait for MacVim to open file and then close
+wait_for_macvim_with_file() {
+    local file_path="$1"
+    
+    # Wait for MacVim application to be running
+    info_printf "Waiting for MacVim to start..."
+    local attempts=0
+    
+    # Wait up to 10 seconds for MacVim to start
+    while [[ $attempts -lt 10 ]]; do
+        if pgrep -f "MacVim" >/dev/null 2>&1; then
+            break
+        fi
+        sleep 1
+        ((attempts++))
+    done
+    
+    if [[ $attempts -ge 10 ]]; then
+        warning_printf "MacVim may not have started. Continuing anyway..."
+        return 1
+    fi
+    
+    info_printf "MacVim started. Waiting for you to close it..."
+    
+    # Now wait for ALL MacVim processes to close
+    # This is more reliable than trying to track specific files
+    while pgrep -f "MacVim" >/dev/null 2>&1; do
+        sleep 2
+    done
+    
+    info_printf "MacVim closed. Giving it a moment to finish saving..."
+    # Give extra time for file system to sync
+    sleep 3
 }
 
 # Main execution
@@ -114,40 +152,29 @@ if ! decrypt_file; then
     error_print "Error: Failed to decrypt file." true
 fi
 
-# Open the decrypted file in MacVim
+# Open the decrypted file in MacVim and capture the process
 format_printf "Opening secret file in MacVim..." "cyan"
-
-open -a MacVim "$DECRYPTED_FILE"
-
-# Wait for MacVim to close the file
-warning_printf "Waiting for MacVim to close..."
 
 # Get the initial modification time
 initial_mtime=$(stat -f "%m" "$DECRYPTED_FILE")
-current_mtime=$initial_mtime
 
-# Wait for the file to be modified and then closed
-while pgrep MacVim >/dev/null; do
-    # Check if the file has been modified
-    current_mtime=$(stat -f "%m" "$DECRYPTED_FILE")
-    if [[ "$current_mtime" != "$initial_mtime" ]]; then
-        # File has been modified, now wait for MacVim to close
-        break
-    fi
-    sleep 1
-done
+# Open MacVim
+open -a MacVim "$DECRYPTED_FILE"
 
-# If file was modified, wait for MacVim to fully close
+# Wait for MacVim to open and then close
+warning_printf "Please close MacVim when you're done editing to continue..."
+wait_for_macvim_with_file "$DECRYPTED_FILE"
+
+# Check if the file was modified
+current_mtime=$(stat -f "%m" "$DECRYPTED_FILE")
 if [[ "$current_mtime" != "$initial_mtime" ]]; then
-    # Wait for the user to close MacVim
-    osascript -e 'tell application "MacVim" to quit'
-    # Give it a moment to complete saving
-    sleep 1
-fi
-
-# Re-encrypt the file
-if ! encrypt_file; then
-    error_print "Error: Failed to re-encrypt file." true
+    info_printf "File was modified, proceeding with re-encryption..."
+    # Re-encrypt the file
+    if ! encrypt_file; then
+        error_print "Error: Failed to re-encrypt file." true
+    fi
+else
+    info_printf "File was not modified, skipping re-encryption."
 fi
 
 # Cleanup and exit (will be called by trap)
