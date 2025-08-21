@@ -7,6 +7,11 @@ function pyup {
     PyUpdate.sh
 }
 
+function pyuninstall {
+    clear
+    PyUninstall.sh
+}
+
 function pipup {
     clear
     PipUpdate.sh
@@ -57,17 +62,18 @@ function menu {
     echo
     echo -e "\t\t\t\033[33;1mUtility Menu\033[0m\n"
     echo -e "\t1. Python Update"
-    echo -e "\t2. Pip Package Update"
-    echo -e "\t3. Vim Plugin Update"
-    echo -e "\t4. Java Update"
-    echo -e "\t5. Copilot Extension Update"
-    echo -e "\t6. Npm Package Update"
-    echo -e "\t7. Disk Cleanup"
-    echo -e "\t8. Cleanup Claude Workspace"
+    echo -e "\t2. Python Uninstaller"
+    echo -e "\t3. Pip Package Update"
+    echo -e "\t4. Vim Plugin Update"
+    echo -e "\t5. Java Update"
+    echo -e "\t6. Copilot Extension Update"
+    echo -e "\t7. Npm Package Update"
+    echo -e "\t8. Disk Cleanup"
+    echo -e "\t9. Cleanup Claude Workspace"
     echo
     echo -e "\t\033[4;36mBundle Updates\033[0m"
-    echo -e "\t9. Update All Packages"
-    echo -e "\t10. Cleanup All Disks"
+    echo -e "\t10. Update All Packages"
+    echo -e "\t11. Cleanup All Disks"
     echo
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
@@ -90,38 +96,42 @@ while true; do
                 hit_any_key=true
                 ;;
             2)
-                pipup
+                pyuninstall
                 hit_any_key=true
                 ;;
             3)
-                vimup
+                pipup
                 hit_any_key=true
                 ;;
             4)
-                javaup
+                vimup
                 hit_any_key=true
                 ;;
             5)
-                copiup
+                javaup
                 hit_any_key=true
                 ;;
             6)
-                npmup
+                copiup
                 hit_any_key=true
                 ;;
             7)
-                cleanup
+                npmup
                 hit_any_key=true
                 ;;
             8)
-                cleanupclaude
+                cleanup
                 hit_any_key=true
                 ;;
             9)
-                updateallpack
+                cleanupclaude
                 hit_any_key=true
                 ;;
             10)
+                updateallpack
+                hit_any_key=true
+                ;;
+            11)
                 cleanupalldisk
                 hit_any_key=true
                 ;;
