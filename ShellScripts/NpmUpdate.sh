@@ -461,6 +461,11 @@ mcp_server_test() {
 main() {
 
     display_header
+    # Ask if user wants to run npm package update
+    if ! get_yes_no "$(format_printf "Do you want to run Npm Package Update?" none "rocket")"; then
+        error_printf "Npm Package Update cancelled by user"
+        return 0
+    fi
     printf "\n"
     select_mcp_server
 
@@ -489,6 +494,7 @@ main() {
         case $choice in
             1) run_standard_update ;;
             2) run_major_update ;;
+            # Use || true to ignore the exit code
             3) update_version_number || true ;;
             4) mcp_server_test ;;
             5) create_dxt_file ;;
@@ -503,7 +509,14 @@ main() {
     success_printf "Npm Package Update completed..."
 }
 
+trap '
+    exit_code=$?
+    # Ignore intentional "return 1" (used for user cancel or expected branch)
+    if [[ $exit_code -ne 0 && $exit_code -ne 1 ]]; then
+        error_printf "An unexpected error occurred (exit code: $exit_code)"
+        exit $exit_code
+    fi
+' ERR
 trap 'error_printf "Script interrupted by user" && exit 130' INT
-trap 'error_printf "An unexpected error occurred" && exit 1' ERR
 
 main "$@"
