@@ -14,6 +14,7 @@ typeset -A ZJUMP_DIRS=(
     [gha]="$HOME/Documents/GitHub/Brew-Autoupdate"
     [ghs]="$HOME/Documents/GitHub/Code-Snippets"
     [mcp]="$HOME/mcp-servers"
+    [peek]="$HOME/Library/GroupContainersAlias/9V456WSURS.com.bigzlabs.peekgroup/Library/Application Support/Styles"
 )
 
 zjump() {
