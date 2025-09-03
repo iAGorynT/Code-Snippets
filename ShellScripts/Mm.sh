@@ -1,4 +1,5 @@
 #!/bin/zsh
+# Main Menu Script
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
 
