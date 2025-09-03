@@ -1,6 +1,12 @@
 #!/bin/zsh
+# Main menu script using FLibFormatPrintf.sh for formatting
+# Source function library with error handling
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
+source "$FORMAT_LIBRARY"
+
 # Trap Ctl-C and Require a Menu Selection to Exit Script
-trap 'echo -e  "\nCtrl-C will not terminate $0."'  INT
+trap 'warning_printf "\nCtrl-C will not terminate $0."'  INT
 
 function brewm {
     clear
@@ -34,16 +40,18 @@ function testm {
 
 function menu {
     clear
-    echo
-    echo -e "\t\t\t\033[33;1mMain Menu\033[0m\n"
-    echo -e "\t1. Homebrew Menu"
-    echo -e "\t2. Ops Menu"
-    echo -e "\t3. Dev Menu"
-    echo -e "\t4. Iperf3 Menu"
-    echo -e "\t5. Utility Menu"
-    echo -e "\t6. Test Menu"
-    echo -e "\t0. Exit Menu\n\n"
-    echo -en "\t\tEnter an Option: "
+    printf "\n"
+    format_printf "\t\t\tMain Menu" "yellow" "bold"
+    printf "\n"
+    format_printf "\t1. Homebrew Menu"
+    format_printf "\t2. Ops Menu"
+    format_printf "\t3. Dev Menu"
+    format_printf "\t4. Iperf3 Menu"
+    format_printf "\t5. Utility Menu"
+    format_printf "\t6. Test Menu"
+    format_printf "\t0. Exit Menu"
+    printf "\n\n"
+    printf "\t\tEnter an Option: "
     # Read entire input instead of just one character
     read option
     # Remove any whitespace
@@ -80,7 +88,7 @@ while true; do
                 ;;
             *)
                 clear
-                echo "Sorry, wrong selection"
+                error_printf "Sorry, wrong selection"
                 hit_any_key=true
                 ;;
         esac
@@ -89,12 +97,12 @@ while true; do
         break
     else
         clear
-        echo "Please enter a valid number"
+        error_printf "Please enter a valid number"
         hit_any_key=true
     fi
     # Check if the user should be prompted to hit any key to continue
     if [[ "$hit_any_key" == "true" ]]; then
-        echo -en "\n\n\t\t\tPress any key to continue"
+        printf "\n\n\t\t\tPress any key to continue"
         read -k 1 line
     fi
 done
