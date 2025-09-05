@@ -151,7 +151,7 @@ while true; do
                 ;;
             *)
                 clear
-                printf "Sorry, wrong selection\n"
+                warning_printf "Sorry, wrong selection"
                 hit_any_key=true
                 ;;
         esac
@@ -160,12 +160,14 @@ while true; do
         break
     else
         clear
-        printf "Please enter a valid number\n"
+        warning_printf "Please enter a valid number"
         hit_any_key=true
     fi
     # Check if the user should be prompted to hit any key to continue
     if [[ "$hit_any_key" == "true" ]]; then
-        printf "\n\n\t\t\tPress any key to continue"
+        printf "\n\n\t\t\t"
+        # Use printf with info formatting but without newline
+        printf '\033[1;34m%s\033[0m' "ℹ️  Press any key to continue"
         read -k 1 line
     fi
 done
