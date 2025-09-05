@@ -74,7 +74,7 @@ while true; do
                 ;;
             3)
                 brewdocs3
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             *)
                 clear
