@@ -66,15 +66,15 @@ while true; do
                 ;;
             1)
                 brewdocs1
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             2)
                 brewdocs2
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             3)
                 brewdocs3
-		hit_any_key=true
+                hit_any_key=true
                 ;;
             *)
                 clear
