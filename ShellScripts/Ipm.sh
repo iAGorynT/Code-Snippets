@@ -2,6 +2,11 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e "\nCtrl-C will not terminate $0."' INT
 
+# Standard Message Formatting Library and Functions
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
+source "$FORMAT_LIBRARY"
+
 function iperfstartserver {
     clear
     ipss.sh
@@ -25,14 +30,16 @@ function ooklainternettest {
 
 function menu {
     clear
-    echo
-    echo -e "\t\t\t\033[33;1miPerf3 Menu\033[0m\n"
-    echo -e "\t1. Start iPerf Server"
-    echo -e "\t2. Client to Server Speedtest"
-    echo -e "\t3. Server to Client Speedtest"
-    echo -e "\t4. Ookla Internet Speedtest"
-    echo -e "\t0. Exit Menu\n\n"
-    echo -en "\t\tEnter an Option: "
+    printf "\n"
+    printf "\t\t\t"
+    format_printf "iPerf3 Menu" "yellow" "bold"
+    printf "\n"
+    printf "\t1. Start iPerf Server\n"
+    printf "\t2. Client to Server Speedtest\n"
+    printf "\t3. Server to Client Speedtest\n"
+    printf "\t4. Ookla Internet Speedtest\n"
+    printf "\t0. Exit Menu\n\n"
+    printf "\t\tEnter an Option: "
     # Read entire input instead of just one character
     read option
     # Remove any whitespace
@@ -66,7 +73,7 @@ while true; do
                 ;;
             *)
                 clear
-                echo "Sorry, wrong selection"
+                warning_printf "Sorry, wrong selection"
 		hit_any_key=true
                 ;;
         esac
@@ -75,12 +82,14 @@ while true; do
         break
     else
         clear
-        echo "Please enter a valid number"
+        warning_printf "Please enter a valid number"
 	hit_any_key=true
     fi
     # Check if the user should be prompted to hit any key to continue
     if [[ "$hit_any_key" == "true" ]]; then
-        echo -en "\n\n\t\t\tPress any key to continue"
+        printf "\n\n\t\t\t"
+        # Use printf with info formatting but without newline
+        printf '\033[1;34m%s\033[0m' "ℹ️  Press any key to continue"
         read -k 1 line
     fi
 done

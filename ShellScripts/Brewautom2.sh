@@ -236,6 +236,8 @@ function show_menu() {
     echo -e "\t2. Load Autoupdate"
     echo -e "\t3. Unload Autoupdate"
     echo -e "\t0. Exit"
+    echo
+    echo
     echo -en "\t\tEnter an Option: "
 
     # Read entire input instead of just one character

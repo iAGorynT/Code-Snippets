@@ -53,6 +53,34 @@ get_mac_disk_space() {
     else
         echo "\nCannot calculate percentage (division by zero)"
     fi
+    
+    # Diskspace Command Output
+    # ANSI Colors
+    readonly YELLOW="\033[1;33m"
+    readonly WHITE="\033[97m"
+    readonly CYAN="\033[36m"
+    readonly RESET="\033[0m"
+
+    printf "\n"
+    # Check if diskspace command exists and works
+    if ! command -v diskspace >/dev/null 2>&1 || ! diskspace --version >/dev/null 2>&1; then
+        echo "Error: diskspace command not found or not working correctly."
+    else
+        # Header
+        echo "\033[33;1mDisk Space Report\033[0m"
+        echo "\033[33m-----------------\033[0m"
+
+        # Run diskspace with cleaner AWK processing
+        diskspace --human-readable | awk -v white="$WHITE" -v cyan="$CYAN" -v reset="$RESET" '
+        /^(Available|Important|Opportunistic|Total):/ {
+            gsub(/:/, ":" reset)
+            gsub(/[0-9.]+ [A-Z]+/, cyan "&" reset)
+            print white $0 reset
+            next
+        }
+        {print}
+        '
+    fi
 
     # Display Macintosh HD Info Window
     shortcuts run "Mac HD Info"

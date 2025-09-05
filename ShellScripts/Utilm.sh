@@ -2,6 +2,11 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e "\nCtrl-C will not terminate $0."' INT
 
+# Standard Message Formatting Library and Functions
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
+source "$FORMAT_LIBRARY"
+
 function pyup {
     clear
     PyUpdate.sh
@@ -59,24 +64,27 @@ function cleanupalldisk {
 
 function menu {
     clear
-    echo
-    echo -e "\t\t\t\033[33;1mUtility Menu\033[0m\n"
-    echo -e "\t1. Python Update"
-    echo -e "\t2. Python Uninstaller"
-    echo -e "\t3. Pip Package Update"
-    echo -e "\t4. Vim Plugin Update"
-    echo -e "\t5. Java Update"
-    echo -e "\t6. Copilot Extension Update"
-    echo -e "\t7. Npm Package Update"
-    echo -e "\t8. Disk Cleanup"
-    echo -e "\t9. Cleanup Claude Workspace"
-    echo
-    echo -e "\t\033[4;36mBundle Updates\033[0m"
-    echo -e "\t10. Update All Packages"
-    echo -e "\t11. Cleanup All Disks"
-    echo
-    echo -e "\t0. Exit Menu\n\n"
-    echo -en "\t\tEnter an Option: "
+    printf "\n"
+    printf "\t\t\t"
+    format_printf "Utility Menu" "yellow" "bold"
+    printf "\n"
+    printf "\t1. Python Update\n"
+    printf "\t2. Python Uninstaller\n"
+    printf "\t3. Pip Package Update\n"
+    printf "\t4. Vim Plugin Update\n"
+    printf "\t5. Java Update\n"
+    printf "\t6. Copilot Extension Update\n"
+    printf "\t7. Npm Package Update\n"
+    printf "\t8. Disk Cleanup\n"
+    printf "\t9. Cleanup Claude Workspace\n"
+    printf "\n"
+    printf "\t"
+    format_printf "Bundle Updates" "cyan" "underline"
+    printf "\t10. Update All Packages\n"
+    printf "\t11. Cleanup All Disks\n"
+    printf "\n"
+    printf "\t0. Exit Menu\n\n"
+    printf "\t\tEnter an Option: "
     # Read entire input instead of just one character
     read option
     # Remove any whitespace
@@ -137,7 +145,7 @@ while true; do
                 ;;
             *)
                 clear
-                echo "Sorry, wrong selection"
+                warning_printf "Sorry, wrong selection"
                 hit_any_key=true
                 ;;
         esac
@@ -146,12 +154,14 @@ while true; do
         break
     else
         clear
-        echo "Please enter a valid number"
+        warning_printf "Please enter a valid number"
         hit_any_key=true
     fi
     # Check if the user should be prompted to hit any key to continue
     if [[ "$hit_any_key" == "true" ]]; then
-        echo -en "\n\n\t\t\tPress any key to continue"
+        printf "\n\n\t\t\t"
+        # Use printf with info formatting but without newline
+        printf '\033[1;34m%s\033[0m' "ℹ️  Press any key to continue"
         read -k 1 line
     fi
 done

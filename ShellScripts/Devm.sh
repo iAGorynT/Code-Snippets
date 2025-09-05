@@ -2,6 +2,11 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e "\nCtrl-C will not terminate $0."' INT
 
+# Standard Message Formatting Library and Functions
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
+source "$FORMAT_LIBRARY"
+
 function devsync {
     clear
     Devsync.sh
@@ -45,19 +50,21 @@ function mbat {
 
 function menu {
     clear
-    echo
-    echo -e "\t\t\t\033[33;1mDev Menu\033[0m\n"
-    echo -e "\t1. Devsync (Dev to Local Repo)"
-    echo -e "\t2. GitHub Desktop (Local Repo to GitHub)"
-    echo -e "\t3. Crypvault (Local Repo to iCloud)"
-    echo -e "\t4. Backup Summary"
-    echo
-    echo -e "\t\033[4;36mCoding Updates\033[0m"
-    echo -e "\t5. Replace Shellscript Text"
-    echo -e "\t6. Bat Menu Viewer"
-    echo
-    echo -e "\t0. Exit Menu\n\n"
-    echo -en "\t\tEnter an Option: "
+    printf "\n"
+    printf "\t\t\t"
+    format_printf "Dev Menu" "yellow" "bold"
+    printf "\n"
+    printf "\t1. Devsync (Dev to Local Repo)\n"
+    printf "\t2. GitHub Desktop (Local Repo to GitHub)\n"
+    printf "\t3. Crypvault (Local Repo to iCloud)\n"
+    printf "\t4. Backup Summary\n"
+    printf "\n"
+    printf "\t\033[4;36mCoding Updates\033[0m\n"
+    printf "\t5. Replace Shellscript Text\n"
+    printf "\t6. Bat Menu Viewer\n"
+    printf "\n"
+    printf "\t0. Exit Menu\n\n"
+    printf "\t\tEnter an Option: "
     # Read entire input instead of just one character
     read option
     # Remove any whitespace
@@ -98,7 +105,7 @@ while true; do
                 ;;
             *)
                 clear
-                echo "Sorry, wrong selection"
+                warning_printf "Sorry, wrong selection"
                 hit_any_key=true
                 ;;
         esac
@@ -107,12 +114,14 @@ while true; do
         break
     else
         clear
-        echo "Please enter a valid number"
+        warning_printf "Please enter a valid number"
         hit_any_key=true
     fi
     # Check if the user should be prompted to hit any key to continue
     if [[ "$hit_any_key" == "true" ]]; then
-        echo -en "\n\n\t\t\tPress any key to continue"
+        printf "\n\n\t\t\t"
+        # Use printf with info formatting but without newline
+        printf '\033[1;34m%s\033[0m' "ℹ️  Press any key to continue"
         read -k 1 line
     fi
 done
