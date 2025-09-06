@@ -130,6 +130,7 @@ alias fedoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
 alias fpdoc="FLibFormatPrintfDoc.sh"		# List FLibFormatPrintf.sh Documentation
 alias of="open ."				# Open Current Directory in Finder
 alias np="clear; echo 'Node Processes...'; echo; echo 'PID    CPU  MEM  COMMAND'; ps aux | grep node | grep -v grep | awk '{print \$2, \$3, \$4, \$11}' | column -t" # List Node Processes with Header
+alias ds="clear; echo 'Disk Space...'; echo; diskspace --human-readable" # List Disk Space
 alias ctest="Colortest.sh"			# Display Color Test
 alias webapps="clear; echo 'Web Apps...'; echo; ls --color=never -1 ~/Applications; echo" # List Safari Web Apps
 #=> End Dev Commands
