@@ -32,7 +32,9 @@ function viewbrewfile {
     format_printf "Brew File..." "yellow" "bold"
     printf "\n"
     cat ~/Brewfile
-    printf "\n\n\t\t\tPress any key to view App Descriptions"
+    printf "\n\n\t\t\t"
+    # Use printf with info formatting but without newline
+    printf '\033[1;34m%s\033[0m' "ℹ️  Press any key to view App Descriptions"
     read -k 1 line
     # Display Selected Brew File App Descriptions
     clear
