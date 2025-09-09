@@ -93,8 +93,10 @@ function autoupdate_status() {
             minutes=$(printf "%02d" "$minutes")
             echo "Runs Daily: ${hour}:${minutes}"
         fi 
-        echo -en "\n\n\t\t\tPress any key to view the Autoupdate Log"
-        read -k 1
+        printf "\n\n\t\t\t"
+        # Use printf with info formatting but without newline
+        printf '\033[1;34m%s\033[0m' "ℹ️  Press any key to view the Autoupdate Log"
+        read -k 1 line
         clear
         print_status "${COLOR_BLUE}" "Brew Autoupdate Log Listing..."
         echo
@@ -270,8 +272,6 @@ while true; do
     # Use printf with info formatting but without newline
     printf '\033[1;34m%s\033[0m' "ℹ️  Press any key to continue"
     read -k 1 line
-#    echo -en "\n\tPress any key to continue"
-#    read -k 1
 done
 
 # Reset Ctrl-C behavior to default
