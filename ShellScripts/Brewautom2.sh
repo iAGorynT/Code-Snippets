@@ -101,14 +101,21 @@ function autoupdate_status() {
         print_status "${COLOR_BLUE}" "Brew Autoupdate Log Listing..."
         echo
 
-        # Process log file using awk for better performance
+        # Determine if 'bat' is available, otherwise use 'less'
+        if command -v bat >/dev/null 2>&1; then
+            pager=(bat --language=log --paging=auto)
+        else
+            pager=(less)
+        fi
+
+        # Process log file using awk and view with bat or less
         awk '
             /^(Brew Update,)/ {
                 if (!first) print "====>";
                 first = 0;
             }
             {print}
-        ' "$autolog" | less
+        ' "$autolog" | $pager
 
         # Confirm empty log execution
         while true; do
