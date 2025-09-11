@@ -133,7 +133,7 @@ cleanup_and_exit() {
     [[ -f "$DECRYPTED_FILE" ]] && { rm -P "$DECRYPTED_FILE" 2>/dev/null || rm "$DECRYPTED_FILE"; }
     unset GAUTH_PASSWORD
     echo ""
-    info_printf "Exiting TOTP viewer. Goodbye!"
+    info_printf "Exiting TOTP viewer!"
     exit 0
 }
 
