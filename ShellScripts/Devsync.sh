@@ -92,7 +92,7 @@ function sync_mcpservers() {
         return 1
     fi
     
-    safe_rsync "$MCPSERVER_DIR/" "$GHS_BASE_DIR/mcp-servers" -avhl --delete --exclude '.DS_Store' --exclude 'node_modules'
+    safe_rsync "$MCPSERVER_DIR/" "$GHS_BASE_DIR/mcp-servers" -avhl --delete --exclude '.DS_Store' --exclude 'node_modules' --exclude '*backup*'
 }
 
 function sync_dotfiles() {
