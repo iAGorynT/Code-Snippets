@@ -307,14 +307,14 @@ update_version_number() {
     esac
 }
 
-create_mcpb_file() {
-    rocket_printf "Creating Claude Extension File (MCPB)..."
+create_dxt_file() {
+    rocket_printf "Creating Claude Extension File (DXT)..."
     printf "\n"
     
     # Check if npx is available
     if ! command -v npx &> /dev/null; then
         error_printf "npx is not installed or not in PATH"
-        error_printf "npx is required to run @anthropic-ai/mcpb"
+        error_printf "npx is required to run @anthropic-ai/dxt"
         return 1
     fi
     
@@ -323,31 +323,31 @@ create_mcpb_file() {
     local dir_name=$(basename "$current_dir")
     
     info_printf "Current directory: $current_dir"
-    info_printf "This will create a MCPB file from the current directory contents"
+    info_printf "This will create a DXT file from the current directory contents"
     printf "\n"
     
-    if ! get_yes_no "Do you want to create a MCPB file from the current directory?"; then
-        warning_printf "MCPB creation cancelled by user"
+    if ! get_yes_no "Do you want to create a DXT file from the current directory?"; then
+        warning_printf "DXT creation cancelled by user"
         return 0
     fi
     
-    update_printf "Running: npx @anthropic-ai/mcpb pack"
+    update_printf "Running: npx @anthropic-ai/dxt pack"
     printf "\n"
     
-    # Run the mcpb pack command
-    if npx @anthropic-ai/mcpb pack; then
-        success_printf "MCPB file created successfully!"
+    # Run the dxt pack command
+    if npx @anthropic-ai/dxt pack; then
+        success_printf "DXT file created successfully!"
         
-        # Look for the generated MCPB file
-        local mcpb_files=(*.mcpb)
-        if [[ -f "${mcpb_files[1]}" ]]; then
-            success_printf "Generated MCPB file: ${mcpb_files[1]}"
+        # Look for the generated DXT file
+        local dxt_files=(*.dxt)
+        if [[ -f "${dxt_files[1]}" ]]; then
+            success_printf "Generated DXT file: ${dxt_files[1]}"
         fi
         
         return 0
     else
         local exit_code=$?
-        error_printf "MCPB creation failed with exit code: $exit_code"
+        error_printf "DXT creation failed with exit code: $exit_code"
         return $exit_code
     fi
 }
@@ -480,7 +480,7 @@ main() {
         printf "2) Major version update\n"
         printf "3) Update Package Version Number\n"
         printf "4) MCP Server Test\n"
-        printf "5) Create Claude Extension File (MCPB)\n"
+        printf "5) Create Claude Extension File (DXT)\n"
         printf "6) Set MCP Server\n"
         printf "0) Exit\n"
 	printf "\n"
@@ -497,7 +497,7 @@ main() {
             # Use || true to ignore the exit code
             3) update_version_number || true ;;
             4) mcp_server_test ;;
-            5) create_mcpb_file ;;
+            5) create_dxt_file ;;
             6) select_mcp_server ;;
             0) warning_printf "Exiting without making any updates"; break ;;
             *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, 5, 6, or 0." ;;

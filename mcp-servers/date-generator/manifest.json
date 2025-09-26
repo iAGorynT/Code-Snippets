@@ -1,21 +1,10 @@
 {
-  "dxt_version": "0.1",
-  "name": "date-generator",
-  "version": "1.0.7",
+  "manifest_version": "0.2",
+  "name": "date-generator-mcp",
+  "version": "2.0.0",
   "description": "MCP server for generating dates by month, year, and day of week",
   "author": {
     "name": "Bruce Guthrie"
-  },
-  "server": {
-    "type": "node",
-    "entry_point": "index.js",
-    "mcp_config": {
-      "command": "node",
-      "args": [
-        "${__dirname}/index.js"
-      ],
-      "env": {}
-    }
   },
   "icon": "icon.png",
   "tools": [
@@ -40,6 +29,17 @@
       "description": "Returns available months, years, and days of week for selection."
     }
   ],
+  "server": {
+    "type": "node",
+    "entry_point": "index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/index.js"
+      ],
+      "env": {}
+    }
+  },
   "keywords": [
     "dates"
   ],
