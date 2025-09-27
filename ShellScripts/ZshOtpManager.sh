@@ -90,7 +90,7 @@ cleanup_and_exit() {
     
     # Only print goodbye message if not already exiting due to error
     if [[ $? -eq 0 ]]; then
-        info_printf "Exiting Zsh OTP Manager. Goodbye!"
+        info_printf "Exiting Zsh OTP Manager!"
     fi
     
     # Remove the trap before exiting to prevent recursive calls
