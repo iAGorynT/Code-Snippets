@@ -68,6 +68,8 @@ find_architecture_dmg() {
 # Enhanced download function with progress and error handling
 download_java_dmg() {
     local dmg_url="$1"
+    # Uncomment and modify the line below to use a specific subdirectory
+    # local download_dir="$HOME/Downloads/Java/Azul/ARM Java Installation"
     local download_dir="$HOME/Downloads"
     local download_path="$download_dir/$(basename "$dmg_url")"
     
