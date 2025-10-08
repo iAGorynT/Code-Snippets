@@ -1,17 +1,21 @@
 #!/bin/zsh
 # Uninstall and fully clean up a globally installed npm package
 
+# Source function library with error handling
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
+source "$FORMAT_LIBRARY"
+
 clear
-echo "🚀 Starting npm global package cleanup..."
-echo
+rocket_printf "Starting npm global package cleanup..."
+printf '\n'
 
 if [[ -z "$1" ]]; then
-  echo "Usage: $0 <package-name>"
-  exit 1
+  error_printf "Usage: $0 <package-name>" true
 fi
 
 PACKAGE="$1"
-echo "🔍 Checking for global npm package: $PACKAGE"
+info_printf "Checking for global npm package: $PACKAGE"
 
 # Get npm global directories
 NPM_GLOBAL_DIR=$(npm root -g)
@@ -19,10 +23,10 @@ NPM_BIN_DIR=$(npm bin -g)
 
 # Step 1: Check if package is actually installed
 if [[ ! -d "$NPM_GLOBAL_DIR/$PACKAGE" ]]; then
-  echo "✅ $PACKAGE not found in global npm packages."
+  success_printf "$PACKAGE not found in global npm packages."
   INSTALLED=false
 else
-  echo "📦 Found $PACKAGE at: $NPM_GLOBAL_DIR/$PACKAGE"
+  package_printf "Found $PACKAGE at: $NPM_GLOBAL_DIR/$PACKAGE"
   INSTALLED=true
   
   # Get list of binaries this package provides before uninstalling
@@ -44,23 +48,23 @@ fi
 
 # Step 2: Uninstall globally
 if [[ "$INSTALLED" == true ]]; then
-  echo "🧩 Uninstalling $PACKAGE..."
+  format_printf "Uninstalling $PACKAGE..." "blue" "bold" "🧩"
   npm uninstall -g "$PACKAGE" 2>/dev/null
   
   # Check if uninstall failed due to permissions
   if [[ $? -ne 0 ]]; then
-    echo "⚠️ Permission denied, trying with sudo..."
+    warning_printf "Permission denied, trying with sudo..."
     sudo npm uninstall -g "$PACKAGE"
   fi
 fi
 
 # Step 3: Remove any lingering binaries
 if [[ ${#BINARIES[@]} -gt 0 ]]; then
-  echo "🧹 Checking for leftover binaries..."
+  clean_printf "Checking for leftover binaries..."
   for BIN in "${BINARIES[@]}"; do
     BIN_PATH="$NPM_BIN_DIR/$BIN"
     if [[ -L "$BIN_PATH" ]] || [[ -f "$BIN_PATH" ]]; then
-      echo "⚙️ Removing: $BIN_PATH"
+      format_printf "Removing: $BIN_PATH" "cyan" "italic" "⚙️ "
       sudo rm -f "$BIN_PATH"
     fi
   done
@@ -68,23 +72,23 @@ else
   # Fallback: check for binary matching package name
   BIN_PATH="$NPM_BIN_DIR/$PACKAGE"
   if [[ -L "$BIN_PATH" ]] || [[ -f "$BIN_PATH" ]]; then
-    echo "🧹 Removing binary: $BIN_PATH"
+    clean_printf "Removing binary: $BIN_PATH"
     sudo rm -f "$BIN_PATH"
   fi
 fi
 
 # Step 4: Clean up package directory if it still exists
 if [[ -d "$NPM_GLOBAL_DIR/$PACKAGE" ]]; then
-  echo "🗑️ Removing leftover package directory..."
+  format_printf "Removing leftover package directory..." "green" "italic" "🗑️ "
   sudo rm -rf "$NPM_GLOBAL_DIR/$PACKAGE"
 fi
 
 # Step 5: Clear npm cache
-echo "🧺 Cleaning npm cache..."
+format_printf "Cleaning npm cache..." "green" "italic" "🧺"
 npm cache clean --force >/dev/null 2>&1
 
 # Step 6: Verify removal
-echo "🔎 Verifying cleanup..."
+format_printf "Verifying cleanup..." "blue" "bold" "🔎"
 ISSUES=()
 
 # Check if package directory still exists
@@ -106,12 +110,12 @@ else
 fi
 
 if [[ ${#ISSUES[@]} -gt 0 ]]; then
-  echo "❌ Issues found:"
+  error_printf "Issues found:"
   for ISSUE in "${ISSUES[@]}"; do
-    echo "   - $ISSUE"
+    printf '   - %s\n' "$ISSUE"
   done
-  echo "You may need to remove these manually or check your PATH."
+  printf 'You may need to remove these manually or check your PATH.\n'
   exit 1
 else
-  echo "✅ $PACKAGE fully removed from your system!"
+  success_printf "$PACKAGE fully removed from your system!"
 fi
