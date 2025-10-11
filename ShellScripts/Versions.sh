@@ -12,6 +12,8 @@ printf "\n"
 
 # Bash
 printf "Bash: %s\n" "$(bash --version)" | grep -e 'version '
+printf "Zsh:  %s\n" "$(zsh --version)"
+printf "Current Shell: $SHELL\n"
 
 # GitHub
 printf "\n"
