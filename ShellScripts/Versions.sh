@@ -10,13 +10,7 @@ clear
 format_printf "Software Versions..." yellow bold
 printf "\n"
 
-# Bash
-printf "Bash: %s\n" "$(bash --version)" | grep -e 'version '
-printf "Zsh:  %s\n" "$(zsh --version)"
-printf "Current Shell: $SHELL\n"
-
 # GitHub
-printf "\n"
 info_printf "GitHub:"
 # Git
 printf "Git: %s\n" "$(git --version)"
@@ -135,12 +129,15 @@ else
     error_printf "Rosetta2: NOT installed"
 fi
 
+# Shells
+printf "\n"
+info_printf "Shells:"
+printf "Bash: %s\n" "$(bash --version)" | grep -e 'version '
+printf "Zsh:  %s\n" "$(zsh --version)"
+printf "Current Shell: $SHELL\n"
+
 # XCode Command Line Tools
 printf "\n"
 info_printf "Xcode Command Line Tools:"
 pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
-printf "\n"
-
-# Zsh
-printf "Zsh: %s\n" "$(zsh --version)"
 
