@@ -197,9 +197,6 @@ export FZF_CTRL_R_OPTS="--no-preview --layout=reverse --height=40% --tiebreak=in
 # Source fzf
 source <(fzf --zsh)
 
-# CoPilot Aliases
-eval "$(gh copilot alias -- zsh)"
-
 # zJump - Jump to Frequent Directories
 # Note: zJump is a Shell Function
 source ~/bin/zJump.sh
