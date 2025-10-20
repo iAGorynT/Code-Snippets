@@ -1,4 +1,5 @@
 #!/bin/zsh
+# NOTE: GitHub CLI Copilor Extension Depreciated as of October 25, 2024
 # Source function library with error handling
 FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 LOGS_DIR="$HOME/.logs"
