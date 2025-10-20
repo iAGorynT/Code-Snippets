@@ -52,8 +52,6 @@ main() {
         delete_item $HOME/.logs/pip_update.log
 	# Delete Vim Plugin Update Log
 	delete_item $HOME/.logs/vim_plugin_update.log
-	# Delete Copilot Extension Update Log
-	delete_item $HOME/.logs/copi_update.log
     else
         error_printf "Disk Cleanup cancelled by user."
     fi
