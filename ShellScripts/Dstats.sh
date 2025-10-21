@@ -30,7 +30,7 @@ get_mac_disk_space() {
     local purgeable_space=$(diskutil info "$mount_point" | grep "Purgeable Space" | awk -F ': ' '{print $2}')
    
     clear
-    echo "Disk Detail Information..."
+    echo "\033[33;1mDisk Detail Information...\033[0m"
     echo
 
     # Disk Stats

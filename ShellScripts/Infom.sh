@@ -36,8 +36,8 @@ function hname {
 
 function penv {
     clear
-    echo "Environment Variables..."
-    echo " "
+    format_printf "Environment Variables..." "yellow" "bold"
+    printf "\n"
     printenv | more
     CLOSE_FINDER_WINDOWS=0
 }
@@ -50,18 +50,30 @@ function sver {
 
 function pkgu {
     clear
-    echo "Installed Packages..."
-    echo " "
+    format_printf "Installed Packages..." "yellow" "bold"
+    printf "\n"
     pkgutil --pkgs | more
     CLOSE_FINDER_WINDOWS=0
 }
 
 function pall {
     clear
-    echo "Particulars Information..."
-    echo " "
+    format_printf "Particulars Information..." "yellow" "bold"
+    printf "\n"
     particulars -a
     CLOSE_FINDER_WINDOWS=0
+}
+
+function ghstats {
+    clear
+    format_printf "GitHub Stats..." "yellow" "bold"
+    printf "\n"
+    # Determine if 'gitfetch' is available, otherwise display message
+    if command -v gitfetch >/dev/null 2>&1; then
+        gitfetch
+    else
+        warning_printf "'gitfetch' command not found. Please install it to view GitHub stats." 
+    fi
 }
 
 function dstats {
@@ -81,7 +93,8 @@ function menu {
     printf "\t3. Software Versions\n"
     printf "\t4. Installed Packages\n"
     printf "\t5. Particulars Information\n"
-    printf "\t6. Disk Stats\n"
+    printf "\t6. GitHub Stats\n"
+    printf "\t7. Disk Stats\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
     # Read entire input instead of just one character
@@ -121,6 +134,10 @@ while true; do
                 hit_any_key=true
                 ;;
             6)
+                ghstats
+                hit_any_key=true
+                ;;
+            7)
                 dstats
                 hit_any_key=true
                 ;;
