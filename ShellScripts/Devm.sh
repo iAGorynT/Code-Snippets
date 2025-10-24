@@ -43,6 +43,11 @@ function reptext {
     ReplaceShellText.sh
 }
 
+function autofork {
+    clear
+    AutoForkClone.sh
+}
+
 function mbat {
     clear
     MBat.sh
@@ -61,7 +66,8 @@ function menu {
     printf "\n"
     printf "\t\033[4;36mCoding Updates\033[0m\n"
     printf "\t5. Replace Shellscript Text\n"
-    printf "\t6. Bat Menu Viewer\n"
+    printf "\t6. Auto Fork and Clone Repo\n"
+    printf "\t7. Bat Menu Viewer\n"
     printf "\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
@@ -100,6 +106,10 @@ while true; do
                 hit_any_key=true
                 ;;
             6)
+                autofork
+                hit_any_key=true
+                ;;
+            7)
                 mbat
                 hit_any_key=true
                 ;;
