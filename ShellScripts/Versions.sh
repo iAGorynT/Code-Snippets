@@ -16,6 +16,8 @@ info_printf "GitHub:"
 printf "Git: %s\n" "$(git --version)"
 # Github CLI
 printf "GitHub CLI: %s\n" "$(gh --version)" | grep -e 'version '
+# Copilot CLI
+printf "Copilot CLI: %s\n" "$(copilot --version | grep -v '^Commit:')"
 printf "\n"
 
 # Homebrew
@@ -137,5 +139,4 @@ printf "Current Shell: $SHELL\n"
 # XCode Command Line Tools
 printf "\n"
 info_printf "Xcode Command Line Tools:"
-pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
-
+pkgutil --pkg-info=com.apple.pkg.CLTools_Executables | grep -e 'package-id:' -e 'version: '
