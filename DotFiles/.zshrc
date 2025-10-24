@@ -131,6 +131,7 @@ alias fpdoc="FLibFormatPrintfDoc.sh"		# List FLibFormatPrintf.sh Documentation
 alias of="open ."				# Open Current Directory in Finder
 alias np="clear; echo 'Node Processes...'; echo; echo 'PID    CPU  MEM  COMMAND'; ps aux | grep node | grep -v grep | awk '{print \$2, \$3, \$4, \$11}' | column -t" # List Node Processes with Header
 alias npml="clear; echo 'Global NPM Packages...'; echo; npm list -g --depth=0"	# List Global NPM Packages
+alias npmo="clear; echo 'Outdated NPM Packages...'; echo; npm outdated -g --depth=0  "	# List Outdated Global NPM Packages
 alias npmu="NpmGlobalUninstall.sh"              # Uninstall Global NPM Packages - npmu <package name>
 alias ds="clear; echo 'Disk Space...'; echo; diskspace --human-readable" # List Disk Space
 alias ctest="Colortest.sh"			# Display Color Test
