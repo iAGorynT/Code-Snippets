@@ -39,6 +39,9 @@ check_gh_auth() {
 }
 
 # --- MAIN ---
+clear
+echo -e "\033[1;33mAuto Fork and Clone...\033[0m"
+echo
 [[ "$1" == "-h" || "$1" == "--help" ]] && usage
 
 # Check GitHub CLI authentication first
