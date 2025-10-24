@@ -73,8 +73,7 @@ ORIGINAL_USER=$(echo "$REPO_URL" | sed -E 's#https://github\.com/([^/]+)/.*#\1#'
 
 # Check if forking your own repo
 if [[ "$ORIGINAL_USER" == "$GITHUB_USER" ]]; then
-  echo "⚠️  This is already your repository. Do you want to just clone it? (y/n)"
-  read -r response
+  read -r "response?⚠️  This is already your repository. Do you want to just clone it? (y/n) "
   if [[ "$response" =~ ^[Yy]$ ]]; then
     FORK_URL="$REPO_URL"
     SKIP_FORK=true
@@ -89,8 +88,7 @@ fi
 
 # Get optional feature branch (from argument or prompt)
 if [[ -z "$2" ]]; then
-  echo "Enter feature branch name (press Enter to skip):"
-  read -r FEATURE_BRANCH
+  read -r "FEATURE_BRANCH?Enter feature branch name (press Enter to skip): "
 else
   FEATURE_BRANCH="$2"
 fi
