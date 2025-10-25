@@ -3,7 +3,7 @@
 # Automates GitHub fork → clone → setup (with optional feature branch)
 # Repos are cloned into $HOME/Documents/GitHub
 
-# Enhanced npm package update script with simplified menu
+# Source function library with error handling
 FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 [[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
