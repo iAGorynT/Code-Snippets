@@ -3,6 +3,11 @@
 # Automates GitHub fork → clone → setup (with optional feature branch)
 # Repos are cloned into $HOME/Documents/GitHub
 
+# Enhanced npm package update script with simplified menu
+FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
+source "$FORMAT_LIBRARY"
+
 # --- CONFIG ---
 BASE_DIR="$HOME/Documents/GitHub"
 
@@ -25,7 +30,7 @@ EOF
 validate_url() {
   local url="$1"
   if [[ ! "$url" =~ ^https://github\.com/[^/]+/[^/]+/?$ ]]; then
-    echo "❌ Invalid GitHub URL format. Expected: https://github.com/username/repo"
+    error_printf "Invalid GitHub URL format. Expected: https://github.com/username/repo"
     return 1
   fi
   return 0
@@ -33,15 +38,14 @@ validate_url() {
 
 check_gh_auth() {
   if ! gh auth status &>/dev/null; then
-    echo "❌ Not authenticated with GitHub CLI. Please run: gh auth login"
-    exit 1
+    error_printf "Not authenticated with GitHub CLI. Please run: gh auth login" true
   fi
 }
 
 # --- MAIN ---
 clear
-echo -e "\033[1;33mAuto Fork and Clone...\033[0m"
-echo
+format_printf "Auto Fork and Clone..." "yellow" "bold"
+printf "\n"
 [[ "$1" == "-h" || "$1" == "--help" ]] && usage
 
 # Check GitHub CLI authentication first
@@ -50,8 +54,7 @@ check_gh_auth
 # Get GitHub username
 GITHUB_USER=$(gh api user --jq .login 2>/dev/null)
 if [[ -z "$GITHUB_USER" ]]; then
-  echo "❌ Failed to get GitHub username. Check your authentication."
-  exit 1
+  error_printf "Failed to get GitHub username. Check your authentication." true
 fi
 
 # Get repo URL (from argument or prompt)
@@ -59,7 +62,7 @@ if [[ -z "$1" ]]; then
   read -r "REPO_URL?Enter the GitHub repository URL to fork: "
   REPO_URL="${REPO_URL## }"  # Trim leading whitespace
   REPO_URL="${REPO_URL%% }"  # Trim trailing whitespace
-  [[ -z "$REPO_URL" ]] && { echo "❌ No URL provided"; exit 1; }
+  [[ -z "$REPO_URL" ]] && { error_printf "No URL provided" true; }
 else
   REPO_URL="$1"
 fi
@@ -81,7 +84,7 @@ if [[ "$ORIGINAL_USER" == "$GITHUB_USER" ]]; then
     FORK_URL="$REPO_URL"
     SKIP_FORK=true
   else
-    echo "Operation cancelled."
+    info_printf "Operation cancelled."
     exit 0
   fi
 else
@@ -99,25 +102,27 @@ fi
 LOCAL_PATH="$BASE_DIR/$REPO_NAME"
 
 # Display configuration
-echo "\n📋 Configuration:"
-echo "🔗 Original repo: $REPO_URL"
-echo "📦 Repo name: $REPO_NAME"
-echo "👤 GitHub user: $GITHUB_USER"
-echo "📂 Target directory: $LOCAL_PATH"
-[[ -n "$FEATURE_BRANCH" ]] && echo "🌿 Feature branch: $FEATURE_BRANCH"
+printf "\n"
+info_printf "Configuration:"
+printf "🔗 Original repo: %s\n" "$REPO_URL"
+printf "📦 Repo name: %s\n" "$REPO_NAME"
+printf "👤 GitHub user: %s\n" "$GITHUB_USER"
+printf "📂 Target directory: %s\n" "$LOCAL_PATH"
+[[ -n "$FEATURE_BRANCH" ]] && printf "🌿 Feature branch: %s\n" "$FEATURE_BRANCH"
 
 # Check if directory already exists
 if [[ -d "$LOCAL_PATH" ]]; then
-  echo "\n⚠️  Directory already exists: $LOCAL_PATH"
-  echo "Choose an action:"
-  echo "  1) Delete and re-clone"
-  echo "  2) Skip cloning and just setup remotes"
-  echo "  3) Cancel"
+  printf "\n"
+  warning_printf "Directory already exists: $LOCAL_PATH"
+  printf "Choose an action:\n"
+  printf "  1) Delete and re-clone\n"
+  printf "  2) Skip cloning and just setup remotes\n"
+  printf "  3) Cancel\n"
   read -r "choice?Enter choice (1-3): "
   
   case "$choice" in
     1)
-      echo "🗑️  Removing existing directory..."
+      clean_printf "Removing existing directory..."
       rm -rf "$LOCAL_PATH"
       ;;
     2)
@@ -125,7 +130,7 @@ if [[ -d "$LOCAL_PATH" ]]; then
       cd "$LOCAL_PATH" || exit 1
       ;;
     *)
-      echo "Operation cancelled."
+      info_printf "Operation cancelled."
       exit 0
       ;;
   esac
@@ -136,88 +141,90 @@ mkdir -p "$BASE_DIR"
 
 # --- FORK ---
 if [[ "$SKIP_FORK" != true ]]; then
-  echo "\n🍴 Forking $REPO_NAME to your account..."
+  printf "\n"
+  format_printf "Forking $REPO_NAME to your account..." "magenta" "bold" "🍴"
   
   # Check if fork already exists
   if gh repo view "$GITHUB_USER/$REPO_NAME" &>/dev/null; then
-    echo "✅ Fork already exists in your account"
+    success_printf "Fork already exists in your account"
   else
     if ! gh repo fork "$REPO_URL" --clone=false --remote=false; then
-      echo "❌ Fork failed. Check repository access and permissions."
-      exit 1
+      error_printf "Fork failed. Check repository access and permissions." true
     fi
-    echo "⏳ Waiting for fork to be ready..."
+    time_printf "Waiting for fork to be ready..."
     sleep 3
   fi
 fi
 
 # --- CLONE ---
 if [[ "$SKIP_CLONE" != true ]]; then
-  cd "$BASE_DIR" || { echo "❌ Cannot access $BASE_DIR"; exit 1; }
+  cd "$BASE_DIR" || { error_printf "Cannot access $BASE_DIR" true; }
   
-  echo "\n📥 Cloning your fork..."
+  printf "\n"
+  format_printf "Cloning your fork..." "cyan" "bold" "📥"
   if ! git clone "$FORK_URL"; then
-    echo "❌ Clone failed. Check network connection and repository access."
-    exit 1
+    error_printf "Clone failed. Check network connection and repository access." true
   fi
   
-  cd "$REPO_NAME" || { echo "❌ Cannot access cloned directory"; exit 1; }
+  cd "$REPO_NAME" || { error_printf "Cannot access cloned directory" true; }
 fi
 
 # --- UPSTREAM ---
 if [[ "$SKIP_FORK" != true ]]; then
-  echo "\n🔗 Adding upstream remote..."
+  printf "\n"
+  format_printf "Adding upstream remote..." "blue" "bold" "🔗"
   
   # Remove existing upstream if present
   git remote remove upstream &>/dev/null
   
   if ! git remote add upstream "$REPO_URL"; then
-    echo "⚠️  Failed to add upstream remote (may already exist)"
+    warning_printf "Failed to add upstream remote (may already exist)"
   fi
 fi
 
-echo "\n✅ Current remotes:"
+printf "\n"
+success_printf "Current remotes:"
 git remote -v
 
 # --- OPTIONAL FEATURE BRANCH ---
 if [[ -n "$FEATURE_BRANCH" ]]; then
-  echo "\n🌿 Creating feature branch: $FEATURE_BRANCH"
+  printf "\n"
+  format_printf "Creating feature branch: $FEATURE_BRANCH" "green" "bold" "🌿"
   
   # Validate branch name
   if ! git check-ref-format --branch "$FEATURE_BRANCH" &>/dev/null; then
-    echo "⚠️  Invalid branch name format. Using default branch."
+    warning_printf "Invalid branch name format. Using default branch."
   elif git rev-parse --verify "$FEATURE_BRANCH" &>/dev/null; then
-    echo "⚠️  Branch already exists. Switching to it..."
+    warning_printf "Branch already exists. Switching to it..."
     git checkout "$FEATURE_BRANCH"
   else
     git checkout -b "$FEATURE_BRANCH"
-    echo "✅ Branch '$FEATURE_BRANCH' created and checked out"
+    success_printf "Branch '$FEATURE_BRANCH' created and checked out"
   fi
 else
-  echo "\n💡 No feature branch specified. Staying on default branch."
+  printf "\n"
+  format_printf "No feature branch specified. Staying on default branch." "blue" "💡"
 fi
 
 # --- FINAL SUMMARY ---
-cat << EOF
-
-──────────────────────────────────────────────
-🎉 Setup Complete!
-──────────────────────────────────────────────
-📂 Local path : $LOCAL_PATH
-🌐 Fork URL   : $FORK_URL
-🔗 Upstream   : $REPO_URL
-$([ -n "$FEATURE_BRANCH" ] && echo "🌿 Branch     : $FEATURE_BRANCH")
-──────────────────────────────────────────────
-Next steps:
-  cd "$LOCAL_PATH"
-  
-  # Make your changes, then:
-  git add .
-  git commit -m "Your descriptive commit message"
-  git push origin ${FEATURE_BRANCH:-main}
-  
-  # Create a pull request:
-  gh pr create --web
-──────────────────────────────────────────────
-
-EOF
+printf "\n"
+printf "──────────────────────────────────────────────\n"
+rocket_printf "Setup Complete!"
+printf "──────────────────────────────────────────────\n"
+printf "📂 Local path : %s\n" "$LOCAL_PATH"
+printf "🌐 Fork URL   : %s\n" "$FORK_URL"
+printf "🔗 Upstream   : %s\n" "$REPO_URL"
+[[ -n "$FEATURE_BRANCH" ]] && printf "🌿 Branch     : %s\n" "$FEATURE_BRANCH"
+printf "──────────────────────────────────────────────\n"
+printf "Next steps:\n"
+printf "  cd \"%s\"\n" "$LOCAL_PATH"
+printf "  \n"
+printf "  # Make your changes, then:\n"
+printf "  git add .\n"
+printf "  git commit -m \"Your descriptive commit message\"\n"
+printf "  git push origin %s\n" "${FEATURE_BRANCH:-main}"
+printf "  \n"
+printf "  # Create a pull request:\n"
+printf "  gh pr create --web\n"
+printf "──────────────────────────────────────────────\n"
+printf "\n"
