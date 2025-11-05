@@ -14,7 +14,6 @@ readonly DOTFILES=(
     ".gvimrc"
     ".vimrc"
     ".zshrc"
-    ".zshenv"
 )
 readonly BREWFILES=(
     "Brewfile"
