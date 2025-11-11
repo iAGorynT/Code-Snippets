@@ -7,21 +7,6 @@ FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 [[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
-function pyup {
-    clear
-    PyUpdate.sh
-}
-
-function pyuninstall {
-    clear
-    PyUninstall.sh
-}
-
-function pipup {
-    clear
-    PipUpdate.sh
-}
-
 function vimup {
     clear
     VimUpdate.sh
@@ -68,20 +53,17 @@ function menu {
     printf "\t\t\t"
     format_printf "Utility Menu" "yellow" "bold"
     printf "\n"
-    printf "\t1. Python Update\n"
-    printf "\t2. Python Uninstaller\n"
-    printf "\t3. Pip Package Update\n"
-    printf "\t4. Vim Plugin Update\n"
-    printf "\t5. Java Update\n"
-    printf "\t6. Copilot CLI Update\n"
-    printf "\t7. Npm Package Update\n"
-    printf "\t8. Disk Cleanup\n"
-    printf "\t9. Cleanup Claude Workspace\n"
+    printf "\t1. Vim Plugin Update\n"
+    printf "\t2. Java Update\n"
+    printf "\t3. Copilot CLI Update\n"
+    printf "\t4. Npm Package Update\n"
+    printf "\t5. Disk Cleanup\n"
+    printf "\t6. Cleanup Claude Workspace\n"
     printf "\n"
     printf "\t"
     format_printf "Bundle Updates" "cyan" "underline"
-    printf "\t10. Update All Packages\n"
-    printf "\t11. Cleanup All Disks\n"
+    printf "\t7. Update All Packages\n"
+    printf "\t8. Cleanup All Disks\n"
     printf "\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
@@ -100,46 +82,34 @@ while true; do
                 break 
                 ;;
             1)
-                pyup
-                hit_any_key=true
-                ;;
-            2)
-                pyuninstall
-                hit_any_key=true
-                ;;
-            3)
-                pipup
-                hit_any_key=true
-                ;;
-            4)
                 vimup
                 hit_any_key=true
                 ;;
-            5)
+            2)
                 javaup
                 hit_any_key=true
                 ;;
-            6)
+            3)
                 copiup
                 hit_any_key=true
                 ;;
-            7)
+            4)
                 npmup
                 hit_any_key=true
                 ;;
-            8)
+            5)
                 cleanup
                 hit_any_key=true
                 ;;
-            9)
+            6)
                 cleanupclaude
                 hit_any_key=true
                 ;;
-            10)
+            7)
                 updateallpack
                 hit_any_key=true
                 ;;
-            11)
+            8)
                 cleanupalldisk
                 hit_any_key=true
                 ;;

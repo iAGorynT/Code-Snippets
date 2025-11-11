@@ -8,12 +8,10 @@ if [[ ! -f "$FORMAT_LIBRARY" ]]; then
 fi
 source "$FORMAT_LIBRARY"
 
-# Check if pyotp is installed
-if ! python3 -c "import pyotp" &> /dev/null; then
-    error_printf "Error: pyotp is required but not installed." 
-    error_printf "Please install pyotp package:"
-    error_printf "  - Using pip: pip install pyotp"
-    error_printf "  - Or: python3 -m pip install pyotp"
+# Check if uv is available
+if ! command -v uv &> /dev/null; then
+    error_printf "Error: uv is required but not found."
+    error_printf "Please install uv from https://github.com/astral-sh/uv"
     exit 1
 fi
 
@@ -68,7 +66,7 @@ generate_current_totp() {
     if [[ ! "$secret" =~ ^[A-Z2-7]+$ ]]; then
         return 1
     fi
-    python3 -c "import pyotp; print(pyotp.TOTP('$secret').now())" 2>/dev/null
+    uv run --quiet --with pyotp python -c "import pyotp; print(pyotp.TOTP('$secret').now())" 2>/dev/null
 }
 
 # Function to generate next TOTP code
@@ -78,7 +76,7 @@ generate_next_totp() {
     if [[ ! "$secret" =~ ^[A-Z2-7]+$ ]]; then
         return 1
     fi
-    python3 -c "import pyotp, time; print(pyotp.TOTP('$secret').at(int(time.time()) + $TOTP_PERIOD))" 2>/dev/null
+    uv run --quiet --with pyotp python -c "import pyotp, time; print(pyotp.TOTP('$secret').at(int(time.time()) + $TOTP_PERIOD))" 2>/dev/null
 }
 
 # Copy to clipboard function

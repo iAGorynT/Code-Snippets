@@ -124,7 +124,6 @@ alias ghdl="GithubDownloader.sh" 	# Download Github Files
 
 #=> Dev Commands
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
-alias pipup="PipUpdate.sh"			# Update Python Packages
 alias vimup="VimUpdate.sh"			# Update Vim Plugins
 alias fedoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
 alias fpdoc="FLibFormatPrintfDoc.sh"		# List FLibFormatPrintf.sh Documentation
@@ -201,11 +200,6 @@ source <(fzf --zsh)
 # zJump - Jump to Frequent Directories
 # Note: zJump is a Shell Function
 source ~/bin/zJump.sh
-
-# Pyenv - Python Version Manager
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - zsh)"
 
 # Activate Zsh Syntax Highlighting
 # NOTE:  Ensure This is at Very End of .zshrc

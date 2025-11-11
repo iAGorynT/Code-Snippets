@@ -28,8 +28,8 @@ hit_any_key_prompt() {
 }
 
 # List of updater scripts with corresponding package names
-updaters=("PyUpdate.sh" "PipUpdate.sh" "VimUpdate.sh" "JavaUpdate.sh" "CopiUpdate.sh" "NpmUpdate.sh")
-package_names=("Python" "Pip" "Vim" "Java" "Copilot" "Npm")
+updaters=("VimUpdate.sh" "JavaUpdate.sh" "CopiUpdate.sh" "NpmUpdate.sh")
+package_names=("Vim" "Java" "Copilot" "Npm")
 
 # Header
 clear

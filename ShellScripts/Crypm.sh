@@ -32,7 +32,7 @@ function gmanager {
 }
 
 function otppy {
-    python3 ~/PythonCode/otp_generator.py
+    uv run ~/PythonCode/otp_generator.py
 }
 
 function otpzsh {
