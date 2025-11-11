@@ -11,7 +11,7 @@ format_printf "App Descriptions..." "yellow" "bold"
 printf "\n"
 
 # Array of app names
-apps=("pyenv:" "iperf3:" "jq:" "macdown:" "speedtest:" "github:" "macvim-app:")
+apps=("uv:" "iperf3:" "jq:" "macdown:" "speedtest:" "github:" "macvim-app:")
 
 # Function to check if a line contains an app name
 contains_app() {
