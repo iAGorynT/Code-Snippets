@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.14"
+# dependencies = [
+#     "cryptography>=38.0.4",
+#     "pyotp>=2.8.0",
+# ]
+# ///
 import base64
 import os
 import pyotp

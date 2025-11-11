@@ -99,26 +99,6 @@ ssh -V 2>&1 | { read line; printf "OpenSSH: %s\n" "$line"; }
 
 # OpenSSL
 printf "OpenSSL: %s\n" "$(openssl version)"
-
-# Python
-printf "\n"
-info_printf "Python3:"
-python3 --version
-# Get the latest Python version from GitHub
-# This approach uses the GitHub API to check Python tags
-# Get all version tags and find the highest non-alpha/beta version
-latest_tag=$(curl -s https://api.github.com/repos/python/cpython/tags | 
-	grep -o '"name": "v[0-9]\+\.[0-9]\+\.[0-9]\+"' | 
-	sed 's/"name": "v//' | 
-	sed 's/"//' | 
-	sort -V | 
-	tail -1)
-info_printf "Latest Python version for Mac: $latest_tag"
-pyenv --version
-python3 -m pip --version | sed 's/\(.*\)from.*/\1/'
-printf "\n"
-info_printf "Pip Installed Packages:"
-pip list --format=columns
 printf "\n"
 
 # Rosetta2
@@ -128,6 +108,12 @@ if command -v lsbom >/dev/null && lsbom -f /Library/Apple/System/Library/Receipt
 else
     error_printf "Rosetta2: NOT installed"
 fi
+
+# Uv Python Manager and Tools
+printf "\n"
+info_printf "Uv Python Manager:"
+# printf "Uv:  %s\n" "$(uv --version)"
+uv --version
 
 # Shells
 printf "\n"
