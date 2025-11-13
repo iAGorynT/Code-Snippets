@@ -13,11 +13,11 @@ printf "\n"
 # Array of app names
 apps=("uv:" "iperf3:" "jq:" "macdown:" "speedtest:" "github:" "macvim-app:")
 
-# Function to check if a line contains an app name
+# Function to check if a line starts with an app name
 contains_app() {
-    local line=$1
+    local line="$1"
     for app in "${apps[@]}"; do
-        if [[ $line == *"$app"* ]]; then
+        if [[ "$line" == "$app"* ]]; then
             echo "$line"
             break
         fi
