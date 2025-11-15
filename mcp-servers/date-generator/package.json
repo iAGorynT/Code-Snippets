@@ -10,7 +10,7 @@
     "version": "test -f manifest.json && jq '.version = env.npm_package_version' manifest.json > tmp.json && mv tmp.json manifest.json || true"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.21.1"
+    "@modelcontextprotocol/sdk": "^1.22.0"
   },
   "keywords": [
     "mcp",
