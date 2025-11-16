@@ -111,9 +111,7 @@ fi
 
 # Uv Python Manager and Tools
 printf "\n"
-info_printf "Uv Python Manager:"
-# printf "Uv:  %s\n" "$(uv --version)"
-uv --version
+printf "uv Python Package Installer: %s\n" "$(uv --version)"
 
 # Shells
 printf "\n"
