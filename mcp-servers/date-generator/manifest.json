@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.2",
   "name": "date-generator-mcp",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "MCP server for generating dates by month, year, and day of week",
   "author": {
     "name": "Bruce Guthrie"
@@ -31,11 +31,11 @@
   ],
   "server": {
     "type": "node",
-    "entry_point": "index.js",
+    "entry_point": "server/index.js",
     "mcp_config": {
       "command": "node",
       "args": [
-        "${__dirname}/index.js"
+        "${__dirname}/server/index.js"
       ],
       "env": {}
     }
