@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Read and evaluate the main server file to get the functions
-const serverCode = readFileSync(join(__dirname, 'index.js'), 'utf8');
+const serverCode = readFileSync(join(__dirname, 'server', 'index.js'), 'utf8');
 
 // Extract the core functions for testing
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
