@@ -342,7 +342,19 @@ compile_typescript() {
         return 0
     fi
     
-    update_printf "Running: npm run build"
+    # Step 1: npm install
+    update_printf "Step 1: Running npm install to ensure all dependencies are present..."
+    if npm install; then
+        success_printf "npm install completed successfully!"
+    else
+        local exit_code=$?
+        error_printf "npm install failed with exit code: $exit_code"
+        return $exit_code
+    fi
+    printf "\n"
+    
+    # Step 2: npm run build
+    update_printf "Step 2: Running npm run build"
     printf "\n"
     
     # Run the build command
