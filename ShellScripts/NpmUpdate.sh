@@ -213,6 +213,43 @@ run_major_update() {
     fi
 }
 
+run_npm_audit() {
+    update_printf "Starting npm audit..."
+    
+    # Run npm audit and capture output
+    local audit_output
+    local audit_exit_code
+    audit_output=$(npm audit 2>&1)
+    audit_exit_code=$?
+    
+    # Check if vulnerabilities were found (exit code 0 means no vulnerabilities)
+    if [[ $audit_exit_code -eq 0 ]]; then
+        success_printf "No vulnerabilities found"
+        return 0
+    else
+        # Vulnerabilities were found - ask user if they want to fix
+        warning_printf "npm audit found vulnerabilities"
+        printf "\n"
+        # Display the audit results
+        printf "%s\n" "$audit_output"
+        printf "\n"
+        if ! get_yes_no "Do you want to run 'npm audit fix' to attempt repairs?"; then
+            warning_printf "npm audit fix cancelled by user"
+            return 1
+        fi
+        update_printf "Running npm audit fix..."
+        if npm audit fix; then
+            success_printf "npm audit fix completed successfully!"
+            return 0
+        else
+            local fix_exit_code=$?
+            error_printf "npm audit fix failed with exit code: $fix_exit_code"
+            warning_printf "Some vulnerabilities may require manual intervention"
+            return $fix_exit_code
+        fi
+    fi
+}
+
 update_version_number() {
     upgrade_printf "Version Number Update..."
     
@@ -550,9 +587,10 @@ main() {
         printf "5) MCP Server Test\n"
         printf "6) Create Claude Extension File (MCPB)\n"
         printf "7) Set MCP Server\n"
-              printf "0) Exit\n"
+        printf "8) Run npm audit\n"
+        printf "0) Exit\n"
         printf "\n"
-        read "choice?Enter your choice (0-7): "
+        read "choice?Enter your choice (0-8): "
 
 	# Default to exit if no input
         if [[ -z "$choice" ]]; then
@@ -568,8 +606,9 @@ main() {
             5) mcp_server_test ;;
             6) create_mcpb_file ;;
             7) select_mcp_server ;;
+            8) run_npm_audit ;;
             0) warning_printf "Exiting without making any updates"; break ;;
-            *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, 5, 6, 7, or 0." ;;
+            *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, 5, 6, 7, 8, or 0." ;;
         esac
         printf "\n"
         if ! get_yes_no "Would you like to perform another operation?"; then break; fi
