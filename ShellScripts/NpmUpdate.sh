@@ -4,8 +4,6 @@ FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 [[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
-cd $HOME/mcp-servers/date-generator
-
 SCRIPT_DIR=""
 HAS_PACKAGE_JSON=false
 HAS_NCU=false
