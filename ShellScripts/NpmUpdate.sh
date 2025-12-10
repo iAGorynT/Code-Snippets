@@ -9,10 +9,82 @@ HAS_PACKAGE_JSON=false
 HAS_NCU=false
 HAS_LOCKFILE=false
 LOCKFILE_TYPE=""
+CACHED_OUTDATED_OUTPUT=""
+OUTDATED_CACHE_VALID=false
 
 display_header() {
     clear
     format_printf "Npm Package Update..." "yellow" "bold" "package"
+}
+
+# Sanitize input from package.json to prevent command injection
+sanitize_json_string() {
+    local input="$1"
+    # Remove any characters that could be dangerous in shell context
+    # Keep only alphanumeric, spaces, dots, hyphens, underscores, and forward slashes
+    printf "%s" "$input" | sed 's/[^a-zA-Z0-9 .\/_-]//g'
+}
+
+# Safely read package.json field using jq with sanitization
+safe_jq_read() {
+    local file="$1"
+    local field="$2"
+    local default="$3"
+    
+    if [[ ! -f "$file" ]]; then
+        printf "%s" "$default"
+        return 1
+    fi
+    
+    # Validate that file is actually readable and appears to be JSON
+    if ! head -n 1 "$file" 2>/dev/null | grep -q '^[[:space:]]*{' ; then
+        printf "%s" "$default"
+        return 1
+    fi
+    
+    local result
+    result=$(jq -r "$field // \"$default\"" "$file" 2>/dev/null)
+    
+    # Sanitize the output
+    sanitize_json_string "$result"
+}
+
+# Validate and canonicalize path to prevent path traversal
+validate_path() {
+    local path="$1"
+    local base_path="$2"
+    
+    # Resolve to absolute path
+    local abs_path
+    abs_path=$(cd "$path" 2>/dev/null && pwd) || return 1
+    
+    # Ensure path is under base_path
+    if [[ "$abs_path" != "$base_path"* ]]; then
+        return 1
+    fi
+    
+    printf "%s" "$abs_path"
+    return 0
+}
+
+# Cache npm outdated results for reuse
+get_npm_outdated() {
+    if [[ "$OUTDATED_CACHE_VALID" == true ]]; then
+        printf "%s" "$CACHED_OUTDATED_OUTPUT"
+        return 0
+    fi
+    
+    # Run npm outdated and cache the result
+    CACHED_OUTDATED_OUTPUT=$(npm outdated 2>/dev/null || true)
+    OUTDATED_CACHE_VALID=true
+    
+    printf "%s" "$CACHED_OUTDATED_OUTPUT"
+}
+
+# Invalidate the outdated cache (call after updates)
+invalidate_outdated_cache() {
+    OUTDATED_CACHE_VALID=false
+    CACHED_OUTDATED_OUTPUT=""
 }
 
 validate_environment() {
@@ -70,8 +142,8 @@ show_package_info() {
     if [[ ! -f "package.json" ]]; then return 1; fi
     info_printf "Current project information:"
     if command -v jq &> /dev/null; then
-        local name=$(jq -r '.name // "unnamed"' package.json 2>/dev/null)
-        local version=$(jq -r '.version // "unknown"' package.json 2>/dev/null)
+        local name=$(safe_jq_read "package.json" ".name" "unnamed")
+        local version=$(safe_jq_read "package.json" ".version" "unknown")
         printf "  Project: %s (v%s)\n" "$name" "$version"
     else
         printf "  Location: %s\n" "$SCRIPT_DIR"
@@ -87,9 +159,7 @@ show_package_info() {
 
     if command -v npm &> /dev/null; then
         info_printf "Current package status:"
-        local outdated_output
-        # Use || true to ignore the exit code
-        outdated_output=$(npm outdated 2>/dev/null || true)
+        local outdated_output=$(get_npm_outdated)
         if [[ -n "$outdated_output" ]]; then
             printf "%s\n" "$outdated_output"
         else
@@ -99,25 +169,38 @@ show_package_info() {
 }
 
 select_mcp_server() {
-    info_printf "Scanning for MCP servers in $HOME/mcp-servers..."
+    # Validate and canonicalize base path
+    local mcp_base="$HOME/mcp-servers"
+    local validated_base
     
-    if [[ ! -d "$HOME/mcp-servers" ]]; then
-        error_printf "Directory $HOME/mcp-servers not found"
+    if [[ ! -d "$mcp_base" ]]; then
+        error_printf "Directory $mcp_base not found"
         return 1
     fi
+    
+    validated_base=$(cd "$mcp_base" 2>/dev/null && pwd) || {
+        error_printf "Failed to access $mcp_base"
+        return 1
+    }
+    
+    info_printf "Scanning for MCP servers in $validated_base..."
     
     local servers=()
     local server_names=()
     
-    # Find directories containing package.json
-    for dir in "$HOME/mcp-servers"/*/; do
-        if [[ -f "$dir/package.json" ]]; then
-            local dir_name=$(basename "$dir")
-            servers+=("$dir")
+    # Find directories containing package.json with optimized single-pass reading
+    for dir in "$validated_base"/*/; do
+        # Validate each subdirectory path
+        local validated_dir
+        validated_dir=$(validate_path "$dir" "$validated_base") || continue
+        
+        if [[ -f "$validated_dir/package.json" ]]; then
+            local dir_name=$(basename "$validated_dir")
+            servers+=("$validated_dir")
             
-            # Get the name from package.json using same logic as show_package_info
+            # Use safe_jq_read to get the name with sanitization
             if command -v jq &> /dev/null; then
-                local name=$(jq -r '.name // "unnamed"' "$dir/package.json" 2>/dev/null)
+                local name=$(safe_jq_read "$validated_dir/package.json" ".name" "$dir_name")
                 server_names+=("$name")
             else
                 server_names+=("$dir_name")
@@ -143,7 +226,12 @@ select_mcp_server() {
             local selected_dir="${servers[$choice]}"
             success_printf "Selected: ${server_names[$choice]}"
             success_printf "Changing to directory: $selected_dir"
-            cd "$selected_dir"
+            cd "$selected_dir" || {
+                error_printf "Failed to change to directory: $selected_dir"
+                return 1
+            }
+            # Invalidate cache when changing directories
+            invalidate_outdated_cache
             return 0
         else
             warning_printf "Invalid choice. Please enter a number between 1 and ${#servers[@]}."
@@ -154,8 +242,7 @@ select_mcp_server() {
 run_standard_update() {
     update_printf "Starting standard npm update (minor/patch versions)..."
     info_printf "Checking for available updates..."
-    # Use || true to ignore the exit code
-    local outdated_output=$(npm outdated 2>/dev/null || true)
+    local outdated_output=$(get_npm_outdated)
     if [[ -z "$outdated_output" ]]; then
         success_printf "All packages are already up to date!"
         return 0
@@ -170,6 +257,8 @@ run_standard_update() {
     update_printf "Running npm update..."
     if npm update; then
         success_printf "Standard npm update completed successfully!"
+        # Invalidate cache after successful update
+        invalidate_outdated_cache
         return 0
     else
         local exit_code=$?
@@ -204,6 +293,8 @@ run_major_update() {
     upgrade_printf "Updating package.json with major versions..."
     if ncu -u && npm install; then
         success_printf "Major version update completed successfully!"
+        # Invalidate cache after successful update
+        invalidate_outdated_cache
         return 0
     else
         error_printf "Update failed. You may need to resolve conflicts manually."
@@ -238,6 +329,8 @@ run_npm_audit() {
         update_printf "Running npm audit fix..."
         if npm audit fix; then
             success_printf "npm audit fix completed successfully!"
+            # Invalidate cache after successful audit fix
+            invalidate_outdated_cache
             return 0
         else
             local fix_exit_code=$?
@@ -253,7 +346,7 @@ update_version_number() {
     
     # Show current version
     if command -v jq &> /dev/null && [[ -f "package.json" ]]; then
-        local current_version=$(jq -r '.version // "unknown"' package.json 2>/dev/null)
+        local current_version=$(safe_jq_read "package.json" ".version" "unknown")
         info_printf "Current version: $current_version"
     fi
     
@@ -526,32 +619,52 @@ mcp_server_test() {
     fi
     printf "\n"
     
-    # Step 3: npm start
+    # Step 3: npm start - improved process management
     update_printf "Step 3: Starting npm start for 3-4 seconds..."
     printf "\n"
     
     update_printf "Running npm start..."
-    # Start npm in background and capture its PID
-    npm start &
+    
+    # Start npm in a new process group
+    setsid npm start > /dev/null 2>&1 &
     local npm_pid=$!
     
     # Let it run for 3-4 seconds
     sleep 4
     
-    # Kill the npm process and its children
+    # Kill the npm process and its entire process group
     info_printf "Stopping npm start process (PID: $npm_pid)..."
     
-    # Kill the process group to ensure all child processes are terminated
-    if kill -TERM -$npm_pid 2>/dev/null; then
-        success_printf "npm start process stopped successfully"
-    else
-        # If TERM doesn't work, try KILL
-        if kill -KILL -$npm_pid 2>/dev/null; then
-            warning_printf "npm start process force-killed"
+    # Get the process group ID
+    local pgid
+    pgid=$(ps -o pgid= -p $npm_pid 2>/dev/null | tr -d ' ')
+    
+    if [[ -n "$pgid" ]]; then
+        # Kill the entire process group
+        if kill -TERM -$pgid 2>/dev/null; then
+            # Wait up to 2 seconds for graceful shutdown
+            local timeout=0
+            while kill -0 -$pgid 2>/dev/null && [[ $timeout -lt 20 ]]; do
+                sleep 0.1
+                ((timeout++))
+            done
+            
+            # Force kill if still running
+            if kill -0 -$pgid 2>/dev/null; then
+                kill -KILL -$pgid 2>/dev/null
+                warning_printf "npm start process force-killed"
+            else
+                success_printf "npm start process stopped successfully"
+            fi
         else
             warning_printf "npm start process may have already terminated"
         fi
+    else
+        warning_printf "Could not determine process group - process may have already terminated"
     fi
+    
+    # Additional cleanup: find and kill any remaining node processes from this test
+    pkill -P $npm_pid 2>/dev/null || true
     
     # Wait a moment for cleanup
     sleep 1
