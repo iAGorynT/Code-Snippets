@@ -66,7 +66,7 @@ while true; do
     cd "$HOME/Desktop"
 
     # Define common actions
-    common_actions=("Encrypt" "Decrypt" "View")
+    common_actions=("Decrypt")
     
     # Add "GitSync" for non-vmgr case
     if [[ $vaultpassed != "vmgr" ]]; then
@@ -74,7 +74,7 @@ while true; do
     fi
 
     # Add remaining common actions
-    common_actions+=("Backup" "Config" "Reset" "Quit")
+    common_actions+=("Encrypt" "View" "Backup" "Config" "Reset" "Quit")
 
     printf "\n"
     info_printf "Select Action..." 
@@ -109,7 +109,7 @@ while true; do
         rset)
             # Reset settings to All Vaults
             vaultpassed=''
-            info_printf "Settings reset to All Vaults..."
+            printf '\033[1;34m%s%s%b' "ℹ️ " "Settings reset to All Vaults..." "\033[0m"
             read -k 1
             continue
             ;;
