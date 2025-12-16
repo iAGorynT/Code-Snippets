@@ -5,10 +5,81 @@ FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 [[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
+# Validate required commands exist
+validate_commands() {
+    local missing_commands=()
+    
+    for cmd in tar gzip openssl security base64; do
+        if ! command -v "$cmd" >/dev/null 2>&1; then
+            missing_commands+=("$cmd")
+        fi
+    done
+    
+    if [[ ${#missing_commands[@]} -gt 0 ]]; then
+        error_printf "Missing required commands: ${missing_commands[*]}" true
+    fi
+}
+
+# SSL Encrypt function
+ssl_encrypt() {
+    local vault_dir="$1"
+    local vault_enc="$2"
+    local hash_cfg="$3"
+    
+    tar -cf "$vault_dir.tar" "$vault_dir" || { error_printf "Failed to create tar archive" true; }
+    gzip "$vault_dir.tar" || { error_printf "Failed to gzip archive" true; }
+    openssl enc -base64 -e -aes-256-cbc -salt -pass pass:"$hash_cfg" -pbkdf2 -iter 1000000 -in "$vault_dir.tar.gz" -out "$vault_enc" || { error_printf "OpenSSL encryption failed" true; }
+    rm -f "$vault_dir.tar.gz" || { error_printf "Failed to clean up temporary tar.gz file" true; }
+}
+
+# SSL Decrypt function
+ssl_decrypt() {
+    local vault_dir="$1"
+    local vault_enc="$2"
+    local hash_cfg="$3"
+    
+    openssl enc -base64 -d -aes-256-cbc -salt -pass pass:"$hash_cfg" -pbkdf2 -iter 1000000 -in "$vault_enc" -out "$vault_dir.tar.gz" || { error_printf "OpenSSL decryption failed" true; }
+    tar -xzf "$vault_dir.tar.gz" || { error_printf "Failed to extract tar archive" true; }
+    rm -f "$vault_dir.tar.gz" || { error_printf "Failed to clean up temporary tar.gz file" true; }
+}
+
+# PFE Encrypt function
+pfe_encrypt() {
+    local vault_dir="$1"
+    local hash_cfg="$2"
+    
+    if ! command -v java >/dev/null 2>&1; then
+        error_printf "Java is required for PFE encryption but not found" true
+    fi
+    if [[ ! -f /Applications/Utilities/SSE/ssefenc.jar ]]; then
+        error_printf "PFE encryption jar file not found: /Applications/Utilities/SSE/ssefenc.jar" true
+    fi
+    
+    java -Xmx1g -jar /Applications/Utilities/SSE/ssefenc.jar "$vault_dir" "$hash_cfg" twofish || { error_printf "PFE encryption failed" true; }
+}
+
+# PFE Decrypt function
+pfe_decrypt() {
+    local vault_enc="$1"
+    local hash_cfg="$2"
+    
+    if ! command -v java >/dev/null 2>&1; then
+        error_printf "Java is required for PFE decryption but not found" true
+    fi
+    if [[ ! -f /Applications/Utilities/SSE/ssefenc.jar ]]; then
+        error_printf "PFE decryption jar file not found: /Applications/Utilities/SSE/ssefenc.jar" true
+    fi
+    
+    java -Xmx1g -jar /Applications/Utilities/SSE/ssefenc.jar "$vault_enc" "$hash_cfg" || { error_printf "PFE decryption failed" true; }
+}
+
 # Save passed Vault Type if supplied
 # Note: Parameter value should be "vmgr", "gmgr", or left blank
 #vaultpassed=$1
 vaultpassed=${1:-}
+
+# Validate required commands on startup
+validate_commands
 
 # Function to clear screen and display header
 display_header() {
@@ -215,37 +286,32 @@ while true; do
         enc)
             if [[ $encrypt_type == "SSL" ]]; then
                 # SSL Encrypt
-                tar -cf "$vault_dir.tar" "$vault_dir" && 
-                gzip "$vault_dir.tar" && 
-                openssl enc -base64 -e -aes-256-cbc -salt -pass pass:"$hash_cfg" -pbkdf2 -iter 1000000 -in "$vault_dir.tar.gz" -out "$vault_enc" && 
-                rm -f "$vault_dir.tar.gz"
+                ssl_encrypt "$vault_dir" "$vault_enc" "$hash_cfg"
             else
                 # PFE Encrypt
-                java -Xmx1g -jar /Applications/Utilities/SSE/ssefenc.jar "$vault_dir" "$hash_cfg" twofish
+                pfe_encrypt "$vault_dir" "$hash_cfg"
             fi
-            mv -f "$vault_enc" "$icloud_dir"
+            mv -f "$vault_enc" "$icloud_dir" || { error_printf "Failed to move encrypted vault to iCloud" true; }
             rm -rf ~/.trash/"$vault_dir"
-            mv -f "$vault_dir" ~/.trash
+            mv -f "$vault_dir" ~/.trash || { error_printf "Failed to move vault directory to trash" true; }
             info_printf "Vault Encrypted: $vault_dir"
             info_printf "Note: Encrypted Vault Moved To iCloud, Encrypted Directory Moved To Trash"
             ;;
         dec|view)
             if [[ $encrypt_type == "SSL" ]]; then
                 # SSL Decrypt
-                openssl enc -base64 -d -aes-256-cbc -salt -pass pass:"$hash_cfg" -pbkdf2 -iter 1000000 -in "$vault_enc" -out "$vault_dir.tar.gz" && 
-                tar -xzf "$vault_dir.tar.gz" && 
-                rm -f "$vault_dir.tar.gz"
+                ssl_decrypt "$vault_dir" "$vault_enc" "$hash_cfg"
             else
                 # PFE Decrypt
-                java -Xmx1g -jar /Applications/Utilities/SSE/ssefenc.jar "$vault_enc" "$hash_cfg"
+                pfe_decrypt "$vault_enc" "$hash_cfg"
             fi
             rm -rf ~/.trash/"$vault_enc"
-            mv -f "$vault_enc" ~/.trash
+            mv -f "$vault_enc" ~/.trash || { error_printf "Failed to move encrypted vault to trash" true; }
             info_printf "Vault Decrypted: $vault_dir"
             info_printf "Note: Encrypted Vault Moved To Trash"
             if [[ $action == "view" ]]; then
                 warning_printf "When Done Viewing, Move $vault_dir Vault To Trash!"
-                open "$HOME/Desktop/$vault_dir"
+                open "$HOME/Desktop/$vault_dir" || { error_printf "Failed to open vault directory" true; }
             fi
             ;;
         sync)
