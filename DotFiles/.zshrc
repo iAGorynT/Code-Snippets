@@ -134,6 +134,7 @@ alias npmo="clear; echo 'Outdated NPM Packages...'; echo; npm outdated -g --dept
 alias npmu="NpmGlobalUninstall.sh"              # Uninstall Global NPM Packages - npmu <package name>
 alias ds="clear; echo 'Disk Space...'; echo; diskspace --human-readable" # List Disk Space
 alias ctest="Colortest.sh"			# Display Color Test
+alias hlist="Hashlist.sh"			# Hash Key List
 alias webapps="clear; echo 'Web Apps...'; echo; ls --color=never -1 ~/Applications; echo" # List Safari Web Apps
 #=> End Dev Commands
 
