@@ -70,7 +70,10 @@ lookup_hash_keys() {
     # Print completion message
     printf "\033[1;36mOutput written to: %s\033[0m\n" "$OUTPUT_FILE"
 
-    bat $OUTPUT_FILE
+    # Check if the hash keys listing file exists
+    if [[ -f $OUTPUT_FILE ]]; then
+        bat $OUTPUT_FILE
+    fi
 }
 
 # Call the function
