@@ -53,6 +53,11 @@ function mbat {
     MBat.sh
 }
 
+function hlist {
+    clear
+    HashList.sh
+}
+
 function menu {
     clear
     printf "\n"
@@ -68,6 +73,7 @@ function menu {
     printf "\t5. Replace Shellscript Text\n"
     printf "\t6. Auto Fork and Clone Repo\n"
     printf "\t7. Bat Menu Viewer\n"
+    printf "\t8. Hash Key Report\n"
     printf "\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
@@ -111,6 +117,10 @@ while true; do
                 ;;
             7)
                 mbat
+                hit_any_key=true
+                ;;
+            8)
+                hlist
                 hit_any_key=true
                 ;;
             *)
