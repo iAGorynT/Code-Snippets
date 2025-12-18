@@ -20,6 +20,60 @@ cleanup() {
 # Set trap to cleanup on exit
 trap cleanup EXIT
 
+# Function to display menu and handle user selection
+show_menu() {
+    local encrypted_file="$1"
+    local temp_file="$2"
+    
+    while true; do
+        clear
+        format_printf "Hash Key Report - Clipboard Menu" "yellow" "bold"
+        printf "\n"
+        printf "Select an option to copy to clipboard:\n\n"
+        printf "1) Copy decryption command (direct print)\n"
+        printf "2) Copy decryption command (to file)\n"
+        printf "3) Copy decryption command (view on screen)\n"
+        printf "4) Exit\n\n"
+        
+        printf "Enter your choice (1-4): "
+        read -r choice
+        
+        case "$choice" in
+            1)
+                local cmd1="openssl enc -aes-256-cbc -pbkdf2 -d -in $encrypted_file | lp"
+                echo -n "$cmd1" | pbcopy
+                format_printf "✓ Option 1 copied to clipboard" "green" "bold"
+                printf "\n"
+                read -k "?Press any key to continue..."
+                ;;
+            2)
+                local cmd2="openssl enc -aes-256-cbc -pbkdf2 -d -in $encrypted_file > ~/Desktop/hash_report_temp.txt"
+                echo -n "$cmd2" | pbcopy
+                format_printf "✓ Option 2 copied to clipboard" "green" "bold"
+                printf "\n"
+                read -k "?Press any key to continue..."
+                ;;
+            3)
+                local cmd3="openssl enc -aes-256-cbc -pbkdf2 -d -in $encrypted_file"
+                echo -n "$cmd3" | pbcopy
+                format_printf "✓ Option 3 copied to clipboard" "green" "bold"
+                printf "\n"
+                read -k "?Press any key to continue..."
+                ;;
+            4)
+                format_printf "Exiting..." "cyan"
+                printf "\n"
+                return 0
+                ;;
+            *)
+                format_printf "Invalid choice. Please enter 1-4." "red" "bold"
+                printf "\n"
+                read -k "?Press any key to continue..."
+                ;;
+        esac
+    done
+}
+
 # Function to lookup Enigma Hash Keys
 lookup_hash_keys() {
     clear
@@ -82,26 +136,20 @@ lookup_hash_keys() {
         printf "Recovered keys: %d\n" "$success_count"
         printf "Missing keys: %d\n" "$error_count"
         printf "\n"
-        format_printf "INSTRUCTIONS FOR PRINTING:" "yellow" "bold"
+        format_printf "CLIPBOARD MENU:" "yellow" "bold"
         printf "\n"
-        printf "Option 1 - Decrypt and print directly:\n"
-        printf "  openssl enc -aes-256-cbc -pbkdf2 -d -in %s | lp\n" "$ENCRYPTED_FILE"
+        printf "You can now copy decryption commands to your clipboard.\n"
         printf "\n"
-        printf "Option 2 - Decrypt to temporary file for review, then print:\n"
-        printf "  openssl enc -aes-256-cbc -pbkdf2 -d -in %s > ~/Desktop/hash_report_temp.txt\n" "$ENCRYPTED_FILE"
-        printf "  Then print from ~/Desktop/hash_report_temp.txt and delete it when done\n"
-        printf "\n"
-        printf "Option 3 - View on screen first:\n"
-        printf "  openssl enc -aes-256-cbc -pbkdf2 -d -in %s\n" "$ENCRYPTED_FILE"
-        printf "\n"
-        format_printf "NOTE:" "red" "bold"
-        printf "Press ANY KEY when you are finished using the encrypted file above.\n"
-        printf "The encrypted file will be deleted after you confirm.\n"
-        printf "If you created a plaintext file (Option 2), remember to delete it manually.\n"
+        read -k "?Press any key to continue to menu..."
         printf "\n"
         
-        # Wait for user confirmation before cleanup
-        read -k "?Press any key to exit"
+        # Show the menu
+        show_menu "$ENCRYPTED_FILE" "$TEMP_FILE"
+        
+        format_printf "NOTE:" "red" "bold"
+        printf "The encrypted file will now be deleted.\n"
+        printf "If you created a plaintext file, remember to delete it manually.\n"
+        printf "\n"
     else
         format_printf "✗ Encryption failed" "red" "bold"
         printf "\n"
