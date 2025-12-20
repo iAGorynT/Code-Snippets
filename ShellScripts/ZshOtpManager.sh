@@ -30,7 +30,7 @@ error_print() {
 get_password() {
     # Load Hash_CFG
     local secret_type="OTPGenerator"
-    local account="MasterPassword"
+    local account="$USER"
     
     # Lookup Secret in Keychain
     local secret
