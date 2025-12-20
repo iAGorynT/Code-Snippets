@@ -171,7 +171,7 @@ def dump_option(manager):
 def main():
     # Configuration for keychain access
     KEYCHAIN_SERVICE = "OTPGenerator"
-    KEYCHAIN_ACCOUNT = "MasterPassword"
+    KEYCHAIN_ACCOUNT = os.getenv("USER")
 
     # Get password from keychain
     keychain_password = get_password_from_keychain(KEYCHAIN_SERVICE, KEYCHAIN_ACCOUNT)
