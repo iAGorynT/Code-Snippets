@@ -30,7 +30,7 @@ TOTP_PERIOD=30
 # Function to retrieve password from keychain
 get_password() {
     local secret_type="OTPGenerator"
-    local account="MasterPassword"
+    local account="$USER"
     local secret
     if ! secret=$(security find-generic-password -w -s "$secret_type" -a "$account"); then
         error_printf "Secret Not Found, error $?"

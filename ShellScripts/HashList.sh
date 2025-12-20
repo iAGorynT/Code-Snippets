@@ -94,13 +94,8 @@ lookup_hash_keys() {
     
         # Use the hash_key from array as secret_type
         secret_type="$hash_key"
-        
-        # Set account based on hash_key prefix
-        if [[ "$hash_key" == Hash* ]]; then
-            account="$USER"
-        else
-            account="MasterPassword"
-        fi
+        # Set account based username
+        account="$USER"
     
         # Lookup Secret in Keychain (suppress stderr)
         if ! secret=$(security find-generic-password -w -s "$secret_type" -a "$account" 2>/dev/null); then
