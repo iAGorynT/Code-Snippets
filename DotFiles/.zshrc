@@ -186,8 +186,31 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :200 {} || cat {}' --preview-window=right:60% --pointer='>'"
 
 # ALT+C Stays for Directory Search
-export FZF_ALT_C_COMMAND="fd . --type d --hidden --no-ignore --exclude .git --exclude node_modules $HOME/bin $HOME/bin/zTests $HOME/PythonCode $HOME/.logs $HOME/Downloads $HOME/Documents"
+export FZF_ALT_C_COMMAND='
+{
+  printf "%s\n" \
+    "$HOME/bin" \
+    "$HOME/bin/zTests" \
+    "$HOME/PythonCode" \
+    "$HOME/.logs" \
+    "$HOME/Downloads" \
+    "$HOME/Documents" \
+    "$HOME/mcp-servers" \
+    "$HOME/mcp-servers/date-generator"
 
+  fd --type d --hidden --no-ignore \
+    --exclude .git \
+    --exclude node_modules \
+    "$HOME/bin" \
+    "$HOME/bin/zTests" \
+    "$HOME/PythonCode" \
+    "$HOME/.logs" \
+    "$HOME/Downloads" \
+    "$HOME/Documents" \
+    "$HOME/mcp-servers" \
+    "$HOME/mcp-servers/date-generator"
+} | sort -u
+'
 # Disable Preview and Clean Up Layout for ALT+C
 export FZF_ALT_C_OPTS="--no-preview --layout=reverse --height=40% --pointer='>'"
 
