@@ -329,7 +329,7 @@ run_npm_audit() {
         update_printf "Running npm audit fix..."
         if npm audit fix; then
             success_printf "npm audit fix completed successfully!"
-	    info_printf "Remember: perform updates, create new MCPB, and update Claude desktop"
+            info_printf "Remember: perform updates, create new MCPB, and update Claude desktop"
             # Invalidate cache after successful audit fix
             invalidate_outdated_cache
             return 0
