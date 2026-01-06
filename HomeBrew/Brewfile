@@ -1,3 +1,4 @@
+testing
 tap "teamookla/speedtest"
 brew "bat"
 brew "fd"
