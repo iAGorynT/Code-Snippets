@@ -1,4 +1,3 @@
-# testing
 #!/bin/zsh
 
 # Source function library with error handling
