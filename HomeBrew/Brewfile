@@ -1,3 +1,4 @@
+testing
 tap "teamookla/speedtest"
 brew "bat"
 brew "fd"
@@ -16,5 +17,4 @@ brew "teamookla/speedtest/speedtest"
 cask "diskspace"
 cask "font-jetbrains-mono"
 cask "github"
-cask "macdown"
 cask "macvim-app"

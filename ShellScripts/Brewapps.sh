@@ -1,3 +1,4 @@
+# testing
 #!/bin/zsh
 
 # Source function library with error handling
@@ -11,7 +12,7 @@ format_printf "App Descriptions..." "yellow" "bold"
 printf "\n"
 
 # Array of app names
-apps=("uv:" "iperf3:" "jq:" "macdown:" "speedtest:" "github:" "macvim-app:")
+apps=("uv:" "iperf3:" "jq:" "node:" "speedtest:" "github:" "macvim-app:")
 
 # Function to check if a line starts with an app name
 contains_app() {
