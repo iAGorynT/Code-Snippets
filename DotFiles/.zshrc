@@ -164,11 +164,15 @@ source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 # To Customize Prompt, Run `p10k configure` or Edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Setup Unmanaged Homebrew Auto Completions
+# 1) somo zsh Auto Completions
+# NOTE:  Ensure This is BEFORE Homebrew Completions
+fpath=(~/.local/share/zsh/site-functions $fpath)
+
 # Enable Homebrew Shell Completions
 if type brew &>/dev/null
 then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-
+  fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
   autoload -Uz compinit
   compinit
 fi
