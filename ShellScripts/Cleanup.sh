@@ -48,8 +48,6 @@ main() {
         printf "\n"
 	# Delete Vim Plugin Update Log
 	delete_item $HOME/.logs/vim_plugin_update.log
-	# Delete Copilot CLI Update Log
-	delete_item $HOME/.logs/copi_update.log
     else
         error_printf "Disk Cleanup cancelled by user."
     fi

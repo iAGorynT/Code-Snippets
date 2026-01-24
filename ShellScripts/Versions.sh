@@ -16,8 +16,6 @@ info_printf "GitHub:"
 printf "Git: %s\n" "$(git --version)"
 # Github CLI
 printf "GitHub CLI: %s\n" "$(gh --version)" | grep -e 'version '
-# Copilot CLI
-printf "Copilot CLI: %s\n" "$(copilot --version | grep -v '^Commit:')"
 printf "\n"
 
 # Homebrew

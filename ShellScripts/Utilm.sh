@@ -17,11 +17,6 @@ function javaup {
     JavaUpdate.sh
 }
 
-function copiup {
-    clear
-    CopiUpdate.sh
-}
-
 function npmup {
     clear
     NpmUpdate.sh
@@ -55,15 +50,14 @@ function menu {
     printf "\n"
     printf "\t1. Vim Plugin Update\n"
     printf "\t2. Java Update\n"
-    printf "\t3. Copilot CLI Update\n"
-    printf "\t4. Npm Package Update\n"
-    printf "\t5. Disk Cleanup\n"
-    printf "\t6. Cleanup Claude Workspace\n"
+    printf "\t3. Npm Package Update\n"
+    printf "\t4. Disk Cleanup\n"
+    printf "\t5. Cleanup Claude Workspace\n"
     printf "\n"
     printf "\t"
     format_printf "Bundle Updates" "cyan" "underline"
-    printf "\t7. Update All Packages\n"
-    printf "\t8. Cleanup All Disks\n"
+    printf "\t6. Update All Packages\n"
+    printf "\t7. Cleanup All Disks\n"
     printf "\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
@@ -90,26 +84,22 @@ while true; do
                 hit_any_key=true
                 ;;
             3)
-                copiup
-                hit_any_key=true
-                ;;
-            4)
                 npmup
                 hit_any_key=true
                 ;;
-            5)
+            4)
                 cleanup
                 hit_any_key=true
                 ;;
-            6)
+            5)
                 cleanupclaude
                 hit_any_key=true
                 ;;
-            7)
+            6)
                 updateallpack
                 hit_any_key=true
                 ;;
-            8)
+            7)
                 cleanupalldisk
                 hit_any_key=true
                 ;;
