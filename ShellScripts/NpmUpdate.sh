@@ -698,8 +698,8 @@ main() {
         printf "4) Compile TypeScript\n"
         printf "5) MCP Server Test\n"
         printf "6) Create Claude Extension File (MCPB)\n"
-        printf "7) Set MCP Server\n"
-        printf "8) Run npm audit\n"
+        printf "7) Run npm audit\n"
+        printf "8) Set MCP Server\n"
         printf "0) Exit\n"
         printf "\n"
         read "choice?Enter your choice (0-8): "
@@ -717,8 +717,8 @@ main() {
             4) compile_typescript ;;
             5) mcp_server_test ;;
             6) create_mcpb_file ;;
-            7) select_mcp_server ;;
-            8) run_npm_audit ;;
+            7) run_npm_audit ;;
+            8) select_mcp_server ;;
             0) warning_printf "Exiting without making any updates"; break ;;
             *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, 5, 6, 7, 8, or 0." ;;
         esac
