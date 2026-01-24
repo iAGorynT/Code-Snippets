@@ -1,8 +1,8 @@
 #!/bin/zsh
 # NOTE: GitHub CLI Copilot Extension Depreciated as of October 25, 2025
 # Updated to use new Copilot CLI application.
-# NOTE: January 24, 2026-Due to Numerous Execution and Performance Issues, New Copilot CLI App
-# Removed From Usage.
+# NOTE: January 24, 2026-Due to Numerous Execution and Performance Issues,
+# New Copilot CLI App Removed From Usage.
 
 # Source function library with error handling
 FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
