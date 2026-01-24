@@ -51,6 +51,17 @@ def get_password_from_keychain(service_name, account_name):
         return None
 
 
+def copy_to_clipboard(text):
+    """Copy text to macOS clipboard using pbcopy"""
+    try:
+        process = subprocess.Popen(['pbcopy'], stdin=subprocess.PIPE)
+        process.communicate(text.encode('utf-8'))
+        return True
+    except Exception as e:
+        print(f"Error copying to clipboard: {e}")
+        return False
+
+
 class OTPManager:
     def __init__(self):
         self.file_path = os.path.expanduser("~/.otp_secrets.enc")
@@ -168,6 +179,55 @@ def dump_option(manager):
     input("Press Enter to continue...")
 
 
+def copy_otp_option(manager, names):
+    """
+    Copy the current OTP code of a selected account to the clipboard.
+
+    Args:
+        manager (OTPManager): The OTP manager instance
+        names (list): List of account names
+    """
+    if not names:
+        print("No OTP entries available.")
+        input("Press Enter to continue...")
+        return
+
+    try:
+        selection = input("\nEnter the number of the OTP account to copy: ").strip()
+        
+        # Validate input is a number
+        if not selection.isdigit():
+            print("Invalid input. Please enter a number.")
+            input("Press Enter to continue...")
+            return
+        
+        selection_num = int(selection)
+        
+        # Validate number is within range
+        if selection_num < 1 or selection_num > len(names):
+            print(f"Invalid selection. Please enter a number between 1 and {len(names)}.")
+            input("Press Enter to continue...")
+            return
+        
+        # Get the account name and its current OTP code
+        selected_name = sorted(names)[selection_num - 1]
+        current_code, _ = manager.get_code(selected_name)
+        
+        if current_code:
+            if copy_to_clipboard(current_code):
+                print(f"\nCopied OTP code for '{selected_name}' to clipboard: {current_code}")
+            else:
+                print("\nFailed to copy to clipboard.")
+        else:
+            print(f"\nFailed to generate OTP code for '{selected_name}'.")
+        
+        input("Press Enter to continue...")
+        
+    except Exception as e:
+        print(f"\nError: {e}")
+        input("Press Enter to continue...")
+
+
 def main():
     # Configuration for keychain access
     KEYCHAIN_SERVICE = "OTPGenerator"
@@ -216,8 +276,9 @@ def main():
         print("\nOptions:")
         print("a - Add new OTP secret")
         print("r - Remove OTP secret")
+        print("c - Copy OTP code to clipboard")
         print("f - Refresh codes")
-        print("d - Dump raw keys file contents")  # Added new option
+        print("d - Dump raw keys file contents")
         print("q - Quit")
 
         choice = input("\nEnter option: ").lower()
@@ -239,11 +300,14 @@ def main():
                 print(f"No OTP found with name {name}")
             input("Press Enter to continue...")
 
+        elif choice == "c":
+            copy_otp_option(manager, names)
+
         elif choice == "f":
             # Refresh is just continuing the loop, which redraws the screen
             continue
 
-        elif choice == "d":  # Added new case for dump option
+        elif choice == "d":
             dump_option(manager)
 
         elif choice == "q":
