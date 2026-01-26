@@ -89,6 +89,10 @@ printf "Node: %s\n" "$(node --version)"
 printf "Npm: %s\n" "$(npm --version)"
 printf "\n"
 
+# OpenCode
+printf "OpenCode: %s\n" "$(opencode --version 2>/dev/null)" 
+printf "\n"
+
 # SSH
 # Had to run ssh command and pipe it to printf (no new line)
 # in order to get results on one line.  Just trying to printf
