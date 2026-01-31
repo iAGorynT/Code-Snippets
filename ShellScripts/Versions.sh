@@ -5,6 +5,26 @@ FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 [[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
+# Helper function to get tool version with existence check
+get_version() {
+    local cmd=$1
+    local filter=$2
+    local description=$3
+    local version_args=${4:-"--version"}
+    
+    if command -v "$cmd" >/dev/null 2>&1; then
+        local version_output
+        if [[ -n "$filter" ]]; then
+            version_output=$("$cmd" $version_args 2>&1 | grep -e "$filter" | head -1)
+        else
+            version_output=$("$cmd" $version_args 2>&1 | head -1)
+        fi
+        printf "%s: %s\n" "$description" "$version_output"
+    else
+        warning_printf "$description: Not installed"
+    fi
+}
+
 # Display Software Versions
 clear
 format_printf "Software Versions..." yellow bold
@@ -12,14 +32,12 @@ printf "\n"
 
 # GitHub
 info_printf "GitHub:"
-# Git
-printf "Git: %s\n" "$(git --version)"
-# Github CLI
-printf "GitHub CLI: %s\n" "$(gh --version)" | grep -e 'version '
+get_version "git" "git version" "Git"
+get_version "gh" "version" "GitHub CLI" "--version"
 printf "\n"
 
 # Homebrew
-printf "Homebrew: %s\n" "$(brew --version)"
+get_version "brew" "Homebrew" "Homebrew"
 
 # Homebrew Autoupdate
 # echo "Homebrew Autoupdate: $(brew autoupdate version | grep -e 'Version')" # Exclude Change Log
@@ -42,11 +60,13 @@ if [[ -z "$current_zulu_version" ]]; then
 else
     printf "Zulu %s\n" "$current_zulu_version"
 fi
-# Fetch list of all Zulu .dmg files from CDN
-file_list=$(curl -s https://cdn.azul.com/zulu/bin/)
+# Fetch list of all Zulu .dmg files from CDN with timeout
+file_list=$(curl -s --max-time 30 https://cdn.azul.com/zulu/bin/)
 # Check if curl was successful
 if [[ $? -ne 0 || -z "$file_list" ]]; then
-    error_printf "Failed to fetch version information from Azul CDN" true
+    warning_printf "Failed to fetch version information from Azul CDN - skipping latest version check"
+    # Set default values to continue script execution
+    latest_zulu_version="Unknown"
 fi
 # Extract macOS .dmg filenames with Zulu and Java 11+
 dmg_links=(${(@f)$(grep -Eo 'zulu([0-9]+\.[0-9]+\.[0-9]+)-ca-jdk(1[1-9]|2[0-9])[0-9\.\-]*-macosx_[^"]+\.dmg' <<< "$file_list")})
@@ -62,14 +82,15 @@ for link in "${sorted[@]}"; do
     fi
 done
 if [[ -z "$latest_zulu_version" ]]; then
-    error_printf "Could not determine latest Zulu version" true
+    warning_printf "Could not determine latest Zulu version"
+    latest_zulu_version="Unknown"
 fi
 # Now list all links that match this latest version
 info_printf "Latest Zulu version for Mac: $latest_zulu_version"
 printf "\n"
 
 # jq
-printf "jq JSON processor: %s\n" "$(jq -V)"
+get_version "jq" "" "jq JSON processor" "-V"
 
 # MacVim
 printf "\n"
@@ -85,12 +106,12 @@ ls -1 ~/.vim/colors
 printf "\n"
 
 # Node / Npm
-printf "Node: %s\n" "$(node --version)"
-printf "Npm: %s\n" "$(npm --version)"
+get_version "node" "" "Node"
+get_version "npm" "" "Npm"
 printf "\n"
 
 # OpenCode
-printf "OpenCode: %s\n" "$(opencode --version 2>/dev/null)" 
+get_version "opencode" "" "OpenCode" 
 printf "\n"
 
 # SSH
@@ -113,14 +134,14 @@ fi
 
 # Uv Python Manager and Tools
 printf "\n"
-printf "uv Python Package Installer: %s\n" "$(uv --version)"
+get_version "uv" "" "uv Python Package Installer"
 
 # Shells
 printf "\n"
 info_printf "Shells:"
-printf "Bash: %s\n" "$(bash --version)" | grep -e 'version '
-printf "Zsh:  %s\n" "$(zsh --version)"
-printf "Current Shell: $SHELL\n"
+get_version "bash" "version" "Bash"
+get_version "zsh" "" "Zsh"
+printf "Current Shell: %s\n" "$SHELL"
 
 # XCode Command Line Tools
 printf "\n"
