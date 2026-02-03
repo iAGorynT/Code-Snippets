@@ -454,7 +454,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
 async function main(): Promise<void> {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error('Date Generator MCP server running on stdio');
+  // NOTE: console.error() to stderr can interfere with MCP protocol communication over stdio,
+  // causing the client to hang during initialization. Keep stdio clean for JSON-RPC protocol.
+  // console.error('Date Generator MCP server running on stdio');
 }
 
 main().catch((error) => {
