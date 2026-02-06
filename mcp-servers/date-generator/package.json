@@ -1,13 +1,13 @@
 {
   "name": "date-generator-mcp",
-  "version": "3.0.18",
+  "version": "4.0.0",
   "description": "MCP server for generating dates by month, year, and day of week",
-  "main": "server/index.js",
+  "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "start": "node server/index.js",
-    "dev": "node --watch index.js",
+    "start": "tsx src/index.ts",
+    "test": "tsx test.ts",
+    "dev": "tsx --watch src/index.ts",
     "version": "test -f manifest.json && jq '.version = env.npm_package_version' manifest.json > tmp.json && mv tmp.json manifest.json || true"
   },
   "dependencies": {
@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.2.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "keywords": [

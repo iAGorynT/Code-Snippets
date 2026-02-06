@@ -2,18 +2,14 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ES2020",
-    "lib": ["ES2020"],
     "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
+    "strict": false,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
     "resolveJsonModule": true,
-    "outDir": "./server",
-    "rootDir": "./src",
-    "types": ["node"]
+    "skipDefaultLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*"]
 }

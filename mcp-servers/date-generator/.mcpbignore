@@ -1,5 +1,5 @@
 # Comments start with #
-*.test.js
+*.test.ts
 src/**/*.test.ts
 coverage/
 *.log
