@@ -88,7 +88,7 @@ function findAllDatesForDayOfWeek(month: number, year: number, dayOfWeek: number
 }
 
 // Tool implementations
-function generateDates(month: number, year: number, dayOfWeek: number) {
+export function generateDates(month: number, year: number, dayOfWeek: number) {
   validateInputs(month, year, dayOfWeek);
 
   const dates = findAllDatesForDayOfWeek(month, year, dayOfWeek);
@@ -112,7 +112,7 @@ function generateDates(month: number, year: number, dayOfWeek: number) {
   };
 }
 
-function findNthOccurrence(month: number, year: number, dayOfWeek: number, occurrence: number) {
+export function findNthOccurrence(month: number, year: number, dayOfWeek: number, occurrence: number) {
   validateInputs(month, year, dayOfWeek);
   validateOccurrence(occurrence);
 
@@ -155,7 +155,7 @@ function findNthOccurrence(month: number, year: number, dayOfWeek: number, occur
   };
 }
 
-function findNthOccurrenceRange(startMonth: number, endMonth: number, year: number, dayOfWeek: number, occurrence: number) {
+export function findNthOccurrenceRange(startMonth: number, endMonth: number, year: number, dayOfWeek: number, occurrence: number) {
   if (startMonth < 1 || startMonth > 12 || endMonth < 1 || endMonth > 12) {
     throw new Error('Start and end months must be between 1 and 12');
   }
@@ -204,11 +204,11 @@ function findNthOccurrenceRange(startMonth: number, endMonth: number, year: numb
   };
 }
 
-function findNthOccurrenceYear(year: number, dayOfWeek: number, occurrence: number) {
+export function findNthOccurrenceYear(year: number, dayOfWeek: number, occurrence: number) {
   return findNthOccurrenceRange(1, 12, year, dayOfWeek, occurrence);
 }
 
-function getOptions() {
+export function getOptions() {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 201 }, (_, i) => 1900 + i);
   
@@ -459,7 +459,15 @@ async function main(): Promise<void> {
   // console.error('Date Generator MCP server running on stdio');
 }
 
-main().catch((error) => {
-  console.error('Server error:', error);
-  process.exit(1);
-});
+// Start server - only run when executed as main module, not when imported
+// Check if this file is being run directly (not imported)
+const isMainModule = import.meta.url === `file://${process.argv[1]}` || 
+                    import.meta.url === `file:///${process.argv[1].replace(/^\//, '')}` ||
+                    process.argv[1].endsWith('src/index.ts');
+
+if (isMainModule) {
+  main().catch((error) => {
+    console.error('Server error:', error);
+    process.exit(1);
+  });
+}
