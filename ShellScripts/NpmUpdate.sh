@@ -436,73 +436,6 @@ update_version_number() {
     esac
 }
 
-compile_typescript() {
-    rocket_printf "Compiling TypeScript..."
-    printf "\n"
-    
-    # Get current directory info
-    local current_dir=$(pwd)
-    info_printf "Current directory: $current_dir"
-    
-    # Check if package.json exists
-    if [[ ! -f "package.json" ]]; then
-        error_printf "No package.json found in current directory: $current_dir"
-        return 1
-    fi
-    
-    # Check if src/index.ts exists
-    if [[ ! -f "src/index.ts" ]]; then
-        error_printf "No src/index.ts found in current directory: $current_dir"
-        error_printf "TypeScript compilation requires src/index.ts"
-        return 1
-    fi
-    
-    # Check if server directory exists
-    if [[ ! -d "server" ]]; then
-        warning_printf "No server directory found in current directory: $current_dir"
-        warning_printf "npm run build may not work as expected"
-    fi
-    
-    info_printf "This will compile TypeScript (src/index.ts) to JavaScript (server/index.js)"
-    printf "\n"
-    
-    if ! get_yes_no "Do you want to compile TypeScript?"; then
-        warning_printf "TypeScript compilation cancelled by user"
-        return 0
-    fi
-    
-    # Step 1: npm install
-    update_printf "Step 1: Running npm install to ensure all dependencies are present..."
-    if npm install; then
-        success_printf "npm install completed successfully!"
-    else
-        local exit_code=$?
-        error_printf "npm install failed with exit code: $exit_code"
-        return $exit_code
-    fi
-    printf "\n"
-    
-    # Step 2: npm run build
-    update_printf "Step 2: Running npm run build"
-    printf "\n"
-    
-    # Run the build command
-    if npm run build; then
-        success_printf "TypeScript compilation completed successfully!"
-        
-        # Check if server/index.js was created
-        if [[ -f "server/index.js" ]]; then
-            success_printf "Generated output file: server/index.js"
-        fi
-        
-        return 0
-    else
-        local exit_code=$?
-        error_printf "TypeScript compilation failed with exit code: $exit_code"
-        return $exit_code
-    fi
-}
-
 create_mcpb_file() {
     rocket_printf "Creating Claude Extension File (MCPB)..."
     printf "\n"
@@ -555,41 +488,10 @@ mcp_server_test() {
     # Get current directory info
     local current_dir=$(pwd)
     info_printf "Current directory: $current_dir"
-    
-    # Check if required utilities exist
-    if ! command -v npm &> /dev/null; then
-        error_printf "npm is not installed or not in PATH"
-        error_printf "npm is required for MCP Server Test"
-        return 1
-    fi
-    
-    if ! command -v node &> /dev/null; then
-        error_printf "node is not installed or not in PATH"
-        error_printf "node is required for MCP Server Test"
-        return 1
-    fi
-    
-    # Check if required files exist
-    if [[ ! -f "package.json" ]]; then
-        error_printf "No package.json found in current directory: $current_dir"
-        error_printf "MCP Server Test requires a valid Node.js project"
-        return 1
-    fi
-    
-    if [[ ! -f "test.js" ]]; then
-        error_printf "No test.js found in current directory: $current_dir"
-        error_printf "MCP Server Test requires a test.js file"
-        return 1
-    fi
-    
-    if [[ ! -f "server/index.js" ]]; then
-        warning_printf "No server/index.js found in current directory: $current_dir"
-        warning_printf "npm start may not work properly without a main entry point"
-    fi
-    
-    info_printf "MCP Server Test will perform the following steps:"
+
+    info_printf "MCP Server Test will perform the following:"
     printf "  1) Run npm install\n"
-    printf "  2) Run node test.js\n"
+    printf "  2) Run npm test\n"
     printf "  3) Run npm start (press Ctrl-C to stop)\n"
     printf "\n"
     
@@ -597,6 +499,26 @@ mcp_server_test() {
         warning_printf "MCP Server Test cancelled by user"
         return 0
     fi
+    
+    # Check if npm exists
+    if ! command -v npm &> /dev/null; then
+        error_printf "npm is not installed or not in PATH"
+        error_printf "npm is required for MCP Server Test"
+        return 1
+    fi
+    
+    # Check if tsx is available
+    if ! command -v tsx &> /dev/null; then
+        error_printf "tsx is not installed. Please run 'npm install' first."
+	return 1
+    fi
+    
+    # Check if test.ts exists
+    if [ ! -f "test.ts" ]; then
+        error_printf "test.ts not found in current directory."
+	return 1
+    fi
+    printf "\n"
     
     # Step 1: npm install
     update_printf "Step 1: Running npm install..."
@@ -609,15 +531,9 @@ mcp_server_test() {
     fi
     printf "\n"
     
-    # Step 2: node test.js
-    update_printf "Step 2: Running node test.js..."
-    if node test.js; then
-        success_printf "node test.js completed successfully!"
-    else
-        local exit_code=$?
-        error_printf "node test.js failed with exit code: $exit_code"
-        warning_printf "Continuing to npm start despite test failure..."
-    fi
+    # Step 2: Run the mcp server tests
+    update_printf "Step 2: Running mcp server tests..."
+    npm test
     printf "\n"
     
     # Step 3: npm start - improved process management
@@ -695,11 +611,10 @@ main() {
         printf "1) Standard npm update\n"
         printf "2) Major version update\n"
         printf "3) Update Package Version Number\n"
-        printf "4) Compile TypeScript\n"
-        printf "5) MCP Server Test\n"
-        printf "6) Create Claude Extension File (MCPB)\n"
-        printf "7) Run npm audit\n"
-        printf "8) Set MCP Server\n"
+        printf "4) MCP Server Test\n"
+        printf "5) Create Claude Extension File (MCPB)\n"
+        printf "6) Run npm audit\n"
+        printf "7) Set MCP Server\n"
         printf "0) Exit\n"
         printf "\n"
         read "choice?Enter your choice (0-8): "
@@ -714,11 +629,10 @@ main() {
             2) run_major_update ;;
             # Use || true to ignore the exit code
             3) update_version_number || true ;;
-            4) compile_typescript ;;
-            5) mcp_server_test ;;
-            6) create_mcpb_file ;;
-            7) run_npm_audit ;;
-            8) select_mcp_server ;;
+            4) mcp_server_test ;;
+            5) create_mcpb_file ;;
+            6) run_npm_audit ;;
+            7) select_mcp_server ;;
             0) warning_printf "Exiting without making any updates"; break ;;
             *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, 5, 6, 7, 8, or 0." ;;
         esac
