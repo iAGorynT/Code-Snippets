@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.2",
   "name": "date-generator-mcp",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "MCP server for generating dates by month, year, and day of week",
   "author": {
     "name": "Bruce Guthrie"
