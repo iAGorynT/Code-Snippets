@@ -1,7 +1,10 @@
 #!/bin/zsh
 
-# Zsh script to remove contents of all folders in claude_workspace
-# This script will preserve the folder structure but remove all files within subdirectories
+# Zsh script to remove contents from specific folders in opencode_workspace
+# This script will preserve the folder structure but remove all files within:
+# - backups/
+# - new/
+# - scripts/
 
 # Source function library with error handling
 FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
@@ -11,26 +14,33 @@ if [[ ! -f "$FORMAT_LIBRARY" ]]; then
 fi
 source "$FORMAT_LIBRARY"
 
-WORKSPACE_DIR="$HOME/Desktop/claude_workspace"
+WORKSPACE_DIR="$HOME/Desktop/opencode_workspace"
+TARGET_DIRS=("backups" "new" "scripts")
 
-info_printf "Starting cleanup of folder contents in claude_workspace..."
+info_printf "Starting cleanup of folder contents in opencode_workspace..."
 
 # Function to display script header
 display_header() {
     clear
-    format_printf "Cleanup Claude Workspace..." "yellow" "bold"
+    format_printf "Cleanup Opencode Workspace..." "yellow" "bold"
     printf "\n"
 }
 
 # Function to prompt for confirmation
 confirm_deletion() {
-    warning_printf "This will remove ALL contents from the following directories:"
-    find "$WORKSPACE_DIR" -mindepth 1 -maxdepth 1 -type d | while read -r folder; do
-        format_printf "  • $(basename "$folder")/" "blue" "bold"
-        if [ -n "$(find "$folder" -mindepth 1 2>/dev/null)" ]; then
-            format_printf "    Contains files that will be deleted" "red"
+    warning_printf "This will remove contents from the following directories:"
+    for dir_name in "${TARGET_DIRS[@]}"; do
+        local folder="$WORKSPACE_DIR/$dir_name"
+        if [ -d "$folder" ]; then
+            format_printf "  • $dir_name/" "blue" "bold"
+            if [ -n "$(find "$folder" -mindepth 1 2>/dev/null)" ]; then
+                format_printf "    Contains files that will be deleted" "red"
+            else
+                format_printf "    Already empty" "green"
+            fi
         else
-            format_printf "    Already empty" "green"
+            format_printf "  • $dir_name/" "gray" "bold"
+            format_printf "    Directory does not exist" "gray"
         fi
     done
     
@@ -68,7 +78,7 @@ clear_directory_contents() {
 
 # Check if workspace directory exists
 if [ ! -d "$WORKSPACE_DIR" ]; then
-    error_printf "claude_workspace directory not found at $WORKSPACE_DIR" true
+    error_printf "opencode_workspace directory not found at $WORKSPACE_DIR" true
 fi
 
 # Display the header
@@ -77,12 +87,17 @@ display_header
 # Prompt for confirmation before proceeding
 confirm_deletion
 
-# Find all directories in claude_workspace (excluding the workspace directory itself)
-find "$WORKSPACE_DIR" -mindepth 1 -maxdepth 1 -type d | while read -r folder; do
-    clear_directory_contents "$folder"
+# Process only the target directories
+for dir_name in "${TARGET_DIRS[@]}"; do
+    local folder="$WORKSPACE_DIR/$dir_name"
+    if [ -d "$folder" ]; then
+        clear_directory_contents "$folder"
+    else
+        info_printf "Directory does not exist, skipping: $dir_name"
+    fi
 done
 
-success_printf "Folder contents cleanup completed!"
+success_printf "Selective cleanup of backups, new, and scripts directories completed!"
 
 # Show the current structure
 printf "\n"
