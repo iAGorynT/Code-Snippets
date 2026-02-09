@@ -27,9 +27,9 @@ function cleanup {
     Cleanup.sh
 }
 
-function cleanupclaude {
+function cleanupopencode {
     clear
-    CleanupClaude.sh
+    CleanupOpencode.sh
 }
 
 function updateallpack {
@@ -52,7 +52,7 @@ function menu {
     printf "\t2. Java Update\n"
     printf "\t3. Npm Package Update\n"
     printf "\t4. Disk Cleanup\n"
-    printf "\t5. Cleanup Claude Workspace\n"
+    printf "\t5. Cleanup Opencode Workspace\n"
     printf "\n"
     printf "\t"
     format_printf "Bundle Updates" "cyan" "underline"
@@ -92,7 +92,7 @@ while true; do
                 hit_any_key=true
                 ;;
             5)
-                cleanupclaude
+                cleanupopencode
                 hit_any_key=true
                 ;;
             6)

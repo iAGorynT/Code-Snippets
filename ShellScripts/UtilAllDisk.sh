@@ -28,8 +28,8 @@ hit_any_key_prompt() {
 }
 
 # List of updater scripts with corresponding package names
-updaters=("Cleanup.sh" "CleanupClaude.sh")
-package_names=("Disks" "Claude")
+updaters=("Cleanup.sh" "CleanupOpencode.sh")
+package_names=("Disks" "Opencode")
 
 # Header
 clear
