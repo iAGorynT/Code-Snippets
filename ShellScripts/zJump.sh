@@ -15,6 +15,7 @@ typeset -A ZJUMP_DIRS=(
     [ghs]="$HOME/Documents/GitHub/Code-Snippets"
     [mcp]="$HOME/mcp-servers"
     [peek]="$HOME/Library/GroupContainersAlias/9V456WSURS.com.bigzlabs.peekgroup/Library/Application Support/Styles"
+    [oc]="$HOME/Desktop/opencode_workspace"
 )
 
 zjump() {
