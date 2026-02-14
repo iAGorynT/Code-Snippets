@@ -15,14 +15,44 @@ display_header() {
     printf "\n"
 }
 
-# Function to display menu
-function show_menu() {
+# Function to get terminal size
+function get_terminal_size() {
+    local lines cols
+    lines=$(tput lines 2>/dev/null || echo 24)
+    cols=$(tput cols 2>/dev/null || echo 80)
+    echo "$lines $cols"
+}
+
+# Function to display paged menu
+function show_paged_menu() {
+    local -a packages=("$@")
+    local total=${#packages[@]}
+    local -a size=($(get_terminal_size))
+    local term_lines=${size[0]}
+    local page_size=$((term_lines - 10))
+    ((page_size < 5)) && page_size=5
+
+    [[ $scroll_offset -lt 0 ]] && scroll_offset=0
+    local max_offset=$((total - page_size))
+    [[ $max_offset -lt 0 ]] && max_offset=0
+    [[ $scroll_offset -gt $max_offset ]] && scroll_offset=$max_offset
+
+    local end=$((scroll_offset + page_size))
+    [[ $end -gt $total ]] && end=$total
+
+    printf "--- Showing %d-%d of %d ---\n" $((scroll_offset + 1)) "$end" "$total"
+
     local i=1
-    for package in "$@"; do
-        printf "%d) %s\n" "$i" "$package"
+    for package in "${packages[@]}"; do
+        if (( i > scroll_offset && i <= end )); then
+            printf "%d) %s\n" "$i" "$package"
+        fi
         ((i++))
     done
+
     printf "0) Exit\n"
+    printf "\n"
+    printf "Navigation: g=top, G=bottom, u=up, d=down, number=select package\n"
     printf "\n"
 }
 
@@ -59,6 +89,7 @@ function uninstall_package() {
 # Main script
 # Initialize package lists
 fetch_packages
+scroll_offset=0
 
 # Main loop
 while true; do
@@ -72,10 +103,34 @@ while true; do
     fi
 
     info_printf "Installed Homebrew packages:"
-    show_menu "${all_packages[@]}"
+    show_paged_menu "${all_packages[@]}"
 
-    read "choice?Enter the number of the package you want to uninstall (0 to exit): "
-    choice=${choice:-0}  # Set default value to 0 if input is empty
+    local -a size=($(get_terminal_size))
+    local page_size=$((${#size[0]} - 10))
+    ((page_size < 5)) && page_size=5
+
+    read "choice?Enter navigation key or package number (0 to exit): "
+    choice=${choice:-0}
+
+    if [[ "$choice" == "g" ]]; then
+        scroll_offset=0
+        continue
+    elif [[ "$choice" == "G" ]]; then
+        local max_offset=$((${#all_packages[@]} - page_size))
+        ((max_offset < 0)) && max_offset=0
+        scroll_offset=$max_offset
+        continue
+    elif [[ "$choice" == "u" ]]; then
+        ((scroll_offset -= page_size / 2))
+        ((scroll_offset < 0)) && scroll_offset=0
+        continue
+    elif [[ "$choice" == "d" ]]; then
+        local max_offset=$((${#all_packages[@]} - page_size))
+        ((max_offset < 0)) && max_offset=0
+        ((scroll_offset += page_size / 2))
+        [[ $scroll_offset -gt $max_offset ]] && scroll_offset=$max_offset
+        continue
+    fi
 
     if [[ $choice =~ ^[0-9]+$ ]]; then
         if (( choice == 0 )); then
