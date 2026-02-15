@@ -15,11 +15,44 @@ display_header() {
     printf "\n"
 }
 
+# Function to prompt for menu length
+prompt_menu_length() {
+    local -a options=("5" "10" "20")
+    
+    printf "Select menu length (items per page):\n"
+    local i=1
+    for opt in "${options[@]}"; do
+        printf "%d) %s items\n" "$i" "$opt"
+        ((i++))
+    done
+    printf "\n"
+    
+    local choice
+    while true; do
+        read "choice?Enter choice (default: 3): "
+        if [[ -z "$choice" ]]; then
+            choice=3
+        fi
+        if [[ "$choice" =~ ^[1-3]$ ]]; then
+            MENU_LENGTH=${options[$((choice))]}
+            info_printf "Menu length set to $MENU_LENGTH items per page."
+            return 0
+        else
+            warning_printf "Invalid choice. Please enter a number between 1 and 3."
+        fi
+    done
+}
+
 # Function to get terminal size
 function get_terminal_size() {
     local lines cols
-    lines=$(tput lines 2>/dev/null || echo 24)
-    cols=$(tput cols 2>/dev/null || echo 80)
+    
+    lines=$(tput lines 2>/dev/null)
+    cols=$(tput cols 2>/dev/null)
+    
+    [[ -z "$lines" || "$lines" -lt 1 ]] && lines=30
+    [[ -z "$cols" || "$cols" -lt 1 ]] && cols=80
+    
     echo "$lines $cols"
 }
 
@@ -27,10 +60,7 @@ function get_terminal_size() {
 function show_paged_menu() {
     local -a packages=("$@")
     local total=${#packages[@]}
-    local -a size=($(get_terminal_size))
-    local term_lines=${size[0]}
-    local page_size=$((term_lines - 10))
-    ((page_size < 5)) && page_size=5
+    local page_size=$MENU_LENGTH
 
     [[ $scroll_offset -lt 0 ]] && scroll_offset=0
     local max_offset=$((total - page_size))
@@ -88,8 +118,17 @@ function uninstall_package() {
 
 # Main script
 # Initialize package lists
+display_header
 fetch_packages
 scroll_offset=0
+
+if [ ${#all_packages[@]} -eq 0 ]; then
+    warning_printf "No Homebrew packages found. Exiting."
+    exit 0
+fi
+
+printf "\n"
+prompt_menu_length
 
 # Main loop
 while true; do
@@ -105,10 +144,6 @@ while true; do
     info_printf "Installed Homebrew packages:"
     show_paged_menu "${all_packages[@]}"
 
-    local -a size=($(get_terminal_size))
-    local page_size=$((${#size[0]} - 10))
-    ((page_size < 5)) && page_size=5
-
     read "choice?Enter navigation key or package number (0 to exit): "
     choice=${choice:-0}
 
@@ -116,18 +151,18 @@ while true; do
         scroll_offset=0
         continue
     elif [[ "$choice" == "G" ]]; then
-        local max_offset=$((${#all_packages[@]} - page_size))
+        local max_offset=$((${#all_packages[@]} - MENU_LENGTH))
         ((max_offset < 0)) && max_offset=0
         scroll_offset=$max_offset
         continue
     elif [[ "$choice" == "u" ]]; then
-        ((scroll_offset -= page_size / 2))
+        ((scroll_offset -= MENU_LENGTH / 2))
         ((scroll_offset < 0)) && scroll_offset=0
         continue
     elif [[ "$choice" == "d" ]]; then
-        local max_offset=$((${#all_packages[@]} - page_size))
+        local max_offset=$((${#all_packages[@]} - MENU_LENGTH))
         ((max_offset < 0)) && max_offset=0
-        ((scroll_offset += page_size / 2))
+        ((scroll_offset += MENU_LENGTH / 2))
         [[ $scroll_offset -gt $max_offset ]] && scroll_offset=$max_offset
         continue
     fi
