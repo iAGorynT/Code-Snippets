@@ -46,7 +46,7 @@ function brewapps {
     format_printf "Brew App Listing..." "yellow" "bold"
     printf "\n"
     if command -v bat >/dev/null 2>&1; then
-        brew desc --eval-all $(brew list) 2>/dev/null | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | bat
+        brew desc --eval-all $(brew list) 2>/dev/null | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | bat --file-name "Brew App Descriptions"
     else
         brew desc --eval-all $(brew list) 2>/dev/null | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | less
     fi
