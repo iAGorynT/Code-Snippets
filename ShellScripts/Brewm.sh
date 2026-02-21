@@ -45,10 +45,11 @@ function brewapps {
     clear
     format_printf "Brew App Listing..." "yellow" "bold"
     printf "\n"
-    # Formatted Listing and redirect stderr to /dev/null to suppress errors
-    brew desc --eval-all $(brew list) 2>/dev/null | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | more
-    # For Unformatted Listing
-    # brew desc --eval-all $(brew list)
+    if command -v bat >/dev/null 2>&1; then
+        brew desc --eval-all $(brew list) 2>/dev/null | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | bat
+    else
+        brew desc --eval-all $(brew list) 2>/dev/null | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | less
+    fi
 }
 
 function brewtap {
