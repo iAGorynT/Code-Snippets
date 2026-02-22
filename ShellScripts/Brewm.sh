@@ -45,11 +45,50 @@ function brewapps {
     clear
     format_printf "Brew App Listing..." "yellow" "bold"
     printf "\n"
+
+    # Pager selection
     if command -v bat >/dev/null 2>&1; then
-        brew desc --eval-all $(brew list) 2>/dev/null | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | bat --file-name "Brew App Descriptions"
+        bapager=(bat --file-name "Brew App Descriptions")
     else
-        brew desc --eval-all $(brew list) 2>/dev/null | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' | column -s "=" -t | less
+        bapager=(less)
     fi
+
+    # Cache lists once (zsh-safe)
+    local -a formulae casks
+    formulae=("${(@f)$(brew list --formula 2>/dev/null)}")
+    casks=("${(@f)$(brew list --cask 2>/dev/null)}")
+
+    local formula_count=${#formulae[@]}
+    local cask_count=${#casks[@]}
+
+    {
+        # ---- Formulae Section ----
+        info_printf "== Formulae (${formula_count}) =="
+        printf "\n"
+
+        if (( formula_count > 0 )); then
+            brew desc "${formulae[@]}" 2>/dev/null \
+                | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' \
+                | column -s "=" -t
+        else
+            printf "No formulae installed.\n"
+        fi
+
+        printf "\n"
+
+        # ---- Casks Section ----
+        info_printf "== Casks (${cask_count}) =="
+        printf "\n"
+
+        if (( cask_count > 0 )); then
+            brew desc --cask "${casks[@]}" 2>/dev/null \
+                | awk 'gsub(/^([^:]*?)\s*:\s*/,"&=")' \
+                | column -s "=" -t
+        else
+            printf "No casks installed.\n"
+        fi
+
+    } | "${bapager[@]}"
 }
 
 function brewtap {
