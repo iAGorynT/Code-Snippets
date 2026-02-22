@@ -48,7 +48,7 @@ function brewapps {
 
     # Pager selection
     if command -v bat >/dev/null 2>&1; then
-        bapager=(bat --file-name "Brew App Descriptions")
+        bapager=(bat --file-name "$(printf '\033[33mBrew App Listing\033[0m')")
     else
         bapager=(less)
     fi
