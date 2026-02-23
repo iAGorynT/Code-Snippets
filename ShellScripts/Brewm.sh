@@ -30,7 +30,22 @@ function brewdep {
         bapager=(less)
     fi
 
-    brew deps --formula --installed 2>/dev/null | "${bapager[@]}"
+    brew deps --formula --installed 2>/dev/null | \
+    awk -F':' '
+    {
+        gsub(/^ +| +$/, "", $2)
+        if ($2 != "") {
+            name = $1 ":"
+            formulas[++count] = name
+            deps[count] = $2
+            if (length(name) > max) max = length(name)
+        }
+    }
+    END {
+        for (i = 1; i <= count; i++) {
+            printf "%-*s %s\n", max, formulas[i], deps[i]
+        }
+    }' | "${bapager[@]}"
 }
 
 function viewbrewfile {
