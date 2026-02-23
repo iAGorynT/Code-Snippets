@@ -23,7 +23,14 @@ function brewdep {
     clear
     format_printf "Brew Dependencies..." "yellow" "bold"
     printf "\n"
-    brew deps --formula --installed | more
+
+    if command -v bat >/dev/null 2>&1; then
+        bapager=(bat --file-name "$(printf '\033[33mBrew Dependencies\033[0m')")
+    else
+        bapager=(less)
+    fi
+
+    brew deps --formula --installed 2>/dev/null | "${bapager[@]}"
 }
 
 function viewbrewfile {
