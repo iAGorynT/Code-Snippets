@@ -1,6 +1,6 @@
 {
   "name": "date-generator-mcp",
-  "version": "4.0.11",
+  "version": "4.0.12",
   "description": "MCP server for generating dates by month, year, and day of week",
   "main": "src/index.ts",
   "type": "module",
