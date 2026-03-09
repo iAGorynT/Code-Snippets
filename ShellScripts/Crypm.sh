@@ -23,6 +23,10 @@ function crypvault {
     Crypvault.sh
 }
 
+function grcpw {
+    Grcpw.sh
+}
+
 function gauthenticator {
     Gauth.sh
 }
@@ -52,11 +56,12 @@ function menu {
     printf "\t1. Enigma Shortcut\n"
     printf "\t2. SSL Cryptxt\n"
     printf "\t3. SSL Crypvault\n"
-    printf "\t4. Gauth Authenticator\n"
-    printf "\t5. Gauth OTP Manager\n"
-    printf "\t6. Python Authenticator / OTP Manager\n"
-    printf "\t7. Zsh Authenticator\n"
-    printf "\t8. Zsh OTP Manager\n"
+    printf "\t4. GRC Password Extractor\n"
+    printf "\t5. Gauth Authenticator\n"
+    printf "\t6. Gauth OTP Manager\n"
+    printf "\t7. Python Authenticator / OTP Manager\n"
+    printf "\t8. Zsh Authenticator\n"
+    printf "\t9. Zsh OTP Manager\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
     # Read entire input instead of just one character
@@ -88,22 +93,26 @@ while true; do
                 hit_any_key=true
                 ;;
             4)
-                gauthenticator
+                grcpw
                 hit_any_key=true
                 ;;
             5)
-                gmanager
+                gauthenticator
                 hit_any_key=true
                 ;;
             6)
-                otppy
+                gmanager
                 hit_any_key=true
                 ;;
             7)
-                otpzsh
+                otppy
                 hit_any_key=true
                 ;;
             8)
+                otpzsh
+                hit_any_key=true
+                ;;
+            9)
                 otpzshmgr
                 hit_any_key=true
                 ;;

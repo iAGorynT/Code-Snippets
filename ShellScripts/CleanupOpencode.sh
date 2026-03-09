@@ -15,7 +15,7 @@ fi
 source "$FORMAT_LIBRARY"
 
 WORKSPACE_DIR="$HOME/Desktop/opencode_workspace"
-TARGET_DIRS=("backups" "new" "scripts")
+TARGET_DIRS=("backups" "scripts")
 
 info_printf "Starting cleanup of folder contents in opencode_workspace..."
 
@@ -97,7 +97,7 @@ for dir_name in "${TARGET_DIRS[@]}"; do
     fi
 done
 
-success_printf "Selective cleanup of backups, new, and scripts directories completed!"
+success_printf "Selective cleanup of backups and scripts directories completed!"
 
 # Show the current structure
 printf "\n"
