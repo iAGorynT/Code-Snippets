@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Maximum entropy pseudo-random password generator."""
 
+# Uses 'secrets' module for cryptographically secure random generation (not 'random')
 import secrets
 import string
 import argparse
@@ -21,6 +22,7 @@ def generate_password(
     Each symbol in the charset has equal probability of occurring at any position,
     ensuring maximum entropy and uniform randomness across all substrings.
     """
+    # Core generation: secrets.choice() ensures each character is randomly selected
     return "".join(secrets.choice(charset) for _ in range(length))
 
 
@@ -32,6 +34,7 @@ def generate_with_timestamp(
     Timestamp provides uniqueness guarantee while the random portion
     maintains maximum entropy properties.
     """
+    # Convert timestamp to alphanumeric (digits become letters for consistency)
     if include_date:
         ts = time.strftime("%Y%m%d%H%M%S")
     else:
@@ -55,6 +58,7 @@ def generate_with_timestamp(
 
 def copy_to_clipboard(text: str) -> bool:
     """Copy text to clipboard using platform-native command."""
+    # Platform-specific clipboard handling: Darwin (macOS), Linux, or unsupported
     system = platform.system()
     try:
         if system == "Darwin":
@@ -127,6 +131,7 @@ def main():
 
     args = parser.parse_args()
 
+    # Determine charset based on user options (priority: specific types > no-special > simple > default)
     if args.digits_only:
         charset = string.digits
     elif args.alpha_only:
@@ -138,17 +143,20 @@ def main():
     else:
         charset = args.charset
 
+    # Generate password: timestamp-prefixed or standard random
     if args.timestamp:
         password = generate_with_timestamp(args.length, charset, include_date=True)
     else:
         password = generate_password(args.length, charset)
 
+    # Display entropy info if requested
     if args.max_entropy:
         entropy = len(charset) ** args.length
         entropy_bits = args.length * (len(charset).bit_length() - 1)
         print(f"Entropy: ~{entropy_bits} bits ({entropy:.2e} combinations)")
         print()
 
+    # Output: print password and optionally copy to clipboard
     print(password)
 
     if args.copy:
