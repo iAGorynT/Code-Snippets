@@ -12,6 +12,7 @@ printf "\n"
 printf "Choose Password Generator:\n"
 printf "1) GRC (Web-based)\n"
 printf "2) Brukasa (Local Python script)\n"
+printf "\n"
 printf "Enter choice (1 or 2): "
 read choice
 printf "\n"
@@ -26,7 +27,7 @@ if [[ "$choice" == "1" ]]; then
     read
     printf "\n"
 elif [[ "$choice" == "2" ]]; then
-    uv run ~/PythonCode/password_gen.py -m -n -l 63
+    uv run ~/PythonCode/password_gen.py -m -n -o -l 63
     printf "Press Enter to continue... "
     read
     printf "\n"

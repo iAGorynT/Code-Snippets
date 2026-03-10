@@ -4,9 +4,9 @@
 import secrets
 import string
 import argparse
-import sys
 import time
-import os
+import subprocess
+import platform
 
 
 DEFAULT_LENGTH = 32
@@ -51,6 +51,23 @@ def generate_with_timestamp(
 
     result = ts_encoded + random_part
     return result
+
+
+def copy_to_clipboard(text: str) -> bool:
+    """Copy text to clipboard using platform-native command."""
+    system = platform.system()
+    try:
+        if system == "Darwin":
+            subprocess.run(["pbcopy"], input=text.encode(), check=True)
+        elif system == "Linux":
+            subprocess.run(
+                ["xclip", "-selection", "clipboard"], input=text.encode(), check=True
+            )
+        else:
+            return False
+        return True
+    except Exception:
+        return False
 
 
 def main():
@@ -101,6 +118,12 @@ def main():
         action="store_true",
         help="Include timestamp prefix for uniqueness (format: YYYYMMDDHHMMSS)",
     )
+    parser.add_argument(
+        "-o",
+        "--copy",
+        action="store_true",
+        help="Copy password to clipboard",
+    )
 
     args = parser.parse_args()
 
@@ -127,6 +150,12 @@ def main():
         print()
 
     print(password)
+
+    if args.copy:
+        if copy_to_clipboard(password):
+            print("Password copied to clipboard.")
+        else:
+            print("Failed to copy to clipboard.")
 
 
 if __name__ == "__main__":
