@@ -6,17 +6,34 @@ FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 source "$FORMAT_LIBRARY"
 
 clear
-rocket_printf "GRC Password Extractor..."
+rocket_printf "Password Extractor..."
 printf "\n"
 
-info_printf "The GRC website will be opened in your default browser."
-info_printf "Please generate a random password with 63 alpha-numeric characters (a-z, A-Z, 0-9) and copy it to the clipboard."
-printf "Press Enter to open the website. "
-read
-open https://www.grc.com/passwords.htm
-printf "Press Enter to continue... "
-read
+printf "Choose Password Generator:\n"
+printf "1) GRC (Web-based)\n"
+printf "2) Brukasa (Local Python script)\n"
+printf "Enter choice (1 or 2): "
+read choice
 printf "\n"
+
+if [[ "$choice" == "1" ]]; then
+    info_printf "The GRC website will be opened in your default browser."
+    info_printf "Please generate a random password with 63 alpha-numeric characters (a-z, A-Z, 0-9) and copy it to the clipboard."
+    printf "Press Enter to open the website. "
+    read
+    open https://www.grc.com/passwords.htm
+    printf "Press Enter to continue... "
+    read
+    printf "\n"
+elif [[ "$choice" == "2" ]]; then
+    uv run ~/PythonCode/password_gen.py -m -n -l 63
+    printf "Press Enter to continue... "
+    read
+    printf "\n"
+else
+    error_printf "Invalid choice. Please enter 1 or 2." true
+    exit 1
+fi
 
 password=$(pbpaste)
 
