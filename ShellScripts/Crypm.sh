@@ -23,8 +23,8 @@ function crypvault {
     Crypvault.sh
 }
 
-function grcpw {
-    Grcpw.sh
+function pwdex {
+    Pwdex.sh
 }
 
 function gauthenticator {
@@ -56,7 +56,7 @@ function menu {
     printf "\t1. Enigma Shortcut\n"
     printf "\t2. SSL Cryptxt\n"
     printf "\t3. SSL Crypvault\n"
-    printf "\t4. GRC Password Extractor\n"
+    printf "\t4. Password Extractor\n"
     printf "\t5. Gauth Authenticator\n"
     printf "\t6. Gauth OTP Manager\n"
     printf "\t7. Python Authenticator / OTP Manager\n"
@@ -93,7 +93,7 @@ while true; do
                 hit_any_key=true
                 ;;
             4)
-                grcpw
+                pwdex
                 hit_any_key=true
                 ;;
             5)
