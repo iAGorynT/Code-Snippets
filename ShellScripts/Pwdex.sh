@@ -7,8 +7,8 @@ source "$FORMAT_LIBRARY"
 
 clear
 rocket_printf "Password Extractor..."
-printf "\n"
 
+# Display menu and get user choice
 printf "Choose Password Generator:\n"
 printf "1) GRC (Web-based)\n"
 printf "2) Brukasa (Local Python script)\n"
@@ -17,6 +17,7 @@ printf "Enter choice (1 or 2): "
 read choice
 printf "\n"
 
+# Execute selected password generator
 if [[ "$choice" == "1" ]]; then
     info_printf "The GRC website will be opened in your default browser."
     info_printf "Please generate a random password with 63 alpha-numeric characters (a-z, A-Z, 0-9) and copy it to the clipboard."
@@ -36,6 +37,7 @@ else
     exit 1
 fi
 
+# Get password from clipboard and validate
 password=$(pbpaste)
 
 if [[ ! "$password" =~ ^[A-Za-z0-9]{63}$ ]]; then
@@ -45,6 +47,7 @@ fi
 
 info_printf "Full password string: $password"
 
+# Get substring length from user
 printf "Enter the length of the substring to extract (1-63): "
 read length
 
@@ -53,6 +56,7 @@ if [[ ! "$length" =~ ^[0-9]+$ ]] || (( length < 1 || length > 63 )); then
     exit 1
 fi
 
+# Extract random substring
 max_start=$((63 - length))
 start=$((RANDOM % (max_start + 1)))
 
@@ -62,6 +66,7 @@ printf "\n"
 success_printf "Extracted substring: $extracted"
 printf "\n"
 
+# Offer to save extracted password to clipboard
 printf "Would you like to save this to the clipboard? (y/n) "
 read answer
 
