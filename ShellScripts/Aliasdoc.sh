@@ -25,7 +25,6 @@ categories=(
     "Dev"
     "Homebrew"
     "Main Menu"
-    "Function"
     "Quit"
 )
 

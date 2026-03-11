@@ -125,6 +125,7 @@ alias ghdl="GithubDownloader.sh" 	# Download Github Files
 
 #=> Dev Commands
 alias ztmp="~/bin/zTests/zCreateTmp.sh"		# Create Empty Temporary Shell Script File
+bak() { for f; do cp -- "$f"{,.bak}; done }     # Function to make backup copies
 alias vimup="VimUpdate.sh"			# Update Vim Plugins
 alias fedoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
 alias fpdoc="FLibFormatPrintfDoc.sh"		# List FLibFormatPrintf.sh Documentation
@@ -155,10 +156,6 @@ alias mmt="~/bin/zTests/Mmt.sh"			# Test Menu
 # List Menu Alias'
 alias mml="clear; grep -e '# Main Menu' -e 'alias mm' $HOME/.zshrc | grep -v ‘mml=‘"
 #=> End Main Menu Commands
-
-#=> Function Commands
-bak() { for f; do cp -- "$f"{,.bak}; done }  # Make backup copies
-#=> End Function Commands
 
 # Enable Colorized Directory Listings
 export CLICOLOR=1
