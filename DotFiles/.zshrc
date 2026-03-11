@@ -156,6 +156,10 @@ alias mmt="~/bin/zTests/Mmt.sh"			# Test Menu
 alias mml="clear; grep -e '# Main Menu' -e 'alias mm' $HOME/.zshrc | grep -v ‘mml=‘"
 #=> End Main Menu Commands
 
+#=> Function Commands
+bak() { for f; do cp -- "$f"{,.bak}; done }  # Make backup copies
+#=> End Function Commands
+
 # Enable Colorized Directory Listings
 export CLICOLOR=1
 
