@@ -128,7 +128,7 @@ printf "\n"
 # Check for the presence of the Rosetta 2 installation receipt
 if command -v lsbom >/dev/null && lsbom -f /Library/Apple/System/Library/Receipts/com.apple.pkg.RosettaUpdateAuto.bom >/dev/null 2>&1; then
     info_printf "Rosetta2: Installed"
-    warning_printf "Support Sunsets with MacOS 27 and Ends with MacOS 28 (2027)"
+    warning_printf "Support Limited with MacOS 27 and Ends with MacOS 28 (2027)"
 else
     error_printf "Rosetta2: NOT installed"
 fi
