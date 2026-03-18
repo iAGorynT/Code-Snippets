@@ -156,7 +156,7 @@ function menu {
     printf "\t7. Brew Doctor\n"
     printf "\t8. Brew Autoupdate\n"
     printf "\t9. MacVim Explore\n"
-    printf "\t10. Brew App Uninstaller\n"
+    printf "\t10. Brew App Uninstaller/Reinstaller\n"
     printf "\t0. Exit Menu\n\n\n"
     printf "\t\tEnter an Option: "
     # Read entire input instead of just one character

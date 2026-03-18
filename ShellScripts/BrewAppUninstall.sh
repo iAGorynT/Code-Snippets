@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # Brew App Uninstaller
-# This script provides an interactive menu to uninstall Homebrew packages (formulae and casks).
+# This script provides an interactive menu to uninstall/reinstall Homebrew packages (formulae and casks).
 
 # Source function library with error handling
 FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
@@ -11,7 +11,7 @@ source "$FORMAT_LIBRARY"
 # Function to display script header
 display_header() {
     clear
-    format_printf "Brew App Uninstaller..." "yellow" "bold"
+    format_printf "Brew App Uninstaller/Reinstaller..." "yellow" "bold"
     printf "\n"
 }
 
@@ -103,6 +103,17 @@ function show_package_counts() {
     printf "\n"
 }
 
+# Function to reinstall a package
+function reinstall_package() {
+    local package=$1
+    if [[ " ${casks[@]} " =~ " ${package} " ]]; then
+        brew reinstall --cask "$package"
+    else
+        brew reinstall "$package"
+    fi
+    success_printf "$package has been reinstalled."
+}
+
 # Function to uninstall a package
 function uninstall_package() {
     local package=$1
@@ -174,11 +185,23 @@ while true; do
         elif (( choice <= ${#all_packages[@]} )); then
             selected_package=${all_packages[$choice]}
             
-            read "confirm?Are you sure you want to uninstall $selected_package? (y/n): "
-            if [[ $confirm =~ ^[Yy]$ ]]; then
-                uninstall_package "$selected_package"
+            read "confirm?Do you want to (u)ninstall, (r)einstall, or (n)one for $selected_package? (u/r/n): "
+            if [[ $confirm =~ ^[Uu]$ ]]; then
+                read "confirm2?Are you sure you want to uninstall $selected_package? (y/n): "
+                if [[ $confirm2 =~ ^[Yy]$ ]]; then
+                    uninstall_package "$selected_package"
+                else
+                    info_printf "Uninstallation cancelled."
+                fi
+            elif [[ $confirm =~ ^[Rr]$ ]]; then
+                read "confirm2?Are you sure you want to reinstall $selected_package? (y/n): "
+                if [[ $confirm2 =~ ^[Yy]$ ]]; then
+                    reinstall_package "$selected_package"
+                else
+                    info_printf "Reinstallation cancelled."
+                fi
             else
-                info_printf "Uninstallation cancelled."
+                info_printf "Operation cancelled."
             fi
         else
             warning_printf "Invalid selection. Please enter a number between 0 and ${#all_packages[@]}."
