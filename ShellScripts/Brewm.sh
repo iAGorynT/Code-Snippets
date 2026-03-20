@@ -143,6 +143,11 @@ function brewappuninstaller {
     brewappuninstall.sh
 }
 
+function brewinfo {
+    clear
+    brewinfo.sh
+}
+
 function menu {
     clear
     printf "\n"
@@ -157,6 +162,7 @@ function menu {
     printf "\t8. Brew Autoupdate\n"
     printf "\t9. MacVim Explore\n"
     printf "\t10. Brew App Uninstaller/Reinstaller\n"
+    printf "\t11. Brew App Information\n"
     printf "\t0. Exit Menu\n\n\n"
     printf "\t\tEnter an Option: "
     # Read entire input instead of just one character
@@ -211,6 +217,10 @@ while true; do
                 ;;
             10)
                 brewappuninstaller
+                hit_any_key=true
+                ;;
+            11)
+                brewinfo
                 hit_any_key=true
                 ;;
             *)
