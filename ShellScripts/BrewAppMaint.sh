@@ -44,7 +44,7 @@ search_term=""
 # Function to display script header
 display_header() {
     clear
-    format_printf "Brew Info Viewer..." "yellow" "bold"
+    format_printf "Brew App Uninstall/Reinstall/Info..." "yellow" "bold"
     printf "\n"
     
     # Show current filter and search state
@@ -155,6 +155,7 @@ show_paged_menu() {
     printf "\n"
     printf "Navigation: g=top G=bottom u=up d=down j=down k=up :=jump 0=exit\n"
     printf "Filters: f=formulae c=casks a=all /=search h=help r=refresh\n"
+    printf "Actions: Enter number to select package\n"
     printf "\n"
 }
 
@@ -209,7 +210,7 @@ show_package_counts() {
 get_package_type() {
     local package=$1
     local pkg_type=${package_types[$package]}
-    
+
     if [[ -n "$pkg_type" ]]; then
         echo "$pkg_type"
     elif [[ " ${casks[*]} " =~ " ${package} " ]]; then
@@ -217,6 +218,170 @@ get_package_type() {
     else
         echo "formula"
     fi
+}
+
+# Function to confirm action with user
+confirm_action() {
+    local action=$1
+    local package=$2
+    local response
+
+    printf "\n"
+    printf "⚠️  Are you sure you want to $action $package? [y/N] "
+    read -k1 response
+    printf "\n"
+
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+        return 0
+    else
+        info_printf "Action cancelled."
+        return 1
+    fi
+}
+
+# Function to uninstall a package
+uninstall_package() {
+    local package=$1
+    local type
+
+    type=$(get_package_type "$package")
+
+    if ! confirm_action "uninstall" "$package"; then
+        return 1
+    fi
+
+    printf "\n"
+    info_printf "Uninstalling $package..."
+
+    if [[ "$type" == "cask" ]]; then
+        brew uninstall --cask "$package" 2>&1
+    else
+        brew uninstall --formula "$package" 2>&1
+    fi
+
+    if [[ $? -eq 0 ]]; then
+        success_printf "Successfully uninstalled $package"
+
+        # Run autoremove to clean up dependencies
+        printf "\n"
+        info_printf "Running brew autoremove..."
+        brew autoremove 2>&1
+
+        # Clear from caches
+        unset "package_types[$package]"
+        unset "outdated_packages[$package]"
+        unset "info_cache[$package]"
+
+        # Remove from arrays
+        all_packages=(${all_packages[@]/$package})
+        formulae=(${formulae[@]/$package})
+        casks=(${casks[@]/$package})
+        filtered_packages=(${filtered_packages[@]/$package})
+
+        return 0
+    else
+        error_printf "Failed to uninstall $package"
+        return 1
+    fi
+}
+
+# Function to reinstall a package
+reinstall_package() {
+    local package=$1
+    local type
+
+    type=$(get_package_type "$package")
+
+    if ! confirm_action "reinstall" "$package"; then
+        return 1
+    fi
+
+    printf "\n"
+    info_printf "Reinstalling $package..."
+
+    if [[ "$type" == "cask" ]]; then
+        brew reinstall --cask "$package" 2>&1
+    else
+        brew reinstall --formula "$package" 2>&1
+    fi
+
+    if [[ $? -eq 0 ]]; then
+        success_printf "Successfully reinstalled $package"
+
+        # Clear info cache since package may have changed
+        unset "info_cache[$package]"
+
+        return 0
+    else
+        error_printf "Failed to reinstall $package"
+        return 1
+    fi
+}
+
+# Function to show package action menu
+show_package_actions() {
+    local package=$1
+    local action_choice
+
+    while true; do
+        display_header
+        info_printf "=== Package Actions: $package ==="
+        printf "\n"
+
+        # Show current status
+        local type=$(get_package_type "$package")
+        printf "Type: %s\n" "$type"
+
+        if [[ -n "${outdated_packages[$package]}" ]]; then
+            warning_printf "Status: OUTDATED - Update available"
+        fi
+
+        printf "\n"
+        printf "[u]ninstall  [r]einstall  [i]nfo  [b]ack\n"
+        printf "\n"
+        printf "Choice: "
+        read -k1 action_choice
+
+        case "$action_choice" in
+            "u")
+                printf "\n"
+                if uninstall_package "$package"; then
+                    printf "\n"
+                    printf "Press any key to continue..."
+                    read -k1
+                    return 0
+                else
+                    printf "\n"
+                    printf "Press any key to continue..."
+                    read -k1
+                fi
+                ;;
+            "r")
+                printf "\n"
+                if reinstall_package "$package"; then
+                    printf "\n"
+                    printf "Press any key to continue..."
+                    read -k1
+                else
+                    printf "\n"
+                    printf "Press any key to continue..."
+                    read -k1
+                fi
+                ;;
+            "i")
+                printf "\n"
+                show_package_info "$package"
+                printf "\n"
+                printf "Press any key to continue..."
+                read -k1
+                ;;
+            "b"|$'\e')
+                return 0
+                ;;
+            *)
+                ;;
+        esac
+    done
 }
 
 # Function to apply current filter and search
@@ -365,7 +530,7 @@ show_help() {
     clear
     format_printf "Brew Info Viewer - Help" "yellow" "bold"
     printf "\n\n"
-    
+
     format_printf "Navigation" "cyan" "bold"
     printf "  g          Jump to top of list\n"
     printf "  G          Jump to bottom of list\n"
@@ -376,7 +541,7 @@ show_help() {
     printf "  :<number>  Jump to specific item number\n"
     printf "  0          Exit the program\n"
     printf "\n"
-    
+
     format_printf "Filters" "cyan" "bold"
     printf "  f          Show formulae only\n"
     printf "  c          Show casks only\n"
@@ -384,16 +549,24 @@ show_help() {
     printf "  /          Search within current filter\n"
     printf "  ESC        Clear search\n"
     printf "\n"
-    
+
+    format_printf "Package Actions" "cyan" "bold"
+    printf "  <number>   Select package by number to open action menu\n"
+    printf "  u          Uninstall selected package (with confirmation)\n"
+    printf "  r          Reinstall selected package (with confirmation)\n"
+    printf "  i          View detailed package information\n"
+    printf "  b          Back to package list\n"
+    printf "\n"
+
     format_printf "Other Commands" "cyan" "bold"
     printf "  r          Refresh package lists and caches\n"
     printf "  h or ?     Show this help screen\n"
     printf "\n"
-    
+
     format_printf "Indicators" "cyan" "bold"
     printf "  [OUTDATED] Package has an update available\n"
     printf "\n"
-    
+
     printf "Press any key to return to the menu..."
     read -k1
 }
@@ -652,18 +825,14 @@ main() {
                         break
                     fi
                 done
-                
+
                 if [[ "$num" =~ ^[0-9]+$ ]]; then
                     local selection=$num
                     if (( selection <= ${#filtered_packages[@]} )); then
                         selected_package=${filtered_packages[$selection]}
-                        
-                        display_header
-                        show_package_info "$selected_package"
-                        
-                        printf "\n"
-                        printf "Press any key to continue..."
-                        read -k1
+
+                        # Show package action menu
+                        show_package_actions "$selected_package"
                     else
                         printf "\n"
                         warning_printf "Invalid selection: $selection"
