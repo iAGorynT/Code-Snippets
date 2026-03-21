@@ -1,7 +1,7 @@
 #!/bin/zsh
 
-# Brew Info Viewer
-# This script provides an interactive menu to view detailed information about Homebrew packages (formulae and casks).
+# Brew App Uninstall/Reinstall/Info
+# This script provides an interactive menu to uninstall/reinstall/view app info about Homebrew packages (formulae and casks).
 
 # ============================================================================
 # CONFIGURATION
@@ -115,7 +115,6 @@ show_paged_menu() {
     local end
     local i
     local package
-    local display_num
     local outdated_marker
 
     # Ensure scroll_offset is valid
@@ -135,21 +134,16 @@ show_paged_menu() {
         printf "--- Showing %d-%d of %d ---\n" $((scroll_offset + 1)) "$end" "$total"
     fi
 
-    # Display packages with outdated indicators
-    i=1
-    for package in "${filtered_packages[@]}"; do
-        if (( i > scroll_offset && i <= end )); then
-            display_num=$i
-            outdated_marker=""
-            
-            # Check if outdated
-            if [[ -n "${outdated_packages[$package]}" ]]; then
-                outdated_marker=" [OUTDATED]"
-            fi
-            
-            printf "%d) %s%s\n" "$display_num" "$package" "$outdated_marker"
+    # Display packages with outdated indicators (index-based slice, no full-array walk)
+    for (( i = scroll_offset; i < end; i++ )); do
+        package=${filtered_packages[$((i + 1))]}
+        outdated_marker=""
+        
+        if [[ -n "${outdated_packages[$package]}" ]]; then
+            outdated_marker=" [OUTDATED]"
         fi
-        ((i++))
+        
+        printf "%d) %s%s\n" "$((i + 1))" "$package" "$outdated_marker"
     done
 
     printf "\n"
@@ -190,9 +184,10 @@ refresh_outdated_cache() {
     local outdated_pkg
     
     outdated_packages=()
+    # brew outdated with no flags returns both formulae and casks — one call instead of two
     while IFS= read -r outdated_pkg; do
         [[ -n "$outdated_pkg" ]] && outdated_packages[$outdated_pkg]=1
-    done < <(brew outdated --formula 2>/dev/null; brew outdated --cask 2>/dev/null)
+    done < <(brew outdated 2>/dev/null)
 }
 
 # Function to display package counts
@@ -613,8 +608,11 @@ handle_search() {
                 if [[ ${#search_input} -gt 0 ]]; then
                     search_input="${search_input:0:-1}"
                     printf "\b \b"
-                    search_term="$search_input"
-                    apply_filter
+                    # Only re-filter if search term actually changed
+                    if [[ "$search_input" != "$search_term" ]]; then
+                        search_term="$search_input"
+                        apply_filter
+                    fi
                 fi
                 ;;
             *)
@@ -622,8 +620,11 @@ handle_search() {
                 if [[ "$char" =~ [a-zA-Z0-9._-] ]]; then
                     search_input="${search_input}${char}"
                     printf "%s" "$char"
-                    search_term="$search_input"
-                    apply_filter
+                    # Only re-filter if search term actually changed
+                    if [[ "$search_input" != "$search_term" ]]; then
+                        search_term="$search_input"
+                        apply_filter
+                    fi
                 fi
                 ;;
         esac
@@ -788,6 +789,7 @@ main() {
                 apply_filter
                 ;;
             "r")
+                printf "\n"
                 info_printf "Refreshing package data..."
                 formulae=()
                 casks=()
