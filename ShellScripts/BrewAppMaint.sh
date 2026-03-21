@@ -818,7 +818,8 @@ main() {
                 local num="$choice"
                 local next_char
                 while true; do
-                    read -t 0.1 -k1 next_char 2>/dev/null || break
+		    # Time Delay increased from 0.1 to 0.7 to give user more time for entry
+                    read -t 0.7 -k1 next_char 2>/dev/null || break
                     if [[ "$next_char" =~ [0-9] ]]; then
                         num="${num}${next_char}"
                     else
