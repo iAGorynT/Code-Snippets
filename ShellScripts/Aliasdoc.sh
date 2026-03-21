@@ -14,7 +14,6 @@ categories=(
     "Particulars CLI"
     "Encrypt / Decrypt"
     "MacVim"
-    "MacDown Markdown Editor"
     "Terminal List"
     "Network Speedtest"
     "hdiutil"

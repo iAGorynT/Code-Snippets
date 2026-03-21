@@ -60,10 +60,6 @@ alias mvedit="Mvedit.sh $1"		# Launch macVim Editor From Terminal Command Prompt
 alias mvexplore="Mvexplore.sh"		# Open Netrw File Explorer in Home Directory
 #=> End MacVim Commands
 
-#=> MacDown Markdown Editor Commands
-alias mdedit="Mdedit.sh $1"		# Launch MacDown From Terminal Command Prompt
-#=> End MacDown Markdown Editor Commands
-
 #=> Terminal List Commands 
 alias la="ls -a"                                                # List All
 alias ll="ls -al"					        # Long List - Total at top is Block Count
@@ -144,7 +140,6 @@ alias brewit="Brewit.sh"				# Update Homebrew
 alias brewdep="clear; brew deps --formula --installed"	# List Dependencies
 alias brewdocm="Brewdocm.sh"				# Brew Doctor
 alias brewtap="clear; brew tap"				# List All Taps
-alias brewapp="Brewappuninstall.sh"			# Brew App Uninstaller
 #=> End Homebrew Commands
 
 #=> Main Menu Commands
