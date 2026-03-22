@@ -45,10 +45,22 @@ function menu {
     printf "\t5. Time Machine Menu\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
-    # Read entire input instead of just one character
-    read option
+    # Read Single-key input 
+    read -k1 option
+    # Read remaining digits
+    local num="$option"
+    local next_char
+    while true; do
+    # Time Delay increased from 0.1 to 0.3 to give user more time for entry
+    read -s -t 0.3 -k1 next_char 2>/dev/null || break
+    if [[ "$next_char" =~ [0-9] ]]; then
+        num="${num}${next_char}"
+    else
+        break
+    fi
+    done
     # Remove any whitespace
-    option=$(echo $option | tr -d '[:space:]')
+    option=$(echo $num | tr -d '[:space:]')
 }
 
 # Main loop
