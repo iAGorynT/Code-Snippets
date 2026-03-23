@@ -10,11 +10,12 @@ get_yes_no() {
     local prompt="$1"
     local response
     while true; do
-        read "response?$prompt (y/n): "
+        read -k 1 "response?$prompt (y/n): "
+        printf '\n'  # <-- newline using printf
         case ${response:l} in
-            y|yes) return 0 ;;
-            n|no)  return 1 ;;
-            *) printf "Please answer yes (Y) or no (N).\n" ;;
+            y) return 0 ;;
+            n) return 1 ;;
+            *) error_printf "Please answer yes (Y) or no (N)." ;;
         esac
     done
 }

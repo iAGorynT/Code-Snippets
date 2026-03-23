@@ -124,16 +124,17 @@ validate_environment() {
     printf "\n"
 }
 
+# Get yes/no input
 get_yes_no() {
     local prompt="$1"
     local response
     while true; do
-        read "response?$prompt (y/n): "
+        read -k 1 "response?$prompt (y/n): "
+        printf '\n'  # <-- newline using printf
         case ${response:l} in
-            y|yes|1) return 0 ;;
-            n|no|0)  return 1 ;;
-            "") warning_printf "Please provide an answer." ;;
-            *) warning_printf "Please answer yes (y) or no (n)." ;;
+            y) return 0 ;;
+            n) return 1 ;;
+            *) error_printf "Please answer yes (Y) or no (N)." ;;
         esac
     done
 }
@@ -221,7 +222,8 @@ select_mcp_server() {
     
     local choice
     while true; do
-        read "choice?Enter your choice (1-${#servers[@]}): "
+        read -k 1 "choice?Enter your choice (1-${#servers[@]}): "
+        printf "\n"
         if [[ "$choice" =~ ^[0-9]+$ ]] && [[ "$choice" -ge 1 ]] && [[ "$choice" -le ${#servers[@]} ]]; then
             local selected_dir="${servers[$choice]}"
             success_printf "Selected: ${server_names[$choice]}"
@@ -360,7 +362,7 @@ update_version_number() {
     printf "\n"
     
     local choice
-    read "choice?Enter your choice (0-4): "
+    read -k 1 "choice?Enter your choice (0-4): "
     
     if [[ -z "$choice" ]]; then
         choice=0
@@ -617,7 +619,10 @@ main() {
         printf "7) Set MCP Server\n"
         printf "0) Exit\n"
         printf "\n"
-        read "choice?Enter your choice (0-8): "
+        read -k 1 "choice?Enter your choice (0-8): "
+	
+        # Remove any whitespace
+        choice=$(echo $choice | tr -d '[:space:]')
 
 	# Default to exit if no input
         if [[ -z "$choice" ]]; then
