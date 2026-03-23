@@ -49,7 +49,8 @@ confirm_deletion() {
     # Use direct printf with color formatting to keep input on same line
     printf '\033[1;33m%s\033[0m' "Do you want to continue? (y/N): "
     
-    read -r response
+    read -k 1 -r response
+    printf "\n"
     case "$response" in
         [yY]|[yY][eE][sS])
             return 0
