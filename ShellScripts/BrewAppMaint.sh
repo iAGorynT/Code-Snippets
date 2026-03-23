@@ -828,7 +828,7 @@ main() {
                         break
                     fi
                 done
-                printf "%s" "$num"
+                # printf "%s" "$num"
 
                 if [[ "$num" =~ ^[0-9]+$ ]]; then
                     local selection=$num
