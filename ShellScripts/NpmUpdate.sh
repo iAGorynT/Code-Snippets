@@ -625,8 +625,8 @@ main() {
         # Remove any whitespace
         choice=$(echo $choice | tr -d '[:space:]')
 
-	# Check for exit by user
-	if [[ -z "$choice" ]]; then
+        # Check for exit by user
+        if [[ -z "$choice" ]]; then
             choice=0
             printf "\n"
         elif [[ "$choice" == "0" ]]; then
