@@ -57,6 +57,7 @@ function eject_drive {
     
     # Only display output if it's not empty
     if [[ -n "$eject_output" ]]; then
+        printf "\n"
         info_printf "$eject_output"
     fi
 }
@@ -100,11 +101,11 @@ function main {
     if [[ "$brukasa_disk" == "true" ]]; then
         printf "\n"
         while true; do
-            read yn\?"Eject Private Thumb Drive (Y/N): "
+            read -k 1 yn\?"Eject Private Thumb Drive (Y/N): "
             case $yn in
                 [Yy]* ) eject_drive "$private_path"; break;;
                 [Nn]* ) break;;
-                * ) printf "Please answer yes (Y) or no (N).\n";;
+                * ) printf "\nPlease answer yes (Y) or no (N).\n";;
             esac
         done
     fi
