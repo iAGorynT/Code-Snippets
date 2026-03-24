@@ -619,16 +619,22 @@ main() {
         printf "7) Set MCP Server\n"
         printf "0) Exit\n"
         printf "\n"
-        read -k 1 "choice?Enter your choice (0-8): "
+        printf "Enter your choice (0-7): "
+        read -k 1 choice
 	
         # Remove any whitespace
         choice=$(echo $choice | tr -d '[:space:]')
 
-	# Default to exit if no input
-        if [[ -z "$choice" ]]; then
+	# Check for exit by user
+	if [[ -z "$choice" ]]; then
             choice=0
+            printf "\n"
+        elif [[ "$choice" == "0" ]]; then
+            printf "\n\n"
+        else
+            printf "\n"
         fi
-        printf "\n"
+
         case $choice in
             1) run_standard_update ;;
             2) run_major_update ;;
@@ -639,7 +645,7 @@ main() {
             6) run_npm_audit ;;
             7) select_mcp_server ;;
             0) warning_printf "Exiting without making any updates"; break ;;
-            *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, 5, 6, 7, 8, or 0." ;;
+            *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, 5, 6, 7, or 0." ;;
         esac
         printf "\n"
         if ! get_yes_no "Would you like to perform another operation?"; then break; fi
