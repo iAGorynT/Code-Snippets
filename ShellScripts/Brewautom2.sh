@@ -119,11 +119,11 @@ function autoupdate_status() {
 
         # Confirm empty log execution
         while true; do
-            read yn\?"Empty Log (Y/N): "
+            read -k 1 yn\?"Empty Log (Y/N): "
             case $yn in
-                [Yy]* ) empty_log "$autolog"; break;;
+                [Yy]* ) printf "\n"; empty_log "$autolog"; break;;
                 [Nn]* ) break;;
-                * ) echo "Please answer yes (Y) or no (N).";;
+                * ) echo "\nPlease answer yes (Y) or no (N).";;
             esac
         done
     else
@@ -139,11 +139,11 @@ function load_autoupdate() {
 
     # Confirm Execution
     while true; do
-        read yn\?"Confirm (Y/N): "
+        read -k 1 yn\?"Confirm (Y/N): "
         case $yn in
             [Yy]* ) echo; break;;
             [Nn]* ) return;;
-            * ) echo "Please answer yes (Y) or no (N).";;
+            * ) echo "\nPlease answer yes (Y) or no (N).";;
         esac
     done
 
@@ -206,11 +206,11 @@ function unload_autoupdate() {
 
     # Confirm Execution
     while true; do
-        read yn\?"Confirm (Y/N): "
+        read -k 1 yn\?"Confirm (Y/N): "
         case $yn in
             [Yy]* ) echo; break;;
             [Nn]* ) return;;
-            * ) echo "Please answer yes (Y) or no (N).";;
+            * ) echo "\nPlease answer yes (Y) or no (N).";;
         esac
     done
 
@@ -249,8 +249,8 @@ function show_menu() {
     echo
     echo -en "\t\tEnter an Option: "
 
-    # Read entire input instead of just one character
-    read option
+    # Read input 
+    read -k 1 option
     # Remove any whitespace
     option=$(echo $option | tr -d '[:space:]')
     echo
