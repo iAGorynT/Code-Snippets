@@ -20,17 +20,7 @@ function ghdesktop {
 
 function crypvault {
     clear
-    echo "Select Vault Type..."
-    echo 
-    local vault_name
-    local common_vaults=("VaultMGR" "GitMGR")
-    select vault_type in "${common_vaults[@]}"; do
-        case $vault_type in
-            VaultMGR) vault_name="vmgr"; break;;
-            GitMGR)   vault_name="gmgr"; break;;
-        esac
-    done
-    Crypvault.sh $vault_name
+    Crypvault.sh 
 }
 
 function bsum {
