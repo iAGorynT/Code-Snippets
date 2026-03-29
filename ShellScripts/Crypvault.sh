@@ -136,53 +136,70 @@ while true; do
     # Set Default Directory To Desktop
     cd "$HOME/Desktop"
 
-    # Define common actions
-    common_actions=("Decrypt")
-    
-    # Add "GitSync" for non-vmgr case
-    if [[ $vaultpassed != "vmgr" ]]; then
-        common_actions+=("GitSync")
+    # Select Vault Type only if not already set
+    if [ -z "$vault_name" ]; then
+        if [ -n "$vaultpassed" ]; then
+            vault_name="$vaultpassed"
+        else
+            info_printf "Select Vault Type..."
+            printf "\n"
+            printf "[V] VaultMGR  [G] GitMGR\n"
+            printf "Choice: "
+            read -k1 vault_key
+            case $vault_key in
+                v|V) vault_name="vmgr";;
+                g|G) vault_name="gmgr";;
+                *)   printf "Invalid choice, try again\n"; read -k1; continue;;
+            esac
+            printf "\n"
+        fi
     fi
 
-    # Add remaining common actions
-    common_actions+=("Encrypt" "View" "Backup" "Config" "Reset" "Quit")
-
-    printf "\n"
-    info_printf "Select Action..." 
-    select action in "${common_actions[@]}"; do
-        case $action in
-            Encrypt)  action="enc"; break;;
-            Decrypt)  action="dec"; break;;
-            View)     action="view"; break;;
-            GitSync)  action="sync"; break;;
-            Backup)   action="back"; break;;
-            Config)   action="conf"; break;;
-            Reset)    action="rset"; break;;
-            Quit)     action="quit"; break;;
+    while true; do
+        printf "\n"
+        info_printf "Select Action..."
+        printf "\n"
+        if [[ $vault_name == "gmgr" ]]; then
+            printf "[D] Decrypt  [G] GitSync  [E] Encrypt  [V] View  [B] Backup  [C] Config  [R] Reset  [Q] Quit\n"
+        else
+            printf "[D] Decrypt  [E] Encrypt  [V] View  [B] Backup  [C] Config  [R] Reset  [Q] Quit\n"
+        fi
+        printf "Choice: "
+        read -k1 action_key
+        case $action_key in
+            d|D) action="dec"; break;;
+            e|E) action="enc"; break;;
+            v|V) action="view"; break;;
+            g|G) action="sync"; break;;
+            b|B) action="back"; break;;
+            c|C) action="conf"; break;;
+            r|R) action="rset"; break;;
+            q|Q) action="quit"; break;;
+            *)   printf "Invalid choice, try again\n"; read -k1;;
         esac
+        printf "\n"
     done
+
     printf "\n"
 
     # Perform the selected action
     case $action in
         quit)
-            # Check if user wants to quit
-            if [[ $action == "quit" ]]; then
-                # Stop Terminal App Launcher
-                if osascript -e 'application "Terminal" is running' >/dev/null 2>&1; then
-                    info_printf "Stopping Terminal App Launcher"
-                    osascript -e 'tell application "Terminal" to quit without saving' >/dev/null 2>&1
-                fi
-                info_printf "OpenSSL Vault Enc/Dec Completed"
-                exit 0
+            # Stop Terminal App Launcher
+            if osascript -e 'application "Terminal" is running' >/dev/null 2>&1; then
+                info_printf "Stopping Terminal App Launcher"
+                osascript -e 'tell application "Terminal" to quit without saving' >/dev/null 2>&1
             fi
+            info_printf "OpenSSL Vault Enc/Dec Completed"
+            exit 0
             ;;
         rset)
             # Reset settings to All Vaults
+            vault_name=''
             vaultpassed=''
             printf '\033[1;34m%s%s%b' "ℹ️ " "Settings reset to All Vaults..." "\033[0m"
             read -k 1
-            continue
+            continue 2
             ;;
         view)
             # Display Warning message
@@ -196,29 +213,12 @@ while true; do
             info_printf "Standby... ConfigFILES Running"
             shortcuts run "ConfigFILES"
             info_printf "ConfigFILES Complete..."
-            continue
+            printf "\n"
+            printf "Press any key to continue"
+            read -k 1
+            continue 2
             ;;
     esac
-
-    # Select Vault Type
-    if [ -z "$vaultpassed" ]; then
-        info_printf "Select Vault Type..." 
-        # Define common vaults
-        if [[ $action != "sync" ]]; then
-            common_vaults=("VaultMGR" "GitMGR")
-        else
-            common_vaults=("GitMGR")
-        fi
-        select vault_type in "${common_vaults[@]}"; do
-            case $vault_type in
-                VaultMGR) vault_name="vmgr"; break;;
-                GitMGR)   vault_name="gmgr"; break;;
-            esac
-        done
-	printf "\n"
-    else
-        vault_name=$vaultpassed
-    fi 
 
     # Set Vault Configuration File Location
     config_dir="$HOME/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Config Files"
@@ -274,11 +274,11 @@ while true; do
     if [[ $action == "enc" || $action == "sync" ]] && [[ ! -d $vault_dir ]]; then
         error_printf "Vault Directory missing on Desktop: $vault_dir"
         read -k 1
-        continue
+        continue 2
     elif [[ $action == "dec" || $action == "view" ]] && [[ ! -f $vault_enc ]]; then
         error_printf "Encrypted Vault missing on Desktop: $vault_enc"
         read -k 1
-        continue
+        continue 2
     fi
 
     # Perform the selected action
@@ -341,4 +341,5 @@ while true; do
     printf "\n"
     printf "Press any key to continue"
     read -k 1
+    continue 2
 done
