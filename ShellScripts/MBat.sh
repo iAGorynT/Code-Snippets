@@ -62,31 +62,43 @@ while true; do
     info_printf "Installed Menu Files:"
     show_menu "${all_menu_files[@]}"
 
-    read "choice?Enter the number of the menu file you want to view (0 to exit): "
-    choice=${choice:-0}  # Set default value to 0 if input is empty
-
-    if [[ $choice =~ ^[0-9]+$ ]]; then
-        if (( choice == 0 )); then
-            success_printf "Exiting... Bat Menu Viewer completed."
-            exit 0
-        elif (( choice <= ${#all_menu_files[@]} )); then
-            selected_menu_file=${all_menu_files[$choice]}
-            view_menu_file "$selected_menu_file"
+    printf "Enter the number of the menu file you want to view (0 to exit): "
+    read -k1 -s choice
+    echo
+    local num="$choice"
+    local next_char=""
+    while true; do
+        read -s -t 0.3 -k1 next_char 2>/dev/null || break
+        if [[ "$next_char" =~ [0-9] ]]; then
+            num="${num}${next_char}"
         else
-            error_printf "Invalid selection. Please enter a number between 0 and ${#all_menu_files[@]}."
+            break
         fi
+    done
+    choice=$(echo $num | tr -d '[:space:]')
+
+    if [[ -z "$choice" ]]; then
+        success_printf "Exiting... Bat Menu Viewer completed."
+        exit 0
+    elif [[ $choice =~ ^[0-9]+$ ]]; then
+        case $choice in
+            0)
+                success_printf "Exiting... Bat Menu Viewer completed."
+                exit 0
+                ;;
+            *)
+                if (( choice <= ${#all_menu_files[@]} )); then
+                    selected_menu_file=${all_menu_files[$choice]}
+                    view_menu_file "$selected_menu_file"
+                else
+                    error_printf "Invalid selection. Please enter a number between 0 and ${#all_menu_files[@]}."
+                fi
+                ;;
+        esac
     else
         error_printf "Invalid input. Please enter a number."
     fi
 
-    printf "\n"
-    read "continue?Press any key to continue or type 'exit' to quit: "
-    if [[ $continue == "exit" ]]; then
-        success_printf "Exiting... Bat Menu Viewer completed."
-        exit 0
-    else
-        clear
-        printf "\n"
-    fi
+
 done
 
