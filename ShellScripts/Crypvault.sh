@@ -323,7 +323,6 @@ while true; do
             info_printf "GitHUB Sync Completed"
             ;;
         back)
-            clear
             info_printf "Backing up $vault_dir" 
             if diskutil list external | grep -q 'Private'; then
                 info_printf "Backing up to Private..."
