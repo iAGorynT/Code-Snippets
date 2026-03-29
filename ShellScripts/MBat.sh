@@ -92,11 +92,15 @@ while true; do
                     view_menu_file "$selected_menu_file"
                 else
                     error_printf "Invalid selection. Please enter a number between 0 and ${#all_menu_files[@]}."
+                    printf "Press Enter to continue..."
+                    read -k1 choice
                 fi
                 ;;
         esac
     else
         error_printf "Invalid input. Please enter a number."
+        printf "Press Enter to continue..."
+        read -k1 choice
     fi
 
 
