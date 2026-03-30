@@ -20,7 +20,8 @@ function turnsshon {
 
 function turnsshoff {
 	clear
-	sudo systemsetup -setremotelogin off
+	# Turn off SSH quietly
+	printf "yes\n" | sudo systemsetup -setremotelogin off >/dev/null 2>&1
 	sudo systemsetup -getremotelogin
 }
 
