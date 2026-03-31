@@ -56,7 +56,7 @@ decrypt_file() {
 # Function to calculate seconds until next TOTP rotation
 calculate_seconds_remaining() {
     local current_time=$(date +%s)
-    echo $(( TOTP_PERIOD - (current_time % TOTP_PERIOD) ))
+    printf "%s\n" $(( TOTP_PERIOD - (current_time % TOTP_PERIOD) ))
 }
 
 # Function to generate TOTP code
@@ -83,13 +83,13 @@ generate_next_totp() {
 copy_to_clipboard() {
     local text="$1"
     if command -v pbcopy &> /dev/null; then
-        echo -n "$text" | pbcopy
+        printf "%s" "$text" | pbcopy
     elif command -v xclip &> /dev/null; then
-        echo -n "$text" | xclip -selection clipboard
+        printf "%s" "$text" | xclip -selection clipboard
     elif command -v wl-copy &> /dev/null; then
-        echo -n "$text" | wl-copy
+        printf "%s" "$text" | wl-copy
     elif command -v clip.exe &> /dev/null; then
-        echo -n "$text" | clip.exe
+        printf "%s" "$text" | clip.exe
     else
         return 1
     fi
@@ -122,7 +122,7 @@ clear_and_display() {
         printf "%-4d %-30s \033[0;32m%-16s\033[0m %-16s [%d:copy]\n" "$counter" "$name" "$current_totp" "$next_totp" "$counter"
     done
 
-    echo ""
+    printf "\n"
     format_printf "Commands: q:quit, r:refresh, <number>:copy code" "magenta" "bold"
 }
 
@@ -130,7 +130,7 @@ clear_and_display() {
 cleanup_and_exit() {
     [[ -f "$DECRYPTED_FILE" ]] && { rm -P "$DECRYPTED_FILE" 2>/dev/null || rm "$DECRYPTED_FILE"; }
     unset GAUTH_PASSWORD
-    echo ""
+    printf "\n"
     info_printf "Exiting TOTP viewer!"
     exit 0
 }
@@ -168,8 +168,21 @@ unset GAUTH_PASSWORD
 
 while true; do
     clear_and_display
-    echo ""
-    read -r "key?Enter command: "
+    printf "\n"
+    printf "Enter command: "
+    read -k1
+    local key="$REPLY"
+    local num="$key"
+    local next_char=""
+    while read -s -t 0.3 -k1 next_char && [[ -n "$next_char" ]]; do
+        if [[ "$next_char" =~ [0-9] ]]; then
+            num="${num}${next_char}"
+        else
+            break
+        fi
+    done
+    printf "\n"
+    key=$(echo "$num" | tr -d '[:space:]')
     if [[ "$key" =~ ^[Qq]$ ]]; then
         cleanup_and_exit
     elif [[ "$key" =~ ^[Rr]$ ]]; then
@@ -196,5 +209,5 @@ while true; do
             sleep 1
         fi
     fi
-    echo ""
+    printf "\n"
 done

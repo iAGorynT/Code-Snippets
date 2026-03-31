@@ -8,6 +8,9 @@
 # ///
 import base64
 import os
+import sys
+import tty
+import termios
 import pyotp
 import json
 import getpass
@@ -16,6 +19,28 @@ import subprocess
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
+
+def read_key():
+    """Read a single keypress from stdin without requiring Enter."""
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+
+    try:
+        tty.setraw(fd)
+        ch = sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
+    return ch
+
+
+def read_single_key(prompt="\nPress any key to continue..."):
+    """Read a single key and return it lowercase. Press Enter returns empty string."""
+    print(prompt, end="", flush=True)
+    key = read_key()
+    print()  # New line after keypress
+    return key.lower()
 
 
 def get_password_from_keychain(service_name, account_name):
@@ -54,8 +79,8 @@ def get_password_from_keychain(service_name, account_name):
 def copy_to_clipboard(text):
     """Copy text to macOS clipboard using pbcopy"""
     try:
-        process = subprocess.Popen(['pbcopy'], stdin=subprocess.PIPE)
-        process.communicate(text.encode('utf-8'))
+        process = subprocess.Popen(["pbcopy"], stdin=subprocess.PIPE)
+        process.communicate(text.encode("utf-8"))
         return True
     except Exception as e:
         print(f"Error copying to clipboard: {e}")
@@ -176,7 +201,7 @@ def dump_option(manager):
     print(raw_secrets)
 
     print("\n")
-    input("Press Enter to continue...")
+    read_single_key("\nPress any key to continue...")
 
 
 def copy_otp_option(manager, names):
@@ -189,43 +214,47 @@ def copy_otp_option(manager, names):
     """
     if not names:
         print("No OTP entries available.")
-        input("Press Enter to continue...")
+        read_single_key()
         return
 
     try:
         selection = input("\nEnter the number of the OTP account to copy: ").strip()
-        
+
         # Validate input is a number
         if not selection.isdigit():
             print("Invalid input. Please enter a number.")
-            input("Press Enter to continue...")
+            read_single_key()
             return
-        
+
         selection_num = int(selection)
-        
+
         # Validate number is within range
         if selection_num < 1 or selection_num > len(names):
-            print(f"Invalid selection. Please enter a number between 1 and {len(names)}.")
-            input("Press Enter to continue...")
+            print(
+                f"Invalid selection. Please enter a number between 1 and {len(names)}."
+            )
+            read_single_key()
             return
-        
+
         # Get the account name and its current OTP code
         selected_name = sorted(names)[selection_num - 1]
         current_code, _ = manager.get_code(selected_name)
-        
+
         if current_code:
             if copy_to_clipboard(current_code):
-                print(f"\nCopied OTP code for '{selected_name}' to clipboard: {current_code}")
+                print(
+                    f"\nCopied OTP code for '{selected_name}' to clipboard: {current_code}"
+                )
             else:
                 print("\nFailed to copy to clipboard.")
         else:
             print(f"\nFailed to generate OTP code for '{selected_name}'.")
-        
-        input("Press Enter to continue...")
-        
+
+        read_single_key()
+
     except Exception as e:
         print(f"\nError: {e}")
-        input("Press Enter to continue...")
+        read_single_key()
 
 
 def main():
@@ -281,7 +310,7 @@ def main():
         print("d - Dump raw keys file contents")
         print("q - Quit")
 
-        choice = input("\nEnter option: ").lower()
+        choice = read_single_key("\nEnter option: ")
 
         if choice == "a":
             name = input("Enter name for the OTP: ")
@@ -290,7 +319,7 @@ def main():
                 print(f"Added OTP for {name}")
             else:
                 print("Failed to add OTP. Invalid secret format.")
-            input("Press Enter to continue...")
+            read_single_key()
 
         elif choice == "r":
             name = input("Enter name of OTP to remove: ")
@@ -298,7 +327,7 @@ def main():
                 print(f"Removed OTP for {name}")
             else:
                 print(f"No OTP found with name {name}")
-            input("Press Enter to continue...")
+            read_single_key()
 
         elif choice == "c":
             copy_otp_option(manager, names)
