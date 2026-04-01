@@ -149,7 +149,7 @@ while true; do
             case $vault_key in
                 v|V) vault_name="vmgr";;
                 g|G) vault_name="gmgr";;
-                *)   printf "\nInvalid choice, try again"; read -k1; continue;;
+                *)   printf '\n\033[1;31m❌ Invalid choice, try again\033[0m'; read -k1; continue;;
             esac
             printf "\n"
         fi
@@ -175,7 +175,7 @@ while true; do
             c|C) action="conf"; break;;
             r|R) action="rset"; break;;
             q|Q) action="quit"; break;;
-            *)   printf "\nInvalid choice, try again"; read -k1;;
+            *)   printf '\n\033[1;31m❌ Invalid choice, try again\033[0m'; read -k1;;
         esac
         printf "\n"
     done
