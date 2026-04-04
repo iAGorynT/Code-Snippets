@@ -36,7 +36,8 @@ show_menu() {
         printf "4) Exit\n\n"
         
         printf "Enter your choice (1-4): "
-        read -r choice
+        read -k 1 -r choice
+        printf "\n"
         
         case "$choice" in
             1)
