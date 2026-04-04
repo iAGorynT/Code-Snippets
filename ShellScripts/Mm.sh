@@ -41,7 +41,7 @@ function menu {
     clear
     printf "\n"
     printf "\t\t\t"
-    format_printf "Main Menu" "yellow" "bold"
+    format_printf "Main Menu" "yellow" "bold" "underline"
     printf "\n"
     printf "\t1. Homebrew Menu\n"
     printf "\t2. Ops Menu\n"

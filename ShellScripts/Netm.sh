@@ -22,7 +22,7 @@ function menu {
     clear
     printf "\n"
     printf "\t\t\t"
-    format_printf "Network Menu" "yellow" "bold"
+    format_printf "Network Menu" "yellow" "bold" "underline"
     printf "\n"
     printf "\t1. Internet Speed Test\n"
     printf "\t2. Apple Network Quality Test\n"

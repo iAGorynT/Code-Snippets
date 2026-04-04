@@ -43,7 +43,7 @@ function menu {
     clear
     printf "\n"
     printf "\t\t\t"
-    format_printf "Crypt Menu" "yellow" "bold"
+    format_printf "Crypt Menu" "yellow" "bold" "underline"
     printf "\n"
     printf "\t1. Enigma Shortcut\n"
     printf "\t2. SSL Cryptxt\n"

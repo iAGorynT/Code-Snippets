@@ -39,7 +39,7 @@ function menu {
 	clear
 	printf "\n"
 	printf "\t\t\t"
-	format_printf "SSH Menu" "yellow" "bold"
+	format_printf "SSH Menu" "yellow" "bold" "underline"
 	printf "\n"
 	printf "\t1. Set SSH Password\n"
 	printf "\t2. Turn SSH On\n"
