@@ -27,14 +27,6 @@ function pwdex {
     Pwdex.sh
 }
 
-function gauthenticator {
-    Gauth.sh
-}
-
-function gmanager {
-    GauthMgr.sh
-}
-
 function otppy {
     uv run ~/PythonCode/otp_generator.py
 }
@@ -57,11 +49,9 @@ function menu {
     printf "\t2. SSL Cryptxt\n"
     printf "\t3. SSL Crypvault\n"
     printf "\t4. Password Extractor\n"
-    printf "\t5. Gauth Authenticator\n"
-    printf "\t6. Gauth OTP Manager\n"
-    printf "\t7. Python Authenticator / OTP Manager\n"
-    printf "\t8. Zsh Authenticator\n"
-    printf "\t9. Zsh OTP Manager\n"
+    printf "\t5. Python Authenticator / OTP Manager\n"
+    printf "\t6. Zsh Authenticator\n"
+    printf "\t7. Zsh OTP Manager\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
     # Read Single-key input 
@@ -109,22 +99,14 @@ while true; do
                 hit_any_key=true
                 ;;
             5)
-                gauthenticator
-                hit_any_key=true
-                ;;
-            6)
-                gmanager
-                hit_any_key=true
-                ;;
-            7)
                 otppy
                 hit_any_key=true
                 ;;
-            8)
+            6)
                 otpzsh
                 hit_any_key=true
                 ;;
-            9)
+            7)
                 otpzshmgr
                 hit_any_key=true
                 ;;
