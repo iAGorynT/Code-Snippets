@@ -14,7 +14,7 @@ printf "1) GRC (Web-based)\n"
 printf "2) Brukasa (Local Python script)\n"
 printf "\n"
 printf "Enter choice (1 or 2): "
-read choice
+read -k 1 choice
 printf "\n"
 
 # Execute selected password generator
@@ -68,9 +68,10 @@ printf "\n"
 
 # Offer to save extracted password to clipboard
 printf "Would you like to save this to the clipboard? (y/n) "
-read answer
+read -k 1 answer
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     echo "$extracted" | pbcopy
+    printf "\n"
     success_printf "Saved to clipboard."
 fi
