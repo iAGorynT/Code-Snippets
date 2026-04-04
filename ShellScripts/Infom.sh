@@ -74,7 +74,7 @@ function menu {
     clear
     printf "\n"
     printf "\t\t\t"
-    format_printf "Info Menu" "yellow" "bold"
+    format_printf "Info Menu" "yellow" "bold" "underline"
     printf "\n"
     printf "\t1. Hostname\n"
     printf "\t2. Environment Variables\n"

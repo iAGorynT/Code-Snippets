@@ -53,7 +53,7 @@ function menu {
     clear
     printf "\n"
     printf "\t\t\t"
-    format_printf "Test Menu" "yellow" "bold"
+    format_printf "Test Menu" "yellow" "bold" "underline"
     printf "\n"
     printf "\t1. zDialogBox\n"
     printf "\t2. zJQJsonConfig\n"

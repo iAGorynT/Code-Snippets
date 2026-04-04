@@ -146,7 +146,7 @@ function brewappmaint {
 function menu {
     clear
     printf "\n"
-    printf "\t\t\t\033[33;1mHomeBrew Menu\033[0m\n\n"
+    printf "\t\t\t\033[33;1;4mHomeBrew Menu\033[0m\n\n"
     printf "\t1. Brewit\n"
     printf "\t2. Brew List\n"
     printf "\t3. Brew Dependencies\n"

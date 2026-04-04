@@ -52,7 +52,7 @@ function menu {
     clear
     printf "\n"
     printf "\t\t\t"
-    format_printf "Dev Menu" "yellow" "bold"
+    format_printf "Dev Menu" "yellow" "bold" "underline"
     printf "\n"
     printf "\t1. Devsync (Dev to Local Repo)\n"
     printf "\t2. GitHub Desktop (Local Repo to GitHub)\n"

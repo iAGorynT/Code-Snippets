@@ -32,7 +32,7 @@ function menu {
     clear
     printf "\n"
     printf "\t\t\t"
-    format_printf "iPerf3 Menu" "yellow" "bold"
+    format_printf "iPerf3 Menu" "yellow" "bold" "underline"
     printf "\n"
     printf "\t1. Start iPerf Server\n"
     printf "\t2. Client to Server Speedtest\n"

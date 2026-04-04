@@ -31,7 +31,7 @@ function menu {
 	clear
 	printf "\n"
 	printf "\t\t\t"
-	format_printf "Time Machine Menu" "yellow" "bold"
+	format_printf "Time Machine Menu" "yellow" "bold" "underline"
 	printf "\n"
 	printf "\t1. Set Time Machine Password\n"
 	printf "\t2. Run Time Machine Backup\n"
