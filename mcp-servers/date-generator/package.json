@@ -1,6 +1,6 @@
 {
   "name": "date-generator-mcp",
-  "version": "4.0.20",
+  "version": "4.0.21",
   "description": "MCP server for generating dates by month, year, and day of week",
   "main": "src/index.ts",
   "type": "module",
@@ -14,7 +14,7 @@
     "@modelcontextprotocol/sdk": "^1.29.0"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0",
+    "@types/node": "^25.5.2",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   },
