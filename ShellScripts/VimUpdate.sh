@@ -32,14 +32,26 @@ update_vim_plugins() {
     
     # Check for vim
     command -v mvim >/dev/null || { error_printf "vim is not installed or not in PATH." | tee -a "$LOG_FILE"; return 1; }
-    
+
     # Update vim plugins
     mvim -c 'PlugUpgrade | PlugUpdate | redir >> ~/.logs/vim_plugin_update.log | redir END | qa!' && {
         success_printf "Vim plugin update completed successfully." | tee -a "$LOG_FILE"
+    
+        # Cleanup old plug.vim file if it exists
+        PLUG_OLD_FILE="${HOME}/.vim/autoload/plug.vim.old"
+        if [[ -f "$PLUG_OLD_FILE" ]]; then
+            rm -f "$PLUG_OLD_FILE" && \
+            success_printf "Removed old Vim plugin file: plug.vim.old" | tee -a "$LOG_FILE" || \
+            error_printf "Failed to remove plug.vim.old" | tee -a "$LOG_FILE"
+        else
+            success_printf "No plug.vim.old file found to clean up." | tee -a "$LOG_FILE"
+        fi
+    
     } || {
         error_printf "Vim plugin update failed." | tee -a "$LOG_FILE"
         return 1
     }
+
     
     return 0
 }
