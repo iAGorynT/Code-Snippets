@@ -125,6 +125,7 @@ bak() { for f; do cp -- "$f"{,.bak}; done }     # Function to make backup copies
 alias vimup="VimUpdate.sh"			# Update Vim Plugins
 alias fedoc="FLibFormatEchoDoc.sh"		# List FLibFormatEcho.sh Documentation
 alias fpdoc="FLibFormatPrintfDoc.sh"		# List FLibFormatPrintf.sh Documentation
+alias oc="opencode"				# Launch Opencode AI Coding Agent
 alias of="open ."				# Open Current Directory in Finder
 alias np="clear; echo 'Node Processes...'; echo; echo 'PID    CPU  MEM  COMMAND'; ps aux | grep node | grep -v grep | awk '{print \$2, \$3, \$4, \$11}' | column -t" # List Node Processes with Header
 alias npml="clear; echo 'Global NPM Packages...'; echo; npm list -g --depth=0"	# List Global NPM Packages
