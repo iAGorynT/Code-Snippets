@@ -68,6 +68,8 @@ function main {
     local private_path="/Volumes/Private"
     local shortcuts_downloads="$downloads_path/Shortcuts Config Files"
     local shortcuts_private="$private_path/Shortcuts Config Files"
+    local shortcuts_hash_downloads="$downloads_path/Shortcuts Hash Files"
+    local shortcuts_hash_private="$private_path/Shortcuts Hash Files"
     local brukasa_disk=false
     
     # Determine if BruKasa Thumb Drive is connected
@@ -89,12 +91,22 @@ function main {
     fi
     
     # Search for JSON files
+    # Shortcuts Config Files
     print_header "JSON Files in ~/Downloads/zVault Backup/Shortcuts Config Files"
     search_files "$shortcuts_downloads" "*.json"
     
     if [[ "$brukasa_disk" == "true" ]]; then
         print_header "JSON Files in /Volumes/Private/Shortcuts Config Files"
         search_files "$shortcuts_private" "*.json"
+    fi	
+
+    # Shortcuts Hash Files
+    print_header "JSON Files in ~/Downloads/zVault Backup/Shortcuts Hash Files"
+    search_files "$shortcuts_hash_downloads" "*.json"
+    
+    if [[ "$brukasa_disk" == "true" ]]; then
+        print_header "JSON Files in /Volumes/Private/Shortcuts Hash Files"
+        search_files "$shortcuts_hash_private" "*.json"
     fi	
 
     # Ask to Eject Brukasa Thumb Drive
