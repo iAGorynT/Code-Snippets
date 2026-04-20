@@ -230,7 +230,6 @@ while true; do
     
     # Set Hash Configuration Files Location
     hash_dir="$HOME/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/Hash Files"
-    hash_files="$hash_dir/*.*"
 
     # Determine Type of Encryption Used on Vault
     if grep -q -w SSL "$config_file"; then 
@@ -332,12 +331,12 @@ while true; do
                 info_printf "Backing up to Private..."
                 cp "$icloud_enc" "/Volumes/Private"
                 cp "$config_file" "/Volumes/Private/Shortcuts Config Files"
-                cp "$hash_files" "/Volumes/Private/Shortcuts Hash Files"
+                cp "$hash_dir"/*.* "/Volumes/Private/Shortcuts Hash Files"
             fi
             info_printf "Backing up to Downloads..."
             cp "$icloud_enc" "$HOME/Downloads/zVault Backup"
             cp "$config_file" "$HOME/Downloads/zVault Backup/Shortcuts Config Files"
-            cp "$hash_files" "$HOME/Downloads/zVault Backup/Shortcuts Hash Files"
+            cp "$hash_dir"/*.* "$HOME/Downloads/zVault Backup/Shortcuts Hash Files"
             info_printf "Vault Backup Completed"
             ;;
     esac
