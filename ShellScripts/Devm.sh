@@ -48,22 +48,29 @@ function hlist {
     HashList.sh
 }
 
+function crypmenu {
+    clear
+    Crypm.sh
+}
+
 function menu {
     clear
     printf "\n"
     printf "\t\t\t"
     format_printf "Dev Menu" "yellow" "bold" "underline"
     printf "\n"
+    printf "\t\033[4;36mVault Management\033[0m\n"
     printf "\t1. Devsync (Dev to Local Repo)\n"
     printf "\t2. GitHub Desktop (Local Repo to GitHub)\n"
     printf "\t3. Crypvault (Local Repo to iCloud)\n"
     printf "\t4. Backup Summary\n"
     printf "\n"
-    printf "\t\033[4;36mCoding Updates\033[0m\n"
+    printf "\t\033[4;36mCoding and Utilities\033[0m\n"
     printf "\t5. Replace Shellscript Text\n"
     printf "\t6. Auto Fork and Clone Repo\n"
     printf "\t7. Bat Menu Viewer\n"
     printf "\t8. Hash Key Report\n"
+    printf "\t9. Crypt Menu\n"
     printf "\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
@@ -124,6 +131,9 @@ while true; do
             8)
                 hlist
                 hit_any_key=true
+                ;;
+            9)
+                crypmenu
                 ;;
             *)
                 clear
