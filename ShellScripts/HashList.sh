@@ -33,9 +33,9 @@ show_menu() {
         printf "1) Copy decryption command (direct print)\n"
         printf "2) Copy decryption command (to file)\n"
         printf "3) Copy decryption command (view on screen)\n"
-        printf "4) Exit\n\n"
+        printf "0) Exit\n\n"
         
-        printf "Enter your choice (1-4): "
+        printf "Enter your choice (0 to exit): "
         read -k 1 -r choice
         printf "\n"
         
@@ -61,13 +61,13 @@ show_menu() {
                 printf "\n"
                 read -k "?Press any key to continue..."
                 ;;
-            4)
+            0|""|$'\n'|'')
                 format_printf "Exiting..." "cyan"
                 printf "\n"
                 return 0
                 ;;
             *)
-                format_printf "Invalid choice. Please enter 1-4." "red" "bold"
+                format_printf "Invalid choice. Please enter 0-3." "red" "bold"
                 printf "\n"
                 read -k "?Press any key to continue..."
                 ;;
@@ -145,7 +145,7 @@ lookup_hash_keys() {
         format_printf "NOTE:" "red" "bold"
         printf "The encrypted file will now be deleted.\n"
         printf "If you created a plaintext file, remember to delete it manually.\n"
-        printf "\n"
+        # printf "\n"
     else
         format_printf "✗ Encryption failed" "red" "bold"
         printf "\n"
