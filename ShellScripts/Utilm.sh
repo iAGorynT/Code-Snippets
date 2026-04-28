@@ -48,6 +48,8 @@ function menu {
     printf "\t\t\t"
     format_printf "Utility Menu" "yellow" "bold" "underline"
     printf "\n"
+    printf "\t"
+    format_printf "Individual Updates" "cyan" "underline"
     printf "\t1. Vim Plugin Update\n"
     printf "\t2. Java Update\n"
     printf "\t3. Npm Package Update\n"
