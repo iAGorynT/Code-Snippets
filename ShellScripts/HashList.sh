@@ -61,7 +61,7 @@ show_menu() {
                 printf "\n"
                 read -k "?Press any key to continue..."
                 ;;
-            0|""|$'\n')
+            0|""|$'\n'|'')
                 format_printf "Exiting..." "cyan"
                 printf "\n"
                 return 0
