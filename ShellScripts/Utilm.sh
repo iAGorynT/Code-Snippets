@@ -57,7 +57,7 @@ function menu {
     printf "\t5. Cleanup Opencode Workspace\n"
     printf "\n"
     printf "\t"
-    format_printf "Bundle Updates" "cyan" "underline"
+    format_printf "Bundled Updates" "cyan" "underline"
     printf "\t6. Update All Packages\n"
     printf "\t7. Cleanup All Disks\n"
     printf "\n"
