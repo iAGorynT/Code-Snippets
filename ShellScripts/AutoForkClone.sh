@@ -200,7 +200,7 @@ if [[ "$SKIP_FORK" != true ]]; then
   if gh repo view "$GITHUB_USER/$REPO_NAME" &>/dev/null; then
     success_printf "Fork already exists in your account"
   else
-    if ! gh repo fork "$REPO_URL" --clone=false --remote=false; then
+    if ! gh repo fork "$REPO_URL" --clone=false; then
       error_printf "Fork failed. Check repository access and permissions." true
     fi
     time_printf "Waiting for fork to be ready..."
