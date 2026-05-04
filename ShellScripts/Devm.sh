@@ -38,6 +38,11 @@ function autofork {
     AutoForkClone.sh
 }
 
+function deletefork {
+    clear
+    DeleteFork.sh
+}
+
 function mbat {
     clear
     MBat.sh
@@ -68,9 +73,10 @@ function menu {
     printf "\t\033[4;36mCoding and Utilities\033[0m\n"
     printf "\t5. Replace Shellscript Text\n"
     printf "\t6. Auto Fork and Clone Repo\n"
-    printf "\t7. Bat Menu Viewer\n"
-    printf "\t8. Hash Key Report\n"
-    printf "\t9. Crypt Menu\n"
+    printf "\t7. Delete Fork\n"
+    printf "\t8. Bat Menu Viewer\n"
+    printf "\t9. Hash Key Report\n"
+    printf "\t10. Crypt Menu\n"
     printf "\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
@@ -125,14 +131,18 @@ while true; do
                 hit_any_key=true
                 ;;
             7)
-                mbat
+                deletefork
                 hit_any_key=true
                 ;;
             8)
-                hlist
+                mbat
                 hit_any_key=true
                 ;;
             9)
+                hlist
+                hit_any_key=true
+                ;;
+            10)
                 crypmenu
                 ;;
             *)
