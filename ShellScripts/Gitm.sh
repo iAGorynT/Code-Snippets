@@ -7,71 +7,24 @@ FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 [[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
-function devsync {
+function autofork {
     clear
-    Devsync.sh
+    AutoForkClone.sh
 }
 
-function ghdesktop { 
+function deletefork {
     clear
-    open -a "GitHub Desktop.app"
-    echo "Running GitHub Desktop App..."
-}
-
-function crypvault {
-    clear
-    Crypvault.sh 
-}
-
-function bsum {
-    clear
-    BackupSummary.sh
-}
-
-function reptext {
-    clear
-    ReplaceShellText.sh
-}
-
-function mbat {
-    clear
-    MBat.sh
-}
-
-function hlist {
-    clear
-    HashList.sh
-}
-
-function crypmenu {
-    clear
-    Crypm.sh
-}
-
-function gitmenu {
-    clear
-    Gitm.sh
+    DeleteFork.sh
 }
 
 function menu {
     clear
     printf "\n"
     printf "\t\t\t"
-    format_printf "Dev Menu" "yellow" "bold" "underline"
+    format_printf "Git Menu" "yellow" "bold" "underline"
     printf "\n"
-    printf "\t\033[4;36mVault Management\033[0m\n"
-    printf "\t1. Devsync (Dev to Local Repo)\n"
-    printf "\t2. GitHub Desktop (Local Repo to GitHub)\n"
-    printf "\t3. Crypvault (Local Repo to iCloud)\n"
-    printf "\t4. Backup Summary\n"
-    printf "\n"
-    printf "\t\033[4;36mCoding and Utilities\033[0m\n"
-    printf "\t5. Replace Shellscript Text\n"
-    printf "\t6. Bat Menu Viewer\n"
-    printf "\t7. Hash Key Report\n"
-    printf "\t8. Crypt Menu\n"
-    printf "\t9. Git Menu\n"
-    printf "\n"
+    printf "\t1. Auto Fork and Clone Repo\n"
+    printf "\t2. Delete Fork\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
     # Read Single-key input 
@@ -101,38 +54,12 @@ while true; do
                 break 
                 ;;
             1)
-                devsync
+                autofork
                 hit_any_key=true
                 ;;
             2)
-                ghdesktop
+                deletefork
                 hit_any_key=true
-                ;;
-            3)
-                crypvault
-                hit_any_key=true
-                ;;
-            4)
-                bsum
-                hit_any_key=true
-                ;;
-            5)
-                reptext
-                hit_any_key=true
-                ;;
-            6)
-                mbat
-                hit_any_key=true
-                ;;
-            7)
-                hlist
-                hit_any_key=true
-                ;;
-            8)
-                crypmenu
-                ;;
-            9)
-                gitmenu
                 ;;
             *)
                 clear
