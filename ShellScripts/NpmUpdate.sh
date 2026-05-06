@@ -310,6 +310,7 @@ run_npm_audit() {
     # Run npm audit and capture output
     local audit_output
     local audit_exit_code
+    local audit_force_flag=""
     audit_output=$(npm audit 2>&1)
     audit_exit_code=$?
     
@@ -328,8 +329,11 @@ run_npm_audit() {
             warning_printf "npm audit fix cancelled by user"
             return 1
         fi
+        if get_yes_no "Do you want to append --force to the npm audit fix command? (May introduce breaking changes)"; then
+            audit_force_flag="--force"
+        fi
         update_printf "Running npm audit fix..."
-        if npm audit fix; then
+        if npm audit fix $audit_force_flag; then
             success_printf "npm audit fix completed successfully!"
             info_printf "Remember: perform updates, create new MCPB, and update Claude desktop"
             # Invalidate cache after successful audit fix
