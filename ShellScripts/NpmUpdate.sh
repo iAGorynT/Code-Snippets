@@ -541,7 +541,7 @@ mcp_server_test() {
     update_printf "Step 2: Running mcp server tests..."
     # Replaced npm test with NODE_OPTIONS due to bug in tsx v4.21.0
     # [DEP0205] DeprecationWarning: module.register() is deprecated (Node.js 26.0.0) #791
-    # Temp fix will only suppress the waring message. Revert code once tsx is updated for Node v26.0.0+ 
+    # Temp fix will only suppress the warning message. Revert code once tsx is updated for Node v26.0.0+ 
     # Temporary Fix
     # npm test
     NODE_OPTIONS='--disable-warning=DEP0205' npm test 
