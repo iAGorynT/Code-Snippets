@@ -497,7 +497,7 @@ mcp_server_test() {
 
     info_printf "MCP Server Test will perform the following:"
     printf "  1) Run npm install\n"
-    printf "  2) Run npm test\n"
+    printf "  2) Run npm test (includes temporary tsx fix)\n"
     printf "  3) Run npm start (press Ctrl-C to stop)\n"
     printf "\n"
     
