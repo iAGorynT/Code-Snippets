@@ -45,11 +45,21 @@ while true; do
     done
     printf "\n"
     printf "Select Category: "
-    read choice
+    read -k1 choice
 
-    # Handle Enter Key Pressed (empty input)
-    if [[ -z "$choice" ]]; then
+    # Handle Enter Key Pressed (empty input selects last category/Quit)
+    if [[ "$choice" == $'\n' || "$choice" == $'\r' ]]; then
         choice=${#categories[@]}
+    fi
+
+    # Accumulate multi-digit numbers (categories 10-18)
+    if [[ "$choice" =~ [1-9] ]]; then
+        num="$choice"
+        while true; do
+            read -s -t 0.3 -k1 next_char 2>/dev/null || break
+            [[ "$next_char" =~ [0-9] ]] && num="${num}${next_char}" || break
+        done
+        choice="$num"
     fi
 
     # Test if input is numeric and within range
