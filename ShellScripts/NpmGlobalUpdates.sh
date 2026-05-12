@@ -21,13 +21,10 @@ packages=(${(f)"$(npm outdated -g --parseable --depth=0 \
 
 if (( ${#packages[@]} == 0 )); then
   success_printf "All global packages are up to date!"
-  exit 0
+else
+  package_printf "Updating: ${packages[@]}"
+  for pkg in "${packages[@]}"; do
+    npm install -g "$pkg"
+  done
+  success_printf "Global packages update completed"
 fi
-
-package_printf "Updating: ${packages[@]}"
-
-for pkg in "${packages[@]}"; do
-  npm install -g "$pkg"
-done
-
-success_printf "Global packages update completed"
