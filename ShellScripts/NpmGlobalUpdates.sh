@@ -13,7 +13,6 @@ printf "\n"
 
 info_printf "Checking outdated global npm packages (excluding npm)..."
 
-local packages
 packages=(${(f)"$(npm outdated -g --parseable --depth=0 \
   | cut -d: -f2 \
   | sed 's/@.*//' \

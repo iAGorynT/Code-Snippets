@@ -128,8 +128,8 @@ alias fpdoc="FLibFormatPrintfDoc.sh"		# List FLibFormatPrintf.sh Documentation
 alias oc="opencode"				# Launch Opencode AI Coding Agent
 alias of="open ."				# Open Current Directory in Finder
 alias np="clear; echo 'Node Processes...'; echo; echo 'PID    CPU  MEM  COMMAND'; ps aux | grep node | grep -v grep | awk '{print \$2, \$3, \$4, \$11}' | column -t" # List Node Processes with Header
-alias npml="clear; echo 'Global NPM Packages...'; echo; npm list -g --depth=0"	# List Global NPM Packages
-alias npmo="clear; echo 'Outdated NPM Packages...'; echo; npm outdated -g --depth=0  "	# List Outdated Global NPM Packages
+alias npml="clear; printf '\033[1;33mGlobal NPM Packages...\033[0m\n'; printf '\n'; npm list -g --depth=0"
+alias npmo="clear; printf '\033[1;33mOutdated NPM Packages...\033[0m\n'; printf '\n'; npm outdated -g --depth=0"
 alias npmu="NpmGlobalUninstall.sh"              # Uninstall Global NPM Packages
 alias npmgu="NpmGlobalUpdates.sh"               # Update Global NPM Packages
 alias ds="clear; echo 'Disk Space...'; echo; diskspace --human-readable" # List Disk Space
