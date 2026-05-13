@@ -8,7 +8,7 @@ FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 source "$FORMAT_LIBRARY"
 
 clear
-rocket_printf "Starting npm global package updates..."
+rocket_printf "Starting NPM global package updates..."
 printf "\n"
 
 info_printf "Checking outdated global npm packages (excluding npm)..."
