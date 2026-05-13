@@ -7,19 +7,38 @@ FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 source "$FORMAT_LIBRARY"
 
 clear
-rocket_printf "Starting npm global package cleanup..."
+rocket_printf "Starting NPM global package uninstall..."
 printf '\n'
 
-if [[ -z "$1" ]]; then
-  error_printf "Usage: $0 <package-name>" true
+# Check that npm is available on the system
+if ! command -v npm &>/dev/null; then
+  error_printf "npm is not installed or not in PATH. Please install Node.js/npm first." true
+  exit 1
 fi
 
-PACKAGE="$1"
+# Prompt user for package name with validation
+while true; do
+  read "PACKAGE?Enter the name of the global npm package to uninstall: "
+  if [[ -z "$PACKAGE" ]]; then
+    error_printf "Package name cannot be empty. Please try again."
+  else
+    break
+  fi
+done
+
 info_printf "Checking for global npm package: $PACKAGE"
 
 # Get npm global directories
-NPM_GLOBAL_DIR=$(npm root -g)
-NPM_BIN_DIR=$(npm bin -g)
+NPM_GLOBAL_DIR=$(npm root -g 2>/dev/null) || { error_printf "Failed to get npm global directory" true; exit 1; }
+NPM_BIN_DIR="$(npm config get prefix 2>/dev/null)/bin"
+if [[ ! -d "$NPM_BIN_DIR" ]]; then
+  error_printf "Failed to determine npm bin directory" true
+  exit 1
+fi
+
+# Check if sudo is available for privilege escalation
+SUDO_AVAILABLE=false
+command -v sudo &>/dev/null && SUDO_AVAILABLE=true
 
 # Step 1: Check if package is actually installed
 if [[ ! -d "$NPM_GLOBAL_DIR/$PACKAGE" ]]; then
@@ -28,11 +47,10 @@ if [[ ! -d "$NPM_GLOBAL_DIR/$PACKAGE" ]]; then
 else
   package_printf "Found $PACKAGE at: $NPM_GLOBAL_DIR/$PACKAGE"
   INSTALLED=true
-  
+
   # Get list of binaries this package provides before uninstalling
   BINARIES=()
   if [[ -f "$NPM_GLOBAL_DIR/$PACKAGE/package.json" ]]; then
-    # Extract bin entries from package.json
     BINARIES=($(node -pe "
       try {
         const pkg = require('$NPM_GLOBAL_DIR/$PACKAGE/package.json');
@@ -46,15 +64,26 @@ else
   fi
 fi
 
-# Step 2: Uninstall globally
+# Step 2: Confirm and uninstall globally
 if [[ "$INSTALLED" == true ]]; then
+  format_printf "Ready to uninstall $PACKAGE" "blue" "bold" "🧩"
+  read -k "CONFIRM?Proceed with uninstall? (y/N): "
+  printf '\n'
+  if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+    info_printf "Uninstall cancelled."
+    exit 0
+  fi
+
   format_printf "Uninstalling $PACKAGE..." "blue" "bold" "🧩"
   npm uninstall -g "$PACKAGE" 2>/dev/null
-  
-  # Check if uninstall failed due to permissions
+
   if [[ $? -ne 0 ]]; then
-    warning_printf "Permission denied, trying with sudo..."
-    sudo npm uninstall -g "$PACKAGE"
+    if [[ "$SUDO_AVAILABLE" == true ]]; then
+      warning_printf "Permission denied, trying with sudo..."
+      sudo npm uninstall -g "$PACKAGE"
+    else
+      warning_printf "Permission denied and sudo is not available. Try running as root."
+    fi
   fi
 fi
 
@@ -65,7 +94,10 @@ if [[ ${#BINARIES[@]} -gt 0 ]]; then
     BIN_PATH="$NPM_BIN_DIR/$BIN"
     if [[ -L "$BIN_PATH" ]] || [[ -f "$BIN_PATH" ]]; then
       format_printf "Removing: $BIN_PATH" "cyan" "italic" "⚙️ "
-      sudo rm -f "$BIN_PATH"
+      rm -f "$BIN_PATH" 2>/dev/null
+      if [[ $? -ne 0 && "$SUDO_AVAILABLE" == true ]]; then
+        sudo rm -f "$BIN_PATH"
+      fi
     fi
   done
 else
@@ -73,21 +105,23 @@ else
   BIN_PATH="$NPM_BIN_DIR/$PACKAGE"
   if [[ -L "$BIN_PATH" ]] || [[ -f "$BIN_PATH" ]]; then
     clean_printf "Removing binary: $BIN_PATH"
-    sudo rm -f "$BIN_PATH"
+    rm -f "$BIN_PATH" 2>/dev/null
+    if [[ $? -ne 0 && "$SUDO_AVAILABLE" == true ]]; then
+      sudo rm -f "$BIN_PATH"
+    fi
   fi
 fi
 
 # Step 4: Clean up package directory if it still exists
 if [[ -d "$NPM_GLOBAL_DIR/$PACKAGE" ]]; then
   format_printf "Removing leftover package directory..." "green" "italic" "🗑️ "
-  sudo rm -rf "$NPM_GLOBAL_DIR/$PACKAGE"
+  rm -rf "$NPM_GLOBAL_DIR/$PACKAGE" 2>/dev/null
+  if [[ $? -ne 0 && "$SUDO_AVAILABLE" == true ]]; then
+    sudo rm -rf "$NPM_GLOBAL_DIR/$PACKAGE"
+  fi
 fi
 
-# Step 5: Clear npm cache
-format_printf "Cleaning npm cache..." "green" "italic" "🧺"
-npm cache clean --force >/dev/null 2>&1
-
-# Step 6: Verify removal
+# Step 5: Verify removal
 format_printf "Verifying cleanup..." "blue" "bold" "🔎"
 ISSUES=()
 

@@ -7,77 +7,36 @@ FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 [[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
 source "$FORMAT_LIBRARY"
 
-function devsync {
+function npmlist {
     clear
-    Devsync.sh
+    NpmList.sh
 }
 
-function ghdesktop { 
+function npmoutdated {
     clear
-    open -a "GitHub Desktop.app"
-    echo "Running GitHub Desktop App..."
+    NpmOutdated.sh
 }
 
-function crypvault {
+function npmglobalupdate {
     clear
-    Crypvault.sh 
+    NpmGlobalUpdates.sh
 }
 
-function bsum {
+function npmglobaluninstall {
     clear
-    BackupSummary.sh
-}
-
-function reptext {
-    clear
-    ReplaceShellText.sh
-}
-
-function mbat {
-    clear
-    MBat.sh
-}
-
-function hlist {
-    clear
-    HashList.sh
-}
-
-function crypmenu {
-    clear
-    Crypm.sh
-}
-
-function gitmenu {
-    clear
-    Gitm.sh
-}
-
-function npmmenu {
-    clear
-    Npmm.sh
+    NpmGlobalUninstall.sh
 }
 
 function menu {
     clear
     printf "\n"
     printf "\t\t\t"
-    format_printf "Dev Menu" "yellow" "bold" "underline"
+    format_printf "NPM Menu" "yellow" "bold" "underline"
     printf "\n"
-    printf "\t\033[4;36mVault Management\033[0m\n"
-    printf "\t1. Devsync (Dev to Local Repo)\n"
-    printf "\t2. GitHub Desktop (Local Repo to GitHub)\n"
-    printf "\t3. Crypvault (Local Repo to iCloud)\n"
-    printf "\t4. Backup Summary\n"
-    printf "\n"
-    printf "\t\033[4;36mCoding and Utilities\033[0m\n"
-    printf "\t5. Replace Shellscript Text\n"
-    printf "\t6. Bat Menu Viewer\n"
-    printf "\t7. Hash Key Report\n"
-    printf "\t8. Crypt Menu\n"
-    printf "\t9. Git Menu\n"
-    printf "\t10. NPM Menu\n"
-    printf "\n"
+    printf "\t1. Global NPM Packages List\n"
+    printf "\t2. Outdated Global NPM Packages\n"
+    printf "\t3. NPM Global Package Updates\n"
+    printf "\t4. Uninstall NPM Global Package\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
     # Read Single-key input 
@@ -107,41 +66,20 @@ while true; do
                 break 
                 ;;
             1)
-                devsync
+                npmlist
                 hit_any_key=true
                 ;;
             2)
-                ghdesktop
+                npmoutdated
                 hit_any_key=true
                 ;;
             3)
-                crypvault
+                npmglobalupdate
                 hit_any_key=true
                 ;;
             4)
-                bsum
+                npmglobaluninstall
                 hit_any_key=true
-                ;;
-            5)
-                reptext
-                hit_any_key=true
-                ;;
-            6)
-                mbat
-                hit_any_key=true
-                ;;
-            7)
-                hlist
-                hit_any_key=true
-                ;;
-            8)
-                crypmenu
-                ;;
-            9)
-                gitmenu
-                ;;
-            10)
-                npmmenu
                 ;;
             *)
                 clear
@@ -163,7 +101,7 @@ while true; do
         # Use printf with info formatting but without newline
         printf '\033[1;34m%s\033[0m' "ℹ️  Press any key to continue"
         read -k 1 line
-   fi
+    fi
 done
 
 clear
