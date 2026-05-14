@@ -50,7 +50,7 @@ function menu {
     printf "\t2. Outdated Global NPM Packages\n"
     printf "\t3. NPM Global Package Updates\n"
     printf "\t4. Uninstall NPM Global Package\n"
-    printf "\t5. Test Uninstall NPM Global Package\n"
+    printf "\t5. Uninstall NPM Global Package (TEST MODE)\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
     # Read Single-key input 
