@@ -18,6 +18,34 @@ clear
 rocket_printf "Starting NPM global package uninstall..."
 printf '\n'
 
+# Check if sudo is available for privilege escalation
+SUDO_AVAILABLE=false
+command -v sudo &>/dev/null && SUDO_AVAILABLE=true
+
+# Parse command line arguments
+TEST_MODE=false
+if [[ "$1" == "-t" || "$1" == "--test" ]]; then
+  TEST_MODE=true
+  shift
+fi
+
+# If in test mode, install 'yo' globally for testing
+if [[ "$TEST_MODE" == true ]]; then
+  info_printf "TEST MODE: Installing 'yo' globally for testing..."
+  if ! npm install -g yo 2>/dev/null; then
+    if [[ "$SUDO_AVAILABLE" == true ]]; then
+      warning_printf "Permission denied, trying with sudo..."
+      if ! sudo npm install -g yo; then
+        error_printf "Failed to install 'yo' for testing. Check permissions or internet connection." true
+      fi
+    else
+      error_printf "Failed to install 'yo' for testing. Check permissions or internet connection." true
+    fi
+  fi
+  info_printf "TEST MODE: 'yo' package installed. Enter 'yo' at the prompt to test uninstall."
+  printf '\n'
+fi
+
 # Check that npm is available on the system
 if ! command -v npm &>/dev/null; then
   error_printf "npm is not installed or not in PATH. Please install Node.js/npm first." true
@@ -40,13 +68,9 @@ info_printf "Checking for global npm package: $PACKAGE"
 NPM_GLOBAL_DIR=$(npm root -g 2>/dev/null) || { error_printf "Failed to get npm global directory" true; exit 1; }
 NPM_BIN_DIR="$(npm config get prefix 2>/dev/null)/bin"
 if [[ ! -d "$NPM_BIN_DIR" ]]; then
-  error_printf "Failed to determine npm bin directory" true
+    error_printf "Failed to determine npm bin directory" true
   exit 1
 fi
-
-# Check if sudo is available for privilege escalation
-SUDO_AVAILABLE=false
-command -v sudo &>/dev/null && SUDO_AVAILABLE=true
 
 # Step 1: Check if package is actually installed
 if [[ ! -d "$NPM_GLOBAL_DIR/$PACKAGE" ]]; then
