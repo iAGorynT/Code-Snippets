@@ -76,7 +76,7 @@ function menu {
     printf "\t7. Hash Key Report\n"
     printf "\t8. Crypt Menu\n"
     printf "\t9. Git Menu\n"
-    printf "\t10. NPM Menu\n"
+    printf "\t10. NPM/BUN Menu\n"
     printf "\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
