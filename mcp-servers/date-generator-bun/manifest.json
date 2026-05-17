@@ -1,8 +1,8 @@
 {
   "manifest_version": "0.2",
-  "name": "date-generator-mcp",
-  "version": "4.0.8",
-  "description": "MCP server for generating dates by month, year, and day of week",
+  "name": "date-generator-bun",
+  "version": "5.0.0",
+  "description": "MCP server for generating dates by month, year, and day of week (Bun)",
   "author": {
     "name": "Bruce Guthrie"
   },
@@ -30,10 +30,10 @@
     }
   ],
   "server": {
-    "type": "node",
+    "type": "binary",
     "entry_point": "src/index.ts",
     "mcp_config": {
-      "command": "/opt/homebrew/bin/tsx",
+      "command": "bun",
       "args": [
         "${__dirname}/src/index.ts"
       ],
@@ -41,7 +41,8 @@
     }
   },
   "keywords": [
-    "dates"
+    "dates",
+    "bun"
   ],
   "license": "MIT"
 }

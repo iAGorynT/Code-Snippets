@@ -1,0 +1,26 @@
+{
+  "name": "date-generator-bun",
+  "version": "5.0.0",
+  "description": "MCP server for generating dates by month, year, and day of week (Bun)",
+  "type": "module",
+  "scripts": {
+    "start": "bun src/index.ts",
+    "test": "bun test.ts",
+    "dev": "bun --watch src/index.ts",
+    "version": "jq --arg v \"$npm_package_version\" '.version = $v' manifest.json > tmp.json && mv tmp.json manifest.json"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  },
+  "keywords": [
+    "mcp",
+    "dates",
+    "calendar",
+    "bun"
+  ],
+  "author": "Bruce Guthrie",
+  "license": "MIT"
+}

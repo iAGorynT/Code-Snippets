@@ -24,7 +24,7 @@ OUTDATED_CACHE_VALID=false
 
 display_header() {
     clear
-    format_printf "Npm Package Update..." "yellow" "bold" "package"
+    format_printf "Npm/Bun Package Update..." "yellow" "bold" "package"
 }
 
 # Sanitize input from package.json to prevent command injection
@@ -77,17 +77,23 @@ validate_path() {
     return 0
 }
 
-# Cache npm outdated results for reuse
-get_npm_outdated() {
+# Cache outdated results for reuse
+get_outdated() {
     if [[ "$OUTDATED_CACHE_VALID" == true ]]; then
         printf "%s" "$CACHED_OUTDATED_OUTPUT"
         return 0
     fi
-    
-    # Run npm outdated and cache the result
-    CACHED_OUTDATED_OUTPUT=$(npm outdated 2>/dev/null || true)
+
+    local cmd
+    if [[ "$LOCKFILE_TYPE" == "bun" ]]; then
+        cmd="bun outdated"
+    else
+        cmd="npm outdated"
+    fi
+
+    CACHED_OUTDATED_OUTPUT=$($cmd 2>/dev/null || true)
     OUTDATED_CACHE_VALID=true
-    
+
     printf "%s" "$CACHED_OUTDATED_OUTPUT"
 }
 
@@ -108,20 +114,19 @@ validate_environment() {
         error_printf "No package.json found in current directory: $SCRIPT_DIR" true
     fi
 
-    if ! command -v npm &> /dev/null; then
-        error_printf "npm is not installed or not in PATH" true
+    if ! command -v npm &> /dev/null && ! command -v bun &> /dev/null; then
+        error_printf "Neither npm nor bun is installed or not in PATH" true
     fi
 
-    if command -v ncu &> /dev/null; then
-        HAS_NCU=true
-        success_printf "npm-check-updates (ncu) is available"
-    else
-        warning_printf "npm-check-updates (ncu) is not installed"
-        warning_printf "Major version updates will not be available"
-        warning_printf "Install with: npm install -g npm-check-updates"
+    if command -v bun &> /dev/null; then
+        info_printf "bun is available"
     fi
 
-    if [[ -f "package-lock.json" ]]; then
+    if [[ -f "bun.lock" ]]; then
+        HAS_LOCKFILE=true
+        LOCKFILE_TYPE="bun"
+        info_printf "Detected bun.lock (Bun project)"
+    elif [[ -f "package-lock.json" ]]; then
         HAS_LOCKFILE=true
         LOCKFILE_TYPE="npm"
         info_printf "Detected package-lock.json (npm project)"
@@ -130,6 +135,17 @@ validate_environment() {
         LOCKFILE_TYPE="yarn"
         info_printf "Detected yarn.lock (Yarn project)"
         warning_printf "This script is optimized for npm - yarn operations may behave differently"
+    fi
+
+    if command -v npm &> /dev/null; then
+        if command -v ncu &> /dev/null; then
+            HAS_NCU=true
+            success_printf "npm-check-updates (ncu) is available"
+        elif [[ "$LOCKFILE_TYPE" != "bun" ]]; then
+            warning_printf "npm-check-updates (ncu) is not installed"
+            warning_printf "Major version updates via ncu will not be available"
+            warning_printf "Install with: npm install -g npm-check-updates"
+        fi
     fi
     printf "\n"
 }
@@ -168,9 +184,9 @@ show_package_info() {
     printf "  Dependencies: %d regular, %d development\n" "$dep_count" "$dev_dep_count"
     printf "\n"
 
-    if command -v npm &> /dev/null; then
+    if command -v npm &> /dev/null || command -v bun &> /dev/null; then
         info_printf "Current package status:"
-        local outdated_output=$(get_npm_outdated)
+        local outdated_output=$(get_outdated)
         if [[ -n "$outdated_output" ]]; then
             printf "%s\n" "$outdated_output"
         else
@@ -252,9 +268,16 @@ select_mcp_server() {
 }
 
 run_standard_update() {
-    update_printf "Starting standard npm update (minor/patch versions)..."
+    local cmd="npm"
+    local label="npm"
+    if [[ "$LOCKFILE_TYPE" == "bun" ]]; then
+        cmd="bun"
+        label="Bun"
+    fi
+
+    update_printf "Starting standard ${label} update (minor/patch versions)..."
     info_printf "Checking for available updates..."
-    local outdated_output=$(get_npm_outdated)
+    local outdated_output=$(get_outdated)
     if [[ -z "$outdated_output" ]]; then
         success_printf "All packages are already up to date!"
         return 0
@@ -266,20 +289,50 @@ run_standard_update() {
         warning_printf "Standard update cancelled by user"
         return 1
     fi
-    update_printf "Running npm update..."
-    if npm update; then
-        success_printf "Standard npm update completed successfully!"
-        # Invalidate cache after successful update
+    update_printf "Running ${cmd} update..."
+    if $cmd update; then
+        success_printf "Standard ${label} update completed successfully!"
         invalidate_outdated_cache
         return 0
     else
         local exit_code=$?
-        error_printf "npm update failed with exit code: $exit_code"
+        error_printf "${cmd} update failed with exit code: $exit_code"
         return $exit_code
     fi
 }
 
 run_major_update() {
+    if [[ "$LOCKFILE_TYPE" == "bun" ]]; then
+        upgrade_printf "Starting major version update check via bun update --latest..."
+        local outdated_output=$(get_outdated)
+        if [[ -z "$outdated_output" ]]; then
+            success_printf "All packages are already up to date!"
+            return 0
+        else
+            printf "%s\n" "$outdated_output"
+        fi
+        printf "\n"
+        warning_printf "Major updates can break your project!"
+        warning_printf "This will modify your package.json and bun.lock"
+        if ! get_yes_no "Do you want to proceed with major updates?"; then
+            warning_printf "Major update cancelled by user"
+            return 1
+        fi
+        if get_yes_no "Create backup of package.json before updating?"; then
+            local backup_file="package.json.backup.$(date +%Y%m%d_%H%M%S)"
+            cp package.json "$backup_file" && success_printf "Backup created: $backup_file"
+        fi
+        upgrade_printf "Running bun update --latest..."
+        if bun update --latest; then
+            success_printf "Major version update completed successfully!"
+            invalidate_outdated_cache
+            return 0
+        else
+            error_printf "Update failed. You may need to resolve conflicts manually."
+            return 1
+        fi
+    fi
+
     if [[ $HAS_NCU == false ]]; then
         error_printf "npm-check-updates (ncu) is required for major version updates"
         return 1
@@ -305,7 +358,6 @@ run_major_update() {
     upgrade_printf "Updating package.json with major versions..."
     if ncu -u && npm install; then
         success_printf "Major version update completed successfully!"
-        # Invalidate cache after successful update
         invalidate_outdated_cache
         return 0
     else
@@ -314,46 +366,76 @@ run_major_update() {
     fi
 }
 
-run_npm_audit() {
-    update_printf "Starting npm audit..."
-    
-    # Run npm audit and capture output
+run_audit() {
+    local cmd="npm"
+    local label="npm"
+    if [[ "$LOCKFILE_TYPE" == "bun" ]]; then
+        cmd="bun"
+        label="Bun"
+    fi
+
+    update_printf "Starting ${label} audit..."
     local audit_output
     local audit_exit_code
-    local audit_force_flag=""
-    audit_output=$(npm audit 2>&1)
+    audit_output=$($cmd audit 2>&1)
     audit_exit_code=$?
-    
-    # Check if vulnerabilities were found (exit code 0 means no vulnerabilities)
+
     if [[ $audit_exit_code -eq 0 ]]; then
         success_printf "No vulnerabilities found"
         return 0
     else
-        # Vulnerabilities were found - ask user if they want to fix
-        warning_printf "npm audit found vulnerabilities"
+        warning_printf "${label} audit found vulnerabilities"
         printf "\n"
-        # Display the audit results
         printf "%s\n" "$audit_output"
         printf "\n"
-        if ! get_yes_no "Do you want to run 'npm audit fix' to attempt repairs?"; then
-            warning_printf "npm audit fix cancelled by user"
-            return 1
-        fi
-        if get_yes_no "Do you want to append --force to the npm audit fix command? (May introduce breaking changes)"; then
-            audit_force_flag="--force"
-        fi
-        update_printf "Running npm audit fix..."
-        if npm audit fix $audit_force_flag; then
-            success_printf "npm audit fix completed successfully!"
-            info_printf "Remember: perform updates, create new MCPB, and update Claude desktop"
-            # Invalidate cache after successful audit fix
-            invalidate_outdated_cache
-            return 0
+
+        if [[ "$LOCKFILE_TYPE" == "bun" ]]; then
+            if ! get_yes_no "Do you want to run 'bun update' to attempt repairs?"; then
+                warning_printf "bun update cancelled by user"
+                return 1
+            fi
+            if get_yes_no "Use --latest flag? (May introduce breaking changes)"; then
+                update_printf "Running bun update --latest..."
+                if bun update --latest; then
+                    success_printf "bun update completed successfully!"
+                    invalidate_outdated_cache
+                    return 0
+                else
+                    error_printf "bun update failed"
+                    return 1
+                fi
+            else
+                update_printf "Running bun update..."
+                if bun update; then
+                    success_printf "bun update completed successfully!"
+                    invalidate_outdated_cache
+                    return 0
+                else
+                    error_printf "bun update failed"
+                    return 1
+                fi
+            fi
         else
-            local fix_exit_code=$?
-            error_printf "npm audit fix failed with exit code: $fix_exit_code"
-            warning_printf "Some vulnerabilities may require manual intervention"
-            return $fix_exit_code
+            local audit_force_flag=""
+            if ! get_yes_no "Do you want to run 'npm audit fix' to attempt repairs?"; then
+                warning_printf "npm audit fix cancelled by user"
+                return 1
+            fi
+            if get_yes_no "Do you want to append --force to the npm audit fix command? (May introduce breaking changes)"; then
+                audit_force_flag="--force"
+            fi
+            update_printf "Running npm audit fix..."
+            if npm audit fix $audit_force_flag; then
+                success_printf "npm audit fix completed successfully!"
+                info_printf "Remember: perform updates, create new MCPB, and update Claude desktop"
+                invalidate_outdated_cache
+                return 0
+            else
+                local fix_exit_code=$?
+                error_printf "npm audit fix failed with exit code: $fix_exit_code"
+                warning_printf "Some vulnerabilities may require manual intervention"
+                return $fix_exit_code
+            fi
         fi
     fi
 }
@@ -500,113 +582,111 @@ create_mcpb_file() {
 mcp_server_test() {
     rocket_printf "MCP Server Test..."
     printf "\n"
-    
-    # Get current directory info
+
     local current_dir=$(pwd)
     info_printf "Current directory: $current_dir"
 
+    local cmd="npm"
+    local label="npm"
+    if [[ "$LOCKFILE_TYPE" == "bun" ]]; then
+        cmd="bun"
+        label="Bun"
+    fi
+
     info_printf "MCP Server Test will perform the following:"
-    printf "  1) Run npm install\n"
-    printf "  2) Run npm test (includes temporary tsx fix)\n"
-    printf "  3) Run npm start (press Ctrl-C to stop)\n"
+    printf "  1) Run ${cmd} install\n"
+    printf "  2) Run ${cmd} test\n"
+    printf "  3) Run ${cmd} start (press Ctrl-C to stop)\n"
     printf "\n"
-    
+
     if ! get_yes_no "Do you want to run MCP Server Test?"; then
         warning_printf "MCP Server Test cancelled by user"
         return 0
     fi
-    
-    # Check if npm exists
-    if ! command -v npm &> /dev/null; then
-        error_printf "npm is not installed or not in PATH"
-        error_printf "npm is required for MCP Server Test"
+
+    # Check that the required package manager exists
+    if ! command -v "$cmd" &> /dev/null; then
+        error_printf "${cmd} is not installed or not in PATH"
+        error_printf "${cmd} is required for MCP Server Test"
         return 1
     fi
-    
-    # Check if tsx is available
-    if ! command -v tsx &> /dev/null; then
-        error_printf "tsx is not installed. Please run 'npm install' first."
-	return 1
+
+    # For npm projects, check if tsx is available
+    if [[ "$LOCKFILE_TYPE" != "bun" ]]; then
+        if ! command -v tsx &> /dev/null; then
+            error_printf "tsx is not installed. Please run 'npm install' first."
+            return 1
+        fi
     fi
-    
-    # Check if test.ts exists
+
     if [ ! -f "test.ts" ]; then
         error_printf "test.ts not found in current directory."
-	return 1
+        return 1
     fi
     printf "\n"
-    
-    # Step 1: npm install
-    update_printf "Step 1: Running npm install..."
-    if npm install; then
-        success_printf "npm install completed successfully!"
+
+    # Step 1: install
+    update_printf "Step 1: Running ${cmd} install..."
+    if $cmd install; then
+        success_printf "${cmd} install completed successfully!"
     else
         local exit_code=$?
-        error_printf "npm install failed with exit code: $exit_code"
+        error_printf "${cmd} install failed with exit code: $exit_code"
         return $exit_code
     fi
     printf "\n"
-    
+
     # Step 2: Run the mcp server tests
     update_printf "Step 2: Running mcp server tests..."
-    # Replaced npm test with NODE_OPTIONS due to bug in tsx v4.21.0
-    # [DEP0205] DeprecationWarning: module.register() is deprecated (Node.js 26.0.0) #791
-    # Temp fix will only suppress the warning message. Revert code once tsx is updated for Node v26.0.0+ 
-    # Temporary Fix
-    # NODE_OPTIONS='--disable-warning=DEP0205' npm test 
-    npm test
+    if [[ "$LOCKFILE_TYPE" == "bun" ]]; then
+        bun run test
+    else
+        npm test
+    fi
     printf "\n"
-    
-    # Step 3: npm start - improved process management
-    update_printf "Step 3: Starting npm start for 3-4 seconds..."
+
+    # Step 3: start - improved process management
+    update_printf "Step 3: Starting ${cmd} start for 3-4 seconds..."
     printf "\n"
-    
-    update_printf "Running npm start..."
-    
-    # Start npm in a new process group
-    setsid npm start > /dev/null 2>&1 &
-    local npm_pid=$!
-    
-    # Let it run for 3-4 seconds
+
+    update_printf "Running ${cmd} start..."
+
+    # Start in a new process group
+    setsid $cmd start > /dev/null 2>&1 &
+    local server_pid=$!
+
     sleep 4
-    
-    # Kill the npm process and its entire process group
-    info_printf "Stopping npm start process (PID: $npm_pid)..."
-    
-    # Get the process group ID
+
+    info_printf "Stopping ${cmd} start process (PID: $server_pid)..."
+
     local pgid
-    pgid=$(ps -o pgid= -p $npm_pid 2>/dev/null | tr -d ' ')
-    
+    pgid=$(ps -o pgid= -p $server_pid 2>/dev/null | tr -d ' ')
+
     if [[ -n "$pgid" ]]; then
-        # Kill the entire process group
         if kill -TERM -$pgid 2>/dev/null; then
-            # Wait up to 2 seconds for graceful shutdown
             local timeout=0
             while kill -0 -$pgid 2>/dev/null && [[ $timeout -lt 20 ]]; do
                 sleep 0.1
                 ((timeout++))
             done
-            
-            # Force kill if still running
+
             if kill -0 -$pgid 2>/dev/null; then
                 kill -KILL -$pgid 2>/dev/null
-                warning_printf "npm start process force-killed"
+                warning_printf "${cmd} start process force-killed"
             else
-                success_printf "npm start process stopped successfully"
+                success_printf "${cmd} start process stopped successfully"
             fi
         else
-            warning_printf "npm start process may have already terminated"
+            warning_printf "${cmd} start process may have already terminated"
         fi
     else
         warning_printf "Could not determine process group - process may have already terminated"
     fi
-    
-    # Additional cleanup: find and kill any remaining node processes from this test
-    pkill -P $npm_pid 2>/dev/null || true
-    
-    # Wait a moment for cleanup
+
+    pkill -P $server_pid 2>/dev/null || true
+
     sleep 1
-    
+
     success_printf "MCP Server Test completed!"
     return 0
 }
@@ -615,8 +695,8 @@ main() {
 
     display_header
     # Ask if user wants to run npm package update
-    if ! get_yes_no "$(format_printf "Do you want to run Npm Package Update?" none "rocket")"; then
-        error_printf "Npm Package Update cancelled by user"
+    if ! get_yes_no "$(format_printf "Do you want to run Npm/Bun Package Update?" none "rocket")"; then
+        error_printf "Npm/Bun Package Update cancelled by user"
         return 0
     fi
     printf "\n"
@@ -629,12 +709,12 @@ main() {
         show_package_info
 
         printf "\n"; info_printf "Choose an option:"
-        printf "1) Standard npm update\n"
+        printf "1) Standard package update\n"
         printf "2) Major version update\n"
         printf "3) Update Package Version Number\n"
         printf "4) MCP Server Test\n"
         printf "5) Create Claude Extension File (MCPB)\n"
-        printf "6) Run npm audit\n"
+        printf "6) Run security audit\n"
         printf "7) Set MCP Server\n"
         printf "0) Exit\n"
         printf "\n"
@@ -661,7 +741,7 @@ main() {
             3) update_version_number || true ;;
             4) mcp_server_test ;;
             5) create_mcpb_file ;;
-            6) run_npm_audit ;;
+            6) run_audit ;;
             7) select_mcp_server ;;
             0) warning_printf "Exiting without making any updates"; break ;;
             *) warning_printf "Invalid choice. Please enter 1, 2, 3, 4, 5, 6, 7, or 0." ;;
@@ -670,7 +750,7 @@ main() {
         if ! get_yes_no "Would you like to perform another operation?"; then break; fi
     done
 
-    success_printf "Npm Package Update completed..."
+    success_printf "Npm/Bun Package Update completed..."
 }
 
 trap '

@@ -89,6 +89,13 @@ fi
 info_printf "Latest Zulu version for Mac: $latest_zulu_version"
 printf "\n"
 
+# Node / Npm / Bun Javascript Runtine Environments
+info_printf "Javascript Runtine Environments:"
+get_version "node" "" "Node"
+get_version "npm" "" "Npm"
+get_version "bun" "" "Bun"
+printf "\n"
+
 # jq
 get_version "jq" "" "jq JSON processor" "-V"
 
@@ -103,11 +110,6 @@ format_printf "Plugins" "white" "underline"
 ls --color=never -1 ~/.vim/plugged
 format_printf "Colors" "white" "underline"
 ls -1 ~/.vim/colors
-printf "\n"
-
-# Node / Npm
-get_version "node" "" "Node"
-get_version "npm" "" "Npm"
 printf "\n"
 
 # OpenCode

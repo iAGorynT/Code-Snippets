@@ -52,7 +52,7 @@ function menu {
     format_printf "Individual Updates" "cyan" "underline"
     printf "\t1. Vim Plugin Update\n"
     printf "\t2. Java Update\n"
-    printf "\t3. Npm Package Update\n"
+    printf "\t3. Npm/Bun Package Update\n"
     printf "\t4. Disk Cleanup\n"
     printf "\t5. Cleanup Opencode Workspace\n"
     printf "\n"
