@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Uninstall and fully clean up a globally installed npm package
+# Uninstall and fully clean up a globally installed npm/bun package
 
 # Source function library with error handling
 
@@ -15,12 +15,69 @@ fi
 source "$FORMAT_LIBRARY"
 
 clear
-rocket_printf "Starting NPM global package uninstall..."
+rocket_printf "Starting global package uninstall..."
 printf '\n'
 
 # Check if sudo is available for privilege escalation
 SUDO_AVAILABLE=false
 command -v sudo &>/dev/null && SUDO_AVAILABLE=true
+
+# Check runtimes availability
+HAS_NPM=false
+HAS_BUN=false
+
+if command -v npm &>/dev/null; then
+  HAS_NPM=true
+fi
+
+if command -v bun &>/dev/null; then
+  HAS_BUN=true
+fi
+
+if [[ "$HAS_NPM" == false && "$HAS_BUN" == false ]]; then
+  error_printf "Neither npm nor bun is installed or not in PATH. Please install Node.js/npm or bun first." true
+  exit 1
+fi
+
+# Select runtime
+if [[ "$HAS_NPM" == true && "$HAS_BUN" == true ]]; then
+  info_printf "Select runtime:"
+  printf "1) npm\n"
+  printf "2) bun\n"
+  printf "\n"
+  while true; do
+    read -k 1 "choice?Enter your choice (1 or 2): "
+    printf "\n"
+    case $choice in
+      1) break ;;
+      2) break ;;
+      *) warning_printf "Invalid choice. Please enter 1 for npm or 2 for bun." ;;
+    esac
+  done
+elif [[ "$HAS_BUN" == true ]]; then
+  choice=2
+else
+  choice=1
+fi
+
+printf "\n"
+
+# Set runtime-specific variables
+if [[ "$choice" == "1" ]]; then
+  GLOBAL_DIR=$(npm root -g 2>/dev/null) || { error_printf "Failed to get npm global directory" true; exit 1; }
+  BIN_DIR="$(npm config get prefix 2>/dev/null)/bin"
+  if [[ ! -d "$BIN_DIR" ]]; then
+    error_printf "Failed to determine npm bin directory" true
+    exit 1
+  fi
+  INSTALL_CMD=(npm install -g)
+  UNINSTALL_CMD=(npm uninstall -g)
+else
+  GLOBAL_DIR="$HOME/.bun/install/global/node_modules"
+  BIN_DIR="$HOME/.bun/bin"
+  INSTALL_CMD=(bun install -g)
+  UNINSTALL_CMD=(bun remove -g)
+fi
 
 # Parse command line arguments
 TEST_MODE=false
@@ -32,10 +89,10 @@ fi
 # If in test mode, install 'yo' globally for testing
 if [[ "$TEST_MODE" == true ]]; then
   info_printf "TEST MODE: Installing 'yo' globally for testing..."
-  if ! npm install -g yo 2>/dev/null; then
+  if ! "${INSTALL_CMD[@]}" yo 2>/dev/null; then
     if [[ "$SUDO_AVAILABLE" == true ]]; then
       warning_printf "Permission denied, trying with sudo..."
-      if ! sudo npm install -g yo; then
+      if ! sudo "${INSTALL_CMD[@]}" yo; then
         error_printf "Failed to install 'yo' for testing. Check permissions or internet connection." true
       fi
     else
@@ -46,15 +103,9 @@ if [[ "$TEST_MODE" == true ]]; then
   printf '\n'
 fi
 
-# Check that npm is available on the system
-if ! command -v npm &>/dev/null; then
-  error_printf "npm is not installed or not in PATH. Please install Node.js/npm first." true
-  exit 1
-fi
-
 # Prompt user for package name with validation
 while true; do
-  read "PACKAGE?Enter the name of the global npm package to uninstall: "
+  read "PACKAGE?Enter the name of the global package to uninstall: "
   if [[ -z "$PACKAGE" ]]; then
     error_printf "Package name cannot be empty. Please try again."
   else
@@ -62,30 +113,22 @@ while true; do
   fi
 done
 
-info_printf "Checking for global npm package: $PACKAGE"
-
-# Get npm global directories
-NPM_GLOBAL_DIR=$(npm root -g 2>/dev/null) || { error_printf "Failed to get npm global directory" true; exit 1; }
-NPM_BIN_DIR="$(npm config get prefix 2>/dev/null)/bin"
-if [[ ! -d "$NPM_BIN_DIR" ]]; then
-    error_printf "Failed to determine npm bin directory" true
-  exit 1
-fi
+info_printf "Checking for global package: $PACKAGE"
 
 # Step 1: Check if package is actually installed
-if [[ ! -d "$NPM_GLOBAL_DIR/$PACKAGE" ]]; then
-  success_printf "$PACKAGE not found in global npm packages."
+if [[ ! -d "$GLOBAL_DIR/$PACKAGE" ]]; then
+  success_printf "$PACKAGE not found in global packages."
   INSTALLED=false
 else
-  package_printf "Found $PACKAGE at: $NPM_GLOBAL_DIR/$PACKAGE"
+  package_printf "Found $PACKAGE at: $GLOBAL_DIR/$PACKAGE"
   INSTALLED=true
 
   # Get list of binaries this package provides before uninstalling
   BINARIES=()
-  if [[ -f "$NPM_GLOBAL_DIR/$PACKAGE/package.json" ]]; then
+  if [[ -f "$GLOBAL_DIR/$PACKAGE/package.json" ]]; then
     BINARIES=($(node -pe "
       try {
-        const pkg = require('$NPM_GLOBAL_DIR/$PACKAGE/package.json');
+        const pkg = require('$GLOBAL_DIR/$PACKAGE/package.json');
         if (typeof pkg.bin === 'string') {
           console.log('$PACKAGE');
         } else if (typeof pkg.bin === 'object') {
@@ -107,14 +150,14 @@ if [[ "$INSTALLED" == true ]]; then
   fi
 
   format_printf "Uninstalling $PACKAGE..." "blue" "bold" "🧩"
-  npm uninstall -g "$PACKAGE" 2>/dev/null
+  "${UNINSTALL_CMD[@]}" "$PACKAGE" 2>/dev/null
 
   if [[ $? -ne 0 ]]; then
     if [[ "$SUDO_AVAILABLE" == true ]]; then
       warning_printf "Permission denied, trying with sudo..."
-      sudo npm uninstall -g "$PACKAGE"
+      sudo "${UNINSTALL_CMD[@]}" "$PACKAGE"
     else
-      warning_printf "Permission denied and sudo is not available. Try running as root."
+      warning_printf "Uninstall failed. Try running with appropriate permissions."
     fi
   fi
 fi
@@ -123,7 +166,7 @@ fi
 if [[ ${#BINARIES[@]} -gt 0 ]]; then
   clean_printf "Checking for leftover binaries..."
   for BIN in "${BINARIES[@]}"; do
-    BIN_PATH="$NPM_BIN_DIR/$BIN"
+    BIN_PATH="$BIN_DIR/$BIN"
     if [[ -L "$BIN_PATH" ]] || [[ -f "$BIN_PATH" ]]; then
       format_printf "Removing: $BIN_PATH" "cyan" "italic" "⚙️ "
       rm -f "$BIN_PATH" 2>/dev/null
@@ -134,7 +177,7 @@ if [[ ${#BINARIES[@]} -gt 0 ]]; then
   done
 else
   # Fallback: check for binary matching package name
-  BIN_PATH="$NPM_BIN_DIR/$PACKAGE"
+  BIN_PATH="$BIN_DIR/$PACKAGE"
   if [[ -L "$BIN_PATH" ]] || [[ -f "$BIN_PATH" ]]; then
     clean_printf "Removing binary: $BIN_PATH"
     rm -f "$BIN_PATH" 2>/dev/null
@@ -145,11 +188,11 @@ else
 fi
 
 # Step 4: Clean up package directory if it still exists
-if [[ -d "$NPM_GLOBAL_DIR/$PACKAGE" ]]; then
+if [[ -d "$GLOBAL_DIR/$PACKAGE" ]]; then
   format_printf "Removing leftover package directory..." "green" "italic" "🗑️ "
-  rm -rf "$NPM_GLOBAL_DIR/$PACKAGE" 2>/dev/null
+  rm -rf "$GLOBAL_DIR/$PACKAGE" 2>/dev/null
   if [[ $? -ne 0 && "$SUDO_AVAILABLE" == true ]]; then
-    sudo rm -rf "$NPM_GLOBAL_DIR/$PACKAGE"
+    sudo rm -rf "$GLOBAL_DIR/$PACKAGE"
   fi
 fi
 
@@ -158,8 +201,8 @@ format_printf "Verifying cleanup..." "blue" "bold" "🔎"
 ISSUES=()
 
 # Check if package directory still exists
-if [[ -d "$NPM_GLOBAL_DIR/$PACKAGE" ]]; then
-  ISSUES+=("Package directory still exists: $NPM_GLOBAL_DIR/$PACKAGE")
+if [[ -d "$GLOBAL_DIR/$PACKAGE" ]]; then
+  ISSUES+=("Package directory still exists: $GLOBAL_DIR/$PACKAGE")
 fi
 
 # Check if any binaries still exist
