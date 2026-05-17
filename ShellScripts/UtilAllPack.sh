@@ -30,7 +30,7 @@ hit_any_key_prompt() {
 
 # List of updater scripts with corresponding package names
 updaters=("VimUpdate.sh" "JavaUpdate.sh" "NpmUpdate.sh")
-package_names=("Vim" "Java" "Npm")
+package_names=("Vim" "Java" "Npm/Bun")
 
 # Header
 clear
