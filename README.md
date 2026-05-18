@@ -8,6 +8,6 @@ If you choose to use any of this code, be sure to test thoroughly in your own en
 
 For updates or more content, follow me on [Mastodon](https://mastodon.social/@iAGorynT).
 
-Check out these Tools: <br>[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv) [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+Check out these Tools: <br>[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv) [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) [![Runs on Bun](https://img.shields.io/badge/Runs%20on-Bun-0D0D0D?style=flat&logo=bun&logoColor=F472B6)](https://github.com/oven-sh/bun)
 
-_Last modified: 11/29/2025 11:26_
+_Last modified: 05/17/2026 20:44_
