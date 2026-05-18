@@ -42,6 +42,11 @@ function cleanupalldisk {
     UtilAllDisk.sh
 }
 
+function npmmenu {
+    clear
+    Npmm.sh
+}
+
 function menu {
     clear
     printf "\n"
@@ -60,6 +65,10 @@ function menu {
     format_printf "Bundled Updates" "cyan" "underline"
     printf "\t6. Update All Packages\n"
     printf "\t7. Cleanup All Disks\n"
+    printf "\n"
+    printf "\t"
+    format_printf "Other Updates" "cyan" "underline"
+    printf "\t8. NPM/BUN Menu\n"
     printf "\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
@@ -116,6 +125,9 @@ while true; do
             7)
                 cleanupalldisk
                 hit_any_key=true
+                ;;
+            8)
+                npmmenu
                 ;;
             *)
                 clear
