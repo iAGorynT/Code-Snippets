@@ -68,7 +68,7 @@ function menu {
     printf "\n"
     printf "\t"
     format_printf "Other Updates" "cyan" "underline"
-    printf "\t8. Global NPM/BUN Menu\n"
+    printf "\t8. Global Npm/Bun Menu\n"
     printf "\n"
     printf "\t0. Exit Menu\n\n"
     printf "\t\tEnter an Option: "
