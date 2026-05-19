@@ -44,7 +44,7 @@ function menu {
     clear
     printf "\n"
     printf "\t\t\t"
-    format_printf "NPM/BUN Menu" "yellow" "bold" "underline"
+    format_printf "Global NPM/BUN Menu" "yellow" "bold" "underline"
     printf "\n"
     printf "\t\033[4;36mUtilities\033[0m\n"
     printf "\t1. Global NPM/BUN Packages List\n"
