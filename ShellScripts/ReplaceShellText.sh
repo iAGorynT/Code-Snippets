@@ -20,9 +20,8 @@ get_yes_no() {
     local prompt="$1" response
     
     while true; do
-        printf "$prompt (y/n): "
-        read -k1 response
-        echo
+        read -k 1 "response?$prompt (y/n): "
+        printf '\n'
         case ${response:l} in
             y|yes) return 0 ;;
             n|no)  return 1 ;;
