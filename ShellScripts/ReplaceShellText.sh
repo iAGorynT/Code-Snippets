@@ -5,7 +5,7 @@ FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
 source "$FORMAT_LIBRARY"
 
 # Directory variables
-WORKSPACE_DIR="$HOME/Desktop/claude_workspace/scripts"
+WORKSPACE_DIR="$HOME/Desktop/opencode_workspace/scripts"
 BIN_DIR="$HOME/bin"
 CHANGES_LOG="changes.log"
 
@@ -20,7 +20,9 @@ get_yes_no() {
     local prompt="$1" response
     
     while true; do
-        read "response?$prompt (y/n): "
+        printf "$prompt (y/n): "
+        read -k1 response
+        echo
         case ${response:l} in
             y|yes) return 0 ;;
             n|no)  return 1 ;;
