@@ -15,17 +15,17 @@ display_header() {
     format_printf "Replace Shellscript Text..." "yellow" "bold"
 }
 
-# Function to get yes/no input
+# Get yes/no input
 get_yes_no() {
-    local prompt="$1" response
-    
+    local prompt="$1"
+    local response
     while true; do
         read -k 1 "response?$prompt (y/n): "
-        printf '\n'
+        printf '\n' 
         case ${response:l} in
-            y|yes) return 0 ;;
-            n|no)  return 1 ;;
-            *) format_printf "Please answer yes (Y) or no (N)." "yellow" "warning" ;;
+            y) return 0 ;;
+            n) return 1 ;;
+            *) error_printf "Please answer yes (Y) or no (N)." ;;
         esac
     done
 }

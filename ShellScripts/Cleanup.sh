@@ -29,7 +29,7 @@ get_yes_no() {
     local response
     while true; do
         read -k 1 "response?$prompt (y/n): "
-        printf '\n'  # <-- newline using printf
+        printf '\n' 
         case ${response:l} in
             y) return 0 ;;
             n) return 1 ;;
