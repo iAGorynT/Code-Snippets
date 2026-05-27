@@ -2,9 +2,17 @@
 # Trap Ctl-C and Require a Menu Selection to Exit Script
 trap 'echo -e "\nCtrl-C will not terminate $0."' INT
 
-# Standard Message Formatting Library and Functions
-FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
-[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
+# Source function library with error handling
+
+SCRIPT_DIR="${0:a:h}"
+FORMAT_LIBRARY="$SCRIPT_DIR/FLibFormatPrintf.sh"
+
+if [[ ! -f "$FORMAT_LIBRARY" ]]; then
+    printf "Error: Required library not found: %s\n" "$FORMAT_LIBRARY" >&2
+    printf "Searched in script directory: %s\n" "$SCRIPT_DIR" >&2
+    exit 1
+fi
+
 source "$FORMAT_LIBRARY"
 
 function enigma {
