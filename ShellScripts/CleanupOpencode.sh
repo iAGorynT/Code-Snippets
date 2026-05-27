@@ -7,11 +7,16 @@
 # - scripts/
 
 # Source function library with error handling
-FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+
+SCRIPT_DIR="${0:a:h}"
+FORMAT_LIBRARY="$SCRIPT_DIR/FLibFormatPrintf.sh"
+
 if [[ ! -f "$FORMAT_LIBRARY" ]]; then
-    printf "Error: Required library %s not found\n" "$FORMAT_LIBRARY" >&2
+    printf "Error: Required library not found: %s\n" "$FORMAT_LIBRARY" >&2
+    printf "Searched in script directory: %s\n" "$SCRIPT_DIR" >&2
     exit 1
 fi
+
 source "$FORMAT_LIBRARY"
 
 WORKSPACE_DIR="$HOME/Desktop/opencode_workspace"
