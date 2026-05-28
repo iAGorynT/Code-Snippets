@@ -37,7 +37,8 @@ function show_menu() {
 
 # Function to fetch installed menu_files
 function fetch_menu_files() {
-    all_menu_files=(*m.sh(N))
+    setopt localoptions extendedglob
+    all_menu_files=(*m[0-9]#.sh(N))
 }
 
 # Function to display menu_file counts
