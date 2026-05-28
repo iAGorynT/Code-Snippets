@@ -4,13 +4,24 @@
 # NOTE: January 24, 2026-Due to Numerous Execution and Performance Issues,
 # New Copilot CLI App Removed From Usage.
 
+# Update BrewitLaunchd.sh with changes when necessary.
+
 # Source function library with error handling
-FORMAT_LIBRARY="$HOME/ShellScripts/FLibFormatPrintf.sh"
+
+SCRIPT_DIR="${0:a:h}"
+FORMAT_LIBRARY="$SCRIPT_DIR/FLibFormatPrintf.sh"
+
+if [[ ! -f "$FORMAT_LIBRARY" ]]; then
+    printf "Error: Required library not found: %s\n" "$FORMAT_LIBRARY" >&2
+    printf "Searched in script directory: %s\n" "$SCRIPT_DIR" >&2
+    exit 1
+fi
+
+source "$FORMAT_LIBRARY"
+
+# Define additional variables
 LOGS_DIR="$HOME/.logs"
 LOG_FILE="$LOGS_DIR/copi_update.log"
-
-[[ -f "$FORMAT_LIBRARY" ]] || { printf "Error: Required library $FORMAT_LIBRARY not found" >&2; exit 1; }
-source "$FORMAT_LIBRARY"
 
 # Function to ensure logs directory exists
 ensure_logs_directory() {
