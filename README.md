@@ -1,3 +1,6 @@
+> 🚚 **This repository has moved to Codeberg!**  
+> Find the latest version at: [https://codeberg.org/iAGorynT/Code-Snippets](https://codeberg.org/iAGorynT/Code-Snippets)
+
 # Code Snippets
 
 > ⚠️ **Note:** This repository contains sample code for educational and personal use. Pull requests from outside contributors are not accepted. Security reports are always welcome!
